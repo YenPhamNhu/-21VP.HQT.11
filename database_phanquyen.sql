@@ -100,7 +100,7 @@ create table LICHSUKHAMBENH(
 IF OBJECT_ID('dbo.THUOC', 'U') IS NOT NULL 
   DROP TABLE dbo.THUOC;
 create table THUOC(
-	MaThuoc int unique not null identity(1,1),
+	MaThuoc int not null,
 	NgayHetHan datetime not null,
 	TenThuoc nvarchar(50) not null,
 	DonViTinh nvarchar(50) not null,
@@ -141,8 +141,8 @@ create table DICHVUSUDUNG(
 	NgaySuDung datetime not null,
 	STTLichSuKB int not null,
 	MaBenhNhan int not null,
-	MaDichVu int,
-	SoLuong int default 0 ,
+	MaDichVu int not null,
+	SoLuong int not null default 0 ,
 	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD)
 )
 --12/Tạo bảng hóa đơn
@@ -152,13 +152,12 @@ create table HOADON(
 	MaHoaDon int unique not null identity(1,1),
 	MaBenhNhan int not null,
 	STTLichSuKB int not null,
-	MaPhieuDVSD int,
-	TongTien int,
-	TinhTrangThanhToan nvarchar(50) check (TinhTrangThanhToan = N'Đã thanh toán' or TinhTrangThanhToan = N'Chưa thanh toán'),
-	NgayThanhToan datetime,
-	MaDonThuoc int,
-	MaLichHen int,
-	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB, MaPhieuDVSD )
+	MaPhieuDVSD int not null,
+	TongTien int not null,
+	TinhTrangThanhToan nvarchar(50) not null check (TinhTrangThanhToan = N'Đã thanh toán' or TinhTrangThanhToan = N'Chưa thanh toán'),
+	NgayThanhToan datetime not null,
+	MaDonThuoc int not null,
+	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB)
 )
 -- Tạo khóa ngoại
 alter table LICHLAMVIEC
@@ -213,7 +212,4 @@ foreign key (STTLichSuKB, MaBenhNhan)
 references LICHSUKHAMBENH,
 constraint FK_HOADON_DONTHUOC
 foreign key (MaDonThuoc)
-references DONTHUOC,
-constraint FK_HOADON_LICHHEN
-foreign key (MaLichHen)
-references LICHHEN
+references DONTHUOC
