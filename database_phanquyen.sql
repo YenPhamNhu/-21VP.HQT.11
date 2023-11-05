@@ -1,10 +1,17 @@
-﻿create database QLPKNK
-drop database QLPKNK
-go
+﻿USE MASTER
+GO
+IF DB_ID('QLPKNK') IS NOT NULL
+BEGIN
+    DROP DATABASE QLPKNK
+END
+create database QLPKNK
+GO
 USE QLPKNK
 GO
 --1/Tạo bảng quản trị viên: 
 --By default, the starting value = 1, and increment by 1 for each new record.
+IF OBJECT_ID('dbo.QTV', 'U') IS NOT NULL 
+  DROP TABLE dbo.QTV;
 create table QTV(
 	MaNhanVien int unique not null identity(1,1),
 	HoTen nvarchar(50) not null,
@@ -14,6 +21,8 @@ create table QTV(
 )
 --2/Tạo bảng nhân viên:
 --By default, the starting value = 10, and increment by 1 for each new record.
+IF OBJECT_ID('dbo.NHANVIEN', 'U') IS NOT NULL 
+  DROP TABLE dbo.NHANVIEN;
 create table NHANVIEN(
 	MaNhanVien int unique not null identity(10,1),
 	Hoten nvarchar(50) not null,
@@ -27,6 +36,8 @@ create table NHANVIEN(
 )
 --3/Tạo bảng nha sĩ:
 --By default, the starting value = 100, and increment by 1 for each new record.
+IF OBJECT_ID('dbo.NHASI', 'U') IS NOT NULL 
+  DROP TABLE dbo.NHASI;
 create table NHASI(
 	MaNhaSi int unique not null identity(100,1),
 	HoTen nvarchar(50) not null,
@@ -41,6 +52,8 @@ create table NHASI(
 )
 --4/Tạo bảng bệnh nhân:
 --By default, the starting value = 1000, and increment by 1 for each new record.
+IF OBJECT_ID('dbo.BENHNHAN', 'U') IS NOT NULL 
+  DROP TABLE dbo.BENHNHAN;
 create table BENHNHAN(
 	MaBenhNhan int unique not null identity(1000,1),
 	HoTen nvarchar(50) not null,
@@ -52,6 +65,8 @@ create table BENHNHAN(
 	constraint PK_BENHNHAN primary key (MaBenhNhan)
 )
 --5/Tạo bảng Nha sĩ đăng ký lịch làm việc:
+IF OBJECT_ID('dbo.LICHLAMVIEC', 'U') IS NOT NULL 
+  DROP TABLE dbo.LICHLAMVIEC;
 create table LICHLAMVIEC(
 	STT int unique not null identity(1,1),
 	Ngay datetime not null,
@@ -60,6 +75,8 @@ create table LICHLAMVIEC(
 	constraint PK_LICHLAMVIEC primary key (STT)
 )
 --6/Tạo bảng Lịch hẹn:
+IF OBJECT_ID('dbo.LICHHEN', 'U') IS NOT NULL 
+  DROP TABLE dbo.LICHHEN;
 create table LICHHEN(
 	MaLichHen int unique not null identity(1,1),
 	NgayGioKham datetime not null,
@@ -69,6 +86,8 @@ create table LICHHEN(
 	constraint PK_LICHHEN primary key (MaLichHen)
 )
 --7/Tạo bảng Hồ sơ Lịch sử khám bệnh:
+IF OBJECT_ID('dbo.LICHSUKHAMBENH', 'U') IS NOT NULL 
+  DROP TABLE dbo.LICHSUKHAMBENH;
 create table LICHSUKHAMBENH(
 	STT int not null,
 	MaBenhNhan int not null,
@@ -78,6 +97,8 @@ create table LICHSUKHAMBENH(
 	constraint PK_LICHSUKHAMBENH primary key (STT, MaBenhNhan)
 )
 --8/Tạo bảng danh sách thuốc:
+IF OBJECT_ID('dbo.THUOC', 'U') IS NOT NULL 
+  DROP TABLE dbo.THUOC;
 create table THUOC(
 	MaThuoc int unique not null identity(1,1),
 	NgayHetHan datetime not null,
@@ -89,6 +110,8 @@ create table THUOC(
 	constraint PK_THUOC primary key (MaThuoc, NgayHetHan)
 )
 --9/Tạo bảng đơn thuốc của bệnh nhân 
+IF OBJECT_ID('dbo.DONTHUOC', 'U') IS NOT NULL 
+  DROP TABLE dbo.DONTHUOC;
 create table DONTHUOC(
 	MaDonThuoc int unique not null identity(1,1),
 	MaThuoc int not null,
@@ -101,6 +124,8 @@ create table DONTHUOC(
 	constraint PK_DONTHUOC primary key (MaDonThuoc)
 )
 --10/Tạo bảng danh mục dịch vụ
+IF OBJECT_ID('dbo.DICHVU', 'U') IS NOT NULL 
+  DROP TABLE dbo.DICHVU;
 create table DICHVU(
 	MaDichVu int unique not null identity(1,1),
 	TenDichVu nvarchar(50) not null,
@@ -109,6 +134,8 @@ create table DICHVU(
 	constraint PK_DICHVU primary key (MaDichVu)
 )
 --11/Tạo bảng danh sách dịch vụ sử dụng của bệnh nhân
+IF OBJECT_ID('dbo.DICHVUSUDUNG', 'U') IS NOT NULL 
+  DROP TABLE dbo.DICHVUSUDUNG;
 create table DICHVUSUDUNG(
 	MaPhieuDVSD int unique not null identity(1,1),
 	NgaySuDung datetime not null,
@@ -119,6 +146,8 @@ create table DICHVUSUDUNG(
 	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD)
 )
 --12/Tạo bảng hóa đơn
+IF OBJECT_ID('dbo.HOADON', 'U') IS NOT NULL 
+  DROP TABLE dbo.HOADON; 
 create table HOADON(
 	MaHoaDon int unique not null identity(1,1),
 	MaBenhNhan int not null,
