@@ -68,7 +68,7 @@ create table LICHHEN(
 )
 
 create table LICHSUKHAMBENH(
-	STT int unique not null identity(1,1),
+	STT int not null,
 	MaBenhNhan int not null,
 	MaNhaSiKham int not null,
 	GhiChu nvarchar(50),
@@ -91,10 +91,10 @@ create table DONTHUOC(
 	MaDonThuoc int unique not null identity(1,1),
 	MaThuoc int not null,
 	MaBenhNhan int not null,
+	NgaySuDung datetime not null,
 	NgayHetHan datetime not null,
 	LieuDung nvarchar(50) not null,
 	STTLichSuKB int not null,
-	NgaySuDung datetime not null,
 	SoLuong int not null,
 	constraint PK_DONTHUOC primary key (MaDonThuoc, MaBenhNhan, STTLichSuKB)
 )
@@ -108,12 +108,13 @@ create table DICHVU(
 )
 
 create table DICHVUSUDUNG(
-	STT int unique not null identity(1,1),
+	MaPhieuDVSD int unique not null identity(1,1),
 	NgaySuDung datetime not null,
+	STTLichSuKB int not null,
 	MaBenhNhan int not null,
 	MaDichVu int,
 	SoLuong int default 0 ,
-	constraint PK_DICHVUSUDUNG primary key (STT, MaBenhNhan)
+	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD, MaBenhNhan, STTLichSuKB)
 )
 
 create table HOADON(
@@ -128,7 +129,6 @@ create table HOADON(
 	MaLichHen int,
 	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB, STTDichVuSD )
 )
-
 
 alter table BENHNHAN
 add
