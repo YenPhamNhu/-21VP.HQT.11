@@ -1,6 +1,6 @@
 ﻿create database QLPKNK
---drop database QLPKNK
---go
+drop database QLPKNK
+go
 USE QLPKNK
 GO
 --1/Tạo bảng quản trị viên: 
@@ -98,7 +98,7 @@ create table DONTHUOC(
 	LieuDung nvarchar(50) not null,
 	STTLichSuKB int not null,
 	SoLuong int not null,
-	constraint PK_DONTHUOC primary key (MaDonThuoc, MaBenhNhan, STTLichSuKB)
+	constraint PK_DONTHUOC primary key (MaDonThuoc)
 )
 --10/Tạo bảng danh mục dịch vụ
 create table DICHVU(
@@ -116,26 +116,75 @@ create table DICHVUSUDUNG(
 	MaBenhNhan int not null,
 	MaDichVu int,
 	SoLuong int default 0 ,
-	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD, MaBenhNhan, STTLichSuKB)
+	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD)
 )
 --12/Tạo bảng hóa đơn
 create table HOADON(
 	MaHoaDon int unique not null identity(1,1),
 	MaBenhNhan int not null,
 	STTLichSuKB int not null,
-	STTDichVuSD int,
+	MaPhieuDVSD int,
 	TongTien int,
 	TinhTrangThanhToan nvarchar(50) check (TinhTrangThanhToan = N'Đã thanh toán' or TinhTrangThanhToan = N'Chưa thanh toán'),
 	NgayThanhToan datetime,
 	MaDonThuoc int,
 	MaLichHen int,
-	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB, STTDichVuSD )
+	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB, MaPhieuDVSD )
 )
-
-alter table BENHNHAN
+-- Tạo khóa ngoại
+alter table LICHLAMVIEC
 add
-constraint FK_BENHNHAN_LICHSUKHAMBENH
+constraint FK_LICHLAMVIEC_NHASI
+foreign key (MaNhaSi)
+references NHASI
+
+alter table LICHHEN
+add
+constraint FK_LICHHEN_NHASI
+foreign key (MaNhaSi)
+references NHASI,
+constraint FK_LICHHEN_BENHNHAN
 foreign key (MaBenhNhan)
+references BENHNHAN
+
+alter table LICHSUKHAMBENH
+add
+constraint FK_LICHSUKHAMBENH_NHASI
+foreign key (MaNhaSiKham)
+references NHASI,
+constraint FK_LICHSUKHAMBENH_BENHNHAN
+foreign key (MaBenhNhan)
+references BENHNHAN
+
+alter table DONTHUOC
+add
+constraint FK_DONTHUOC_THUOC
+foreign key (MaThuoc, NgayHetHan)
+references THUOC,
+constraint FK_DONTHUOC_LICHSUKHAMBENH
+foreign key (STTLichSuKB, MaBenhNhan)
 references LICHSUKHAMBENH
 
-alter table DICHVU
+alter table DICHVUSUDUNG
+add
+constraint FK_DICHVUSUDUNG_DICHVU
+foreign key (MaDichVu)
+references DICHVU,
+constraint FK_DICHVUSUDUNG_LICHSUKHAMBENH
+foreign key (STTLichSuKB, MaBenhNhan)
+references LICHSUKHAMBENH
+
+alter table HOADON
+add
+constraint FK_HOADON_DICHVUSUDUNG
+foreign key (MaPhieuDVSD)
+references DICHVUSUDUNG,
+constraint FK_HOADON_LICHSUKHAMBENH
+foreign key (STTLichSuKB, MaBenhNhan)
+references LICHSUKHAMBENH,
+constraint FK_HOADON_DONTHUOC
+foreign key (MaDonThuoc)
+references DONTHUOC,
+constraint FK_HOADON_LICHHEN
+foreign key (MaLichHen)
+references LICHHEN
