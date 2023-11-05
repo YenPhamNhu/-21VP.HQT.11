@@ -1,11 +1,10 @@
 ﻿create database QLPKNK
-
-USE QLPKNK
-GO
-
 --drop database QLPKNK
 --go
-
+USE QLPKNK
+GO
+--1/Tạo bảng quản trị viên: 
+--By default, the starting value = 1, and increment by 1 for each new record.
 create table QTV(
 	MaNhanVien int unique not null identity(1,1),
 	HoTen nvarchar(50) not null,
@@ -13,9 +12,10 @@ create table QTV(
 	MatKhau varchar(8) not null,
 	constraint PK_QTV primary key (MaNhanVien)
 )
-
+--2/Tạo bảng nhân viên:
+--By default, the starting value = 10, and increment by 1 for each new record.
 create table NHANVIEN(
-	MaNhanVien int unique not null identity(1,1),
+	MaNhanVien int unique not null identity(10,1),
 	Hoten nvarchar(50) not null,
 	SDT varchar(10) unique not null,
 	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
@@ -25,20 +25,10 @@ create table NHANVIEN(
 	MatKhau varchar(8) not null,
 	constraint PK_NHANVIEN primary key (MaNhanVien)
 )
-
-create table BENHNHAN(
-	MaBenhNhan int unique not null identity(1,1),
-	HoTen nvarchar(50) not null,
-	SDT varchar(10) unique not null,
-	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	NgaySinh datetime not null,
-	DiaChi nvarchar(50) not null,
-	MatKhau varchar(8) not null,
-	constraint PK_BENHNHAN primary key (MaBenhNhan)
-)
-
+--3/Tạo bảng nha sĩ:
+--By default, the starting value = 100, and increment by 1 for each new record.
 create table NHASI(
-	MaNhaSi int unique not null identity(1,1),
+	MaNhaSi int unique not null identity(100,1),
 	HoTen nvarchar(50) not null,
 	SDT varchar(10) unique not null,
 	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
@@ -49,7 +39,19 @@ create table NHASI(
 	MatKhau varchar(8) not null,
 	constraint PK_NHASI primary key (MaNhaSi)
 )
-
+--4/Tạo bảng bệnh nhân:
+--By default, the starting value = 1000, and increment by 1 for each new record.
+create table BENHNHAN(
+	MaBenhNhan int unique not null identity(1000,1),
+	HoTen nvarchar(50) not null,
+	SDT varchar(10) unique not null,
+	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
+	NgaySinh datetime not null,
+	DiaChi nvarchar(50) not null,
+	MatKhau varchar(8) not null,
+	constraint PK_BENHNHAN primary key (MaBenhNhan)
+)
+--5/Tạo bảng Nha sĩ đăng ký lịch làm việc:
 create table LICHLAMVIEC(
 	STT int unique not null identity(1,1),
 	Ngay datetime not null,
@@ -57,7 +59,7 @@ create table LICHLAMVIEC(
 	CaDangKy nvarchar(50) not null,
 	constraint PK_LICHLAMVIEC primary key (STT)
 )
-
+--6/Tạo bảng Lịch hẹn:
 create table LICHHEN(
 	MaLichHen int unique not null identity(1,1),
 	NgayGioKham datetime not null,
@@ -66,7 +68,7 @@ create table LICHHEN(
 	TrangThaiLichHen nvarchar(50) not null check (TrangThaiLichHen = N'Đã đặt' or TrangThaiLichHen = N'Đã hủy'),
 	constraint PK_LICHHEN primary key (MaLichHen)
 )
-
+--7/Tạo bảng Hồ sơ Lịch sử khám bệnh:
 create table LICHSUKHAMBENH(
 	STT int not null,
 	MaBenhNhan int not null,
@@ -75,7 +77,7 @@ create table LICHSUKHAMBENH(
 	NgayKham datetime not null,
 	constraint PK_LICHSUKHAMBENH primary key (STT, MaBenhNhan)
 )
-
+--8/Tạo bảng danh sách thuốc:
 create table THUOC(
 	MaThuoc int unique not null identity(1,1),
 	NgayHetHan datetime not null,
@@ -86,7 +88,7 @@ create table THUOC(
 	SoLuongTonKho int not null,
 	constraint PK_THUOC primary key (MaThuoc, NgayHetHan)
 )
-
+--9/Tạo bảng đơn thuốc của bệnh nhân 
 create table DONTHUOC(
 	MaDonThuoc int unique not null identity(1,1),
 	MaThuoc int not null,
@@ -98,7 +100,7 @@ create table DONTHUOC(
 	SoLuong int not null,
 	constraint PK_DONTHUOC primary key (MaDonThuoc, MaBenhNhan, STTLichSuKB)
 )
-
+--10/Tạo bảng danh mục dịch vụ
 create table DICHVU(
 	MaDichVu int unique not null identity(1,1),
 	TenDichVu nvarchar(50) not null,
@@ -106,7 +108,7 @@ create table DICHVU(
 	DonGia int not null,
 	constraint PK_DICHVU primary key (MaDichVu)
 )
-
+--11/Tạo bảng danh sách dịch vụ sử dụng của bệnh nhân
 create table DICHVUSUDUNG(
 	MaPhieuDVSD int unique not null identity(1,1),
 	NgaySuDung datetime not null,
@@ -116,7 +118,7 @@ create table DICHVUSUDUNG(
 	SoLuong int default 0 ,
 	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD, MaBenhNhan, STTLichSuKB)
 )
-
+--12/Tạo bảng hóa đơn
 create table HOADON(
 	MaHoaDon int unique not null identity(1,1),
 	MaBenhNhan int not null,
