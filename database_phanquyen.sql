@@ -7,116 +7,126 @@ GO
 --go
 
 create table QTV(
-	MaNhanVien int unique identity(1,1),
-	HoTen nvarchar(50),
-	SDT varchar(10) unique,
-	MatKhau varchar(8),
+	MaNhanVien int unique not null identity(1,1),
+	HoTen nvarchar(50) not null,
+	SDT varchar(10) unique not null,
+	MatKhau varchar(8) not null,
 	constraint PK_QTV primary key (MaNhanVien)
 )
 
 create table NHANVIEN(
-	MaNhanVien int unique identity(1,1),
-	Hoten nvarchar(50),
-	SDT varchar(10) unique,
-	GioiTinh nvarchar(5) check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	DiaChi nvarchar(50),
-	TinhTrangHoatDong nvarchar(20) check (TinhTrangHoatDong = N'Còn làm' or TinhTrangHoatDong = N'Nghỉ làm'),
-	ViTri nvarchar(50),
-	MatKhau varchar(8),
+	MaNhanVien int unique not null identity(1,1),
+	Hoten nvarchar(50) not null,
+	SDT varchar(10) unique not null,
+	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
+	DiaChi nvarchar(50) not null,
+	TinhTrangHoatDong nvarchar(20) not null check (TinhTrangHoatDong = N'Còn làm' or TinhTrangHoatDong = N'Nghỉ làm'),
+	ViTri nvarchar(50) not null,
+	MatKhau varchar(8) not null,
 	constraint PK_NHANVIEN primary key (MaNhanVien)
 )
 
 create table BENHNHAN(
-	MaBenhNhan int unique identity(1,1),
-	HoTen nvarchar(50),
-	SDT varchar(10) unique,
-	GioiTinh nvarchar(5) check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	NgaySinh datetime,
-	DiaChi nvarchar(50),
-	MatKhau varchar(8),
+	MaBenhNhan int unique not null identity(1,1),
+	HoTen nvarchar(50) not null,
+	SDT varchar(10) unique not null,
+	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
+	NgaySinh datetime not null,
+	DiaChi nvarchar(50) not null,
+	MatKhau varchar(8) not null,
 	constraint PK_BENHNHAN primary key (MaBenhNhan)
 )
 
 create table NHASI(
-	MaNhaSi int unique identity(1,1),
-	HoTen nvarchar(50),
-	SDT varchar(10) unique,
-	GioiTinh nvarchar(5) check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	NgaySinh datetime,
-	DiaChi nvarchar(50),
-	ChuyenMon nvarchar(50),
-	BangCap nvarchar(50),
-	MatKhau varchar(8),
+	MaNhaSi int unique not null identity(1,1),
+	HoTen nvarchar(50) not null,
+	SDT varchar(10) unique not null,
+	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
+	NgaySinh datetime not null,
+	DiaChi nvarchar(50) not null,
+	ChuyenMon nvarchar(50) not null,
+	BangCap nvarchar(50) not null,
+	MatKhau varchar(8) not null,
 	constraint PK_NHASI primary key (MaNhaSi)
 )
 
 create table LICHLAMVIEC(
-	Ngay datetime,
-	MaNhaSi int,
-	STT int unique identity(1,1),
-	CaDangKy nvarchar(50),
+	STT int unique not null identity(1,1),
+	Ngay datetime not null,
+	MaNhaSi int not null,
+	CaDangKy nvarchar(50) not null,
 	constraint PK_LICHLAMVIEC primary key (STT)
 )
 
 create table LICHHEN(
-	MaLichHen int unique identity(1,1),
-	NgayGioKham datetime,
-	MaBenhNhan varchar(6),
-	MaNhaSi varchar(6),
-	TrangThaiLichHen varchar(50),
+	MaLichHen int unique not null identity(1,1),
+	NgayGioKham datetime not null,
+	MaBenhNhan int not null,
+	MaNhaSi int not null,
+	TrangThaiLichHen nvarchar(50) not null check (TrangThaiLichHen = N'Đã đặt' or TrangThaiLichHen = N'Đã hủy'),
 	constraint PK_LICHHEN primary key (MaLichHen)
 )
 
 create table LICHSUKHAMBENH(
-	STT int unique identity(1,1),
-	MaBenhNhan int,
-	NhaSiKham int,
+	STT int unique not null identity(1,1),
+	MaBenhNhan int not null,
+	MaNhaSiKham int not null,
 	GhiChu nvarchar(50),
-	NgayKham datetime,
-	constraint PK_LICHSUKHAMBENH primary key (STT)
-)
-
-create table DONTHUOC(
-	MaDonThuoc varchar(6) unique not null,
-	LieuDung nvarchar(50),
-	SoLuong nvarchar(50),
-	constraint PK_DONTHUOC primary key (MaDonThuoc)
+	NgayKham datetime not null,
+	constraint PK_LICHSUKHAMBENH primary key (STT, MaBenhNhan)
 )
 
 create table THUOC(
-	MaThuoc varchar(6) unique not null,
-	NgayHetHan datetime,
-	TenThuoc nvarchar(50),
-	DonViTinh nvarchar(50),
-	DonGia int,
+	MaThuoc int unique not null identity(1,1),
+	NgayHetHan datetime not null,
+	TenThuoc nvarchar(50) not null,
+	DonViTinh nvarchar(50) not null,
+	DonGia int not null,
 	ChiDinh nvarchar(50),
-	SoLuongTonKho int,
+	SoLuongTonKho int not null,
 	constraint PK_THUOC primary key (MaThuoc, NgayHetHan)
 )
 
+create table DONTHUOC(
+	MaDonThuoc int unique not null identity(1,1),
+	MaThuoc int not null,
+	MaBenhNhan int not null,
+	NgayHetHan datetime not null,
+	LieuDung nvarchar(50) not null,
+	STTLichSuKB int not null,
+	NgaySuDung datetime not null,
+	SoLuong int not null,
+	constraint PK_DONTHUOC primary key (MaDonThuoc, MaBenhNhan, STTLichSuKB)
+)
+
 create table DICHVU(
-	MaDichVu varchar(6) unique not null,
-	TenDichVu nvarchar(50),
-	MoTa nvarchar(255),
-	DonGia int,
+	MaDichVu int unique not null identity(1,1),
+	TenDichVu nvarchar(50) not null,
+	MoTa nvarchar(255) not null,
+	DonGia int not null,
 	constraint PK_DICHVU primary key (MaDichVu)
 )
 
 create table DICHVUSUDUNG(
-	STT varchar(6),
-	MaHoaDon varchar(6),
-	MaDichVu varchar(6),
+	STT int unique not null identity(1,1),
+	NgaySuDung datetime not null,
+	MaBenhNhan int not null,
+	MaDichVu int,
+	SoLuong int default 0 ,
+	constraint PK_DICHVUSUDUNG primary key (STT, MaBenhNhan)
 )
 
 create table HOADON(
-	MaHoaDon varchar(6) unique,
-	MaBenhNhan varchar(6),
-	TenThuoc nvarchar(255),
+	MaHoaDon int unique not null identity(1,1),
+	MaBenhNhan int not null,
+	STTLichSuKB int not null,
+	STTDichVuSD int,
 	TongTien int,
 	TinhTrangThanhToan nvarchar(50) check (TinhTrangThanhToan = N'Đã thanh toán' or TinhTrangThanhToan = N'Chưa thanh toán'),
-	NhaSiKham nvarchar(50),
 	NgayThanhToan datetime,
-	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan)
+	MaDonThuoc int,
+	MaLichHen int,
+	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB, STTDichVuSD )
 )
 
 
