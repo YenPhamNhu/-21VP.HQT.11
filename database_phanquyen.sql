@@ -160,9 +160,9 @@ create table LICHLAMVIEC
 	Ngay datetime not null,
 	MaNhaSi int not null,
 	CaDangKy nvarchar(50) not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50),
+	-- ThaoTac NVARCHAR(50),
+	-- CapNhatVao DATETIME,
+	-- CapNhatBoi NVARCHAR(50),
 	constraint PK_LICHLAMVIEC primary key (STT)
 )
 --6/Tạo bảng Lịch hẹn:
