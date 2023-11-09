@@ -23,6 +23,7 @@ VALUES
 	(N'Hoàng Văn F', '9876543201', N'Nam', N'Hà Nội', N'Còn làm', N'Nhân viên', 'lkjhgf');
 SELECT *
 FROM NHANVIEN
+
 SELECT *
 FROM NHANVIENLog
 -- 3/Chèn dữ liệu vào bảng NHASI
