@@ -40,6 +40,7 @@ FROM NHASI
 SELECT *
 FROM NHASILog
 -- 4/Chèn dữ liệu vào bảng BENHNHAN
+-- delete BENHNHANLog
 INSERT INTO BENHNHAN
 	(HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau)
 VALUES
