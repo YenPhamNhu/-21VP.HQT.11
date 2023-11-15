@@ -119,7 +119,7 @@ ELSE
 END   
 GO
 
---/CREATE INSERT, UPDATE, DELETE TRIGGER  NHASI
+--/CREATE INSERT, UPDATE, DELETE TRIGGER QTV
 DROP TRIGGER IF EXISTS trgQTV
 GO
 CREATE TRIGGER trgQTV ON dbo.QTV
@@ -156,5 +156,5 @@ ELSE
         (MaNhanVien, HoTen, SDT, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
     SELECT MaNhanVien, HoTen, SDT, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'INSERT', GETDATE(), SUSER_NAME()
     FROM inserted as i
-END   
+END
 GO
