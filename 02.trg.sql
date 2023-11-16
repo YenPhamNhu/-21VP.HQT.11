@@ -139,23 +139,23 @@ BEGIN
     FROM Inserted )
    BEGIN
         INSERT  INTO dbo.QTVLog
-            (MaNhanVien, HoTen, SDT, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
-        SELECT MaNhanVien, HoTen, SDT, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'UPDATE', GETDATE(), SUSER_NAME()
+            (MaNhanVien, HoTen, SDT, Email, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT MaNhanVien, HoTen, SDT, Email, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'UPDATE', GETDATE(), SUSER_NAME()
         FROM deleted as u
     END
 ELSE
    BEGIN
         INSERT  INTO dbo.QTVLog
-            (MaNhanVien, HoTen, SDT, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
-        SELECT MaNhanVien, HoTen, SDT, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'DELETE', GETDATE(), SUSER_NAME()
+            (MaNhanVien, HoTen, SDT, Email, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT MaNhanVien, HoTen, SDT, Email, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'DELETE', GETDATE(), SUSER_NAME()
         FROM deleted as d
     END
 END
 ELSE
    BEGIN
     INSERT  INTO dbo.QTVLog
-        (MaNhanVien, HoTen, SDT, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
-    SELECT MaNhanVien, HoTen, SDT, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'INSERT', GETDATE(), SUSER_NAME()
+        (MaNhanVien, HoTen, SDT, Email, MatKhau,EncryptedMatKhau,ThaoTac,CapNhatVao,CapNhatBoi)
+    SELECT MaNhanVien, HoTen, SDT, Email, MatKhau, EncryptByPassPhrase('MAK', MatKhau ), 'INSERT', GETDATE(), SUSER_NAME()
     FROM inserted as i
 END
 GO
@@ -179,7 +179,7 @@ BEGIN
     FROM Inserted )
    BEGIN
         INSERT  INTO dbo.LICHLAMVIECLog
-            (Ngay, MaNhaSi, CaDangKy)
+            (Ngay, MaNhaSi, CaDangKy,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT Ngay, MaNhaSi, CaDangKy, 'UPDATE', GETDATE(), SUSER_NAME()
         FROM deleted as u
     END
@@ -219,14 +219,14 @@ BEGIN
     FROM Inserted )
    BEGIN
         INSERT  INTO dbo.LICHHENLog
-            (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
+            (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen, 'UPDATE', GETDATE(), SUSER_NAME()
         FROM deleted as u
     END
 ELSE
    BEGIN
         INSERT  INTO dbo.LICHHENLog
-            (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
+            (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen, 'DELETE', GETDATE(), SUSER_NAME()
         FROM deleted as d
     END
@@ -234,7 +234,7 @@ END
 ELSE
    BEGIN
     INSERT  INTO dbo.LICHHENLog
-        (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
+        (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen,ThaoTac,CapNhatVao,CapNhatBoi)
     SELECT NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen, 'INSERT', GETDATE(), SUSER_NAME()
     FROM inserted as i
 END
@@ -259,14 +259,14 @@ BEGIN
     FROM Inserted )
    BEGIN
         INSERT  INTO dbo.LICHSUKHAMBENHLog
-            (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham)
+            (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham, 'UPDATE', GETDATE(), SUSER_NAME()
         FROM deleted as u
     END
 ELSE
    BEGIN
         INSERT  INTO dbo.LICHSUKHAMBENHLog
-            (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham)
+            (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham, 'DELETE', GETDATE(), SUSER_NAME()
         FROM deleted as d
     END
@@ -274,7 +274,7 @@ END
 ELSE
    BEGIN
     INSERT  INTO dbo.LICHSUKHAMBENHLog
-        (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham)
+        (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham,ThaoTac,CapNhatVao,CapNhatBoi)
     SELECT STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham, 'INSERT', GETDATE(), SUSER_NAME()
     FROM inserted as i
 END
@@ -299,14 +299,14 @@ BEGIN
     FROM Inserted )
    BEGIN
         INSERT  INTO dbo.THUOCLog
-            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
+            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho, 'UPDATE', GETDATE(), SUSER_NAME()
         FROM deleted as u
     END
 ELSE
    BEGIN
         INSERT  INTO dbo.THUOCLog
-            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
+            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho,ThaoTac,CapNhatVao,CapNhatBoi)
         SELECT MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho, 'DELETE', GETDATE(), SUSER_NAME()
         FROM deleted as d
     END
@@ -314,13 +314,13 @@ END
 ELSE
    BEGIN
     INSERT  INTO dbo.THUOCLog
-        (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
+        (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho,ThaoTac,CapNhatVao,CapNhatBoi)
     SELECT MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho, 'INSERT', GETDATE(), SUSER_NAME()
     FROM inserted as i
 END
 GO
 
---9/CREATE INSERT, UPDATE, DELETE TRIGGER THUOC
+--9/CREATE INSERT, UPDATE, DELETE TRIGGER DICHVU
 DROP TRIGGER IF EXISTS trgDICHVU
 GO
 CREATE TRIGGER trgDICHVU ON dbo.DICHVU
@@ -339,23 +339,144 @@ BEGIN
     FROM Inserted )
    BEGIN
         INSERT  INTO dbo.DICHVULog
-            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
-        SELECT MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho, 'UPDATE', GETDATE(), SUSER_NAME()
+            (TenDichVu, MoTa, DonGia,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT TenDichVu, MoTa, DonGia, 'UPDATE', GETDATE(), SUSER_NAME()
         FROM deleted as u
     END
 ELSE
    BEGIN
         INSERT  INTO dbo.DICHVULog
-            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
-        SELECT MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho, 'DELETE', GETDATE(), SUSER_NAME()
+            (TenDichVu, MoTa, DonGia,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT TenDichVu, MoTa, DonGia, 'DELETE', GETDATE(), SUSER_NAME()
         FROM deleted as d
     END
 END
 ELSE
    BEGIN
-    INSERT  INTO dbo.THUOCLog
-        (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
-    SELECT MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho, 'INSERT', GETDATE(), SUSER_NAME()
+    INSERT  INTO dbo.DICHVULog
+        (TenDichVu, MoTa, DonGia,ThaoTac,CapNhatVao,CapNhatBoi)
+    SELECT TenDichVu, MoTa, DonGia, 'INSERT', GETDATE(), SUSER_NAME()
+    FROM inserted as i
+END
+GO
+
+--10/CREATE INSERT, UPDATE, DELETE TRIGGER DONTHUOC
+DROP TRIGGER IF EXISTS trgDONTHUOC
+GO
+CREATE TRIGGER trgDONTHUOC ON dbo.DONTHUOC
+FOR INSERT, UPDATE, DELETE
+AS
+DECLARE @login_name VARCHAR(128)
+ 
+    SELECT @login_name = login_name
+FROM sys.dm_exec_sessions
+WHERE   session_id = @@SPID
+    
+IF EXISTS ( SELECT 0
+FROM Deleted )
+BEGIN
+    IF EXISTS ( SELECT 0
+    FROM Inserted )
+   BEGIN
+        INSERT  INTO dbo.DONTHUOCLog
+            (MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong, 'UPDATE', GETDATE(), SUSER_NAME()
+        FROM deleted as u
+    END
+ELSE
+   BEGIN
+        INSERT  INTO dbo.DONTHUOCLog
+            (MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong, 'DELETE', GETDATE(), SUSER_NAME()
+        FROM deleted as d
+    END
+END
+ELSE
+   BEGIN
+    INSERT  INTO dbo.DONTHUOCLog
+        (MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong,ThaoTac,CapNhatVao,CapNhatBoi)
+    SELECT MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong, 'INSERT', GETDATE(), SUSER_NAME()
+    FROM inserted as i
+END
+GO
+
+--11/CREATE INSERT, UPDATE, DELETE TRIGGER DICHVUSUDUNG
+DROP TRIGGER IF EXISTS trgDICHVUSUDUNG
+GO
+CREATE TRIGGER trgDICHVUSUDUNG ON dbo.DICHVUSUDUNG
+FOR INSERT, UPDATE, DELETE
+AS
+DECLARE @login_name VARCHAR(128)
+ 
+    SELECT @login_name = login_name
+FROM sys.dm_exec_sessions
+WHERE   session_id = @@SPID
+    
+IF EXISTS ( SELECT 0
+FROM Deleted )
+BEGIN
+    IF EXISTS ( SELECT 0
+    FROM Inserted )
+   BEGIN
+        INSERT  INTO dbo.DICHVUSUDUNGLog
+            (NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong, 'UPDATE', GETDATE(), SUSER_NAME()
+        FROM deleted as u
+    END
+ELSE
+   BEGIN
+        INSERT  INTO dbo.DICHVUSUDUNGLog
+            (NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong, 'DELETE', GETDATE(), SUSER_NAME()
+        FROM deleted as d
+    END
+END
+ELSE
+   BEGIN
+    INSERT  INTO dbo.DICHVUSUDUNGLog
+        (NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong,ThaoTac,CapNhatVao,CapNhatBoi)
+    SELECT NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong, 'INSERT', GETDATE(), SUSER_NAME()
+    FROM inserted as i
+END
+GO
+
+
+--11/CREATE INSERT, UPDATE, DELETE TRIGGER HOADON
+DROP TRIGGER IF EXISTS trgHOADON
+GO
+CREATE TRIGGER trgHOADON ON dbo.HOADON
+FOR INSERT, UPDATE, DELETE
+AS
+DECLARE @login_name VARCHAR(128)
+ 
+    SELECT @login_name = login_name
+FROM sys.dm_exec_sessions
+WHERE   session_id = @@SPID
+    
+IF EXISTS ( SELECT 0
+FROM Deleted )
+BEGIN
+    IF EXISTS ( SELECT 0
+    FROM Inserted )
+   BEGIN
+        INSERT  INTO dbo.HOADONLog
+            (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc, 'UPDATE', GETDATE(), SUSER_NAME()
+        FROM deleted as u
+    END
+ELSE
+   BEGIN
+        INSERT  INTO dbo.HOADONLog
+            (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc,ThaoTac,CapNhatVao,CapNhatBoi)
+        SELECT MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc, 'DELETE', GETDATE(), SUSER_NAME()
+        FROM deleted as d
+    END
+END
+ELSE
+   BEGIN
+    INSERT  INTO dbo.HOADONLog
+        (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc,ThaoTac,CapNhatVao,CapNhatBoi)
+    SELECT MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc, 'INSERT', GETDATE(), SUSER_NAME()
     FROM inserted as i
 END
 GO

@@ -17,6 +17,7 @@ create table QTV
 	MaNhanVien int unique not null identity(1,1),
 	HoTen nvarchar(50) not null,
 	SDT varchar(10) unique not null,
+	Email varchar(255) unique not null,
 	MatKhau varchar(8) not null,
 	constraint PK_QTV primary key (MaNhanVien)
 )
@@ -28,6 +29,7 @@ create table QTVLog
 	MaNhanVien int unique not null,
 	HoTen nvarchar(50) not null,
 	SDT varchar(10) unique not null,
+	Email varchar(255) unique not null,
 	MatKhau varchar(8) not null,
 	EncryptedMatKhau varbinary(MAX),
 	ThaoTac NVARCHAR(50),
@@ -156,7 +158,7 @@ IF OBJECT_ID('dbo.LICHLAMVIECLog', 'U') IS NOT NULL
 create table LICHLAMVIECLog
 (
 	logID INT IDENTITY(1,1) NOT NULL,
-	STT int not null,
+	STT int,
 	Ngay datetime not null,
 	MaNhaSi int not null,
 	CaDangKy nvarchar(50) not null,
@@ -196,7 +198,7 @@ IF OBJECT_ID('dbo.LICHSUKHAMBENH', 'U') IS NOT NULL
   DROP TABLE dbo.LICHSUKHAMBENH;
 create table LICHSUKHAMBENH
 (
-	STT int not null,
+	STT int not null IDENTITY(1,1) NOT NULL,
 	MaBenhNhan int not null,
 	MaNhaSiKham int not null,
 	GhiChu nvarchar(50),
