@@ -90,8 +90,8 @@ VALUES
 INSERT INTO HOADON
   (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc)
 VALUES
-  (1001, 1, 6, 500000, N'Chưa thanh toán', '2023-11-17 10:00:00', 4),
-  (1000, 2, 5, 300000, N'Đã thanh toán', '2023-11-17 10:00:00', 3)
+  (1001, 1, 2, 500000, N'Chưa thanh toán', '2023-11-17 10:00:00', 2),
+  (1000, 2, 1, 300000, N'Đã thanh toán', '2023-11-17 10:00:00', 1)
 SELECT *
 FROM QTV
 SELECT *

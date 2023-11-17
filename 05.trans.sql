@@ -202,9 +202,52 @@ BEGIN
         PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
     END
 END;
-
+GO
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi). 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'XemThongTinNhaSi' AND type = 'P')
+BEGIN
+    DROP PROCEDURE XemThongTinNhaSi;
+    PRINT N'Đã hủy giao tác XemThongTinCaNhan.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác XemThongTinNhaSi chưa được tạo.';
+END
+GO
+CREATE PROCEDURE XemThongTinNhaSi
+    @MaNhaSi INT
+AS
+BEGIN
+    -- Kiểm tra xem MaNhaSi có tồn tại không
+    IF EXISTS (
+        SELECT 1
+    FROM NHASI
+    WHERE MaNhaSi = @MaNhaSi
+    )
+    BEGIN
+        -- Lấy thông tin của NhaSi
+        SELECT
+            HoTen AS 'Họ Tên',
 
+            SDT AS 'Số Điện Thoại',
+            GioiTinh AS 'Giới Tính',
+            NgaySinh AS 'Ngày Sinh',
+            DiaChi AS 'Địa Chỉ',
+            ChuyenMon AS 'Chuyên Khoa',
+            BangCap AS 'Bằng'
+        FROM NHASI
+        WHERE MaNhaSi = @MaNhaSi;
+    END
+    ELSE
+    BEGIN
+        -- Nếu MaNhaSi không tồn tại
+        PRINT 'Không tìm thấy thông tin cho MaNhaSi = ' + CAST(@MaNhaSi AS NVARCHAR(10));
+    END
+END;
+
+GO
 -- Có quyền được cập nhật thông tin cá nhân của bệnh nhân (gọi giao tác CapNhatThongTin) 
 
 -- Có quyền được xem hồ sơ bệnh án (lịch sử khám chữa bệnh) được nha sĩ ghi nhận lại trong quá trình điều trị (gọi giao tác XemHoSoBenhAn) 
@@ -259,7 +302,20 @@ END;
 
 -- Có quyền xem danh mục thuốc (gọi giao tác XemDanhMucThuoc) gồm mã thuốc, tên thuốc, đơn vị tính, chỉ định, số lượng tồn trong kho và ngày hết hạn của thuốc. 
 
--- Có quyền tìm kiếm hồ sơ khám bệnh của bệnh nhân (gọi giao tác TimKiemHoSoBenhNhan) để lấy thông tin khám gồm dịch vụ, phí khám, đơn thuốc để lập hóa đơn thanh toán (gọi giao tác LapHoaDonThanhToan) 
+-- Có quyền tìm kiếm hồ sơ khám bệnh của bệnh nhân (gọi giao tác TimKiemHoSoBenhNhan) 
+-- để lấy thông tin khám gồm dịch vụ, phí khám, đơn thuốc để lập hóa đơn thanh toán (gọi giao tác LapHoaDonThanhToan) 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'TimKiemHoSoBenhNhan' AND type = 'P')
+BEGIN
+    DROP PROCEDURE TimKiemHoSoBenhNhan;
+    PRINT N'Đã hủy giao tác TimKiemHoSoBenhNhan.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác TimKiemHoSoBenhNhan chưa được tạo.';
+END
+GO
 CREATE PROCEDURE TimKiemHoSoBenhNhan
     @TenBenhNhan NVARCHAR(50)
 AS
