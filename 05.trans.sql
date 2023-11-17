@@ -1,6 +1,20 @@
 -- //0.Người dùng khách (người dùng chưa đăng nhập) 
 
--- Có quyền đăng kí tài khoản (gọi giao tác TaoTaiKhoanBenhNhan) bằng cách cung cấp họ tên, ngày sinh, giới tính, số điện thoại, địa chỉ, mật khẩu (mạnh). 
+-- 0.1/Có quyền đăng kí tài khoản (gọi giao tác TaoTaiKhoanBenhNhan) 
+-- bằng cách cung cấp họ tên, ngày sinh, giới tính, số điện thoại
+-- , địa chỉ, mật khẩu (mạnh). 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'TaoTaiKhoanBenhNhan' AND type = 'P')
+BEGIN
+    DROP PROCEDURE TaoTaiKhoanBenhNhan;
+    PRINT N'Đã hủy giao tác TaoTaiKhoanBenhNhan.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác TaoTaiKhoanBenhNhan chưa được tạo.';
+END
+GO
 CREATE PROCEDURE TaoTaiKhoanBenhNhan
     @HoTen NVARCHAR(50),
     @SDT VARCHAR(10),
@@ -10,29 +24,43 @@ CREATE PROCEDURE TaoTaiKhoanBenhNhan
     @MatKhau VARCHAR(8)
 AS
 BEGIN
-
-    INSERT INTO BENHNHAN
-        (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau)
-    VALUES
-        (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @MatKhau);
-
+    IF NOT EXISTS (SELECT 1
+    FROM BENHNHAN
+    WHERE SDT = @SDT)
+    BEGIN
+        INSERT INTO BENHNHAN
+            (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @MatKhau);
+        PRINT N'Tạo tài khoản thành công';
+    END
+    ELSE
+    BEGIN
+        -- SDT đã tồn tại, In ra màn hình
+        PRINT N'Số điện thoại đã tồn tại. Tạo tài khoản không thành công';
+    END
 END;
 GO
-EXEC TaoTaiKhoanBenhNhan
-    @HoTen = 'New Patient',
-    @SDT = '1234567890',
-    @GioiTinh = 'Nam',
-    @NgaySinh = '1990-01-01',
-    @DiaChi = 'Address',
-    @MatKhau = 'password';
+--//-------------------
+-- 0.2/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap)
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'DangNhap' AND type = 'P')
+BEGIN
+    DROP PROCEDURE DangNhap;
+    PRINT N'Đã hủy giao tác DangNhap.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác DangNhap chưa được tạo.';
+END
 GO
--- Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap) 
 CREATE PROCEDURE DangNhap
     @UserName NVARCHAR(50),
     @Password NVARCHAR(50)
 AS
 BEGIN
-    -- Check if the user is a Quan Tri Vien (QTV)
+    -- Kiểm tra User là Quan Tri Vien (QTV)
     IF EXISTS (SELECT 1
     FROM QTV
     WHERE SDT = @UserName AND MatKhau = @Password)
@@ -40,7 +68,7 @@ BEGIN
         -- Quan Tri Vien (QTV) login successful
         SELECT 'QTV' AS UserRole;
     END
-    -- Check if the user is a Nhan Vien (NHANVIEN)
+    -- Kiểm tra User là Nhan Vien (NHANVIEN)
     ELSE IF EXISTS (SELECT 1
     FROM NHANVIEN
     WHERE SDT = @UserName AND MatKhau = @Password)
@@ -48,7 +76,7 @@ BEGIN
         -- Nhan Vien (NHANVIEN) login successful
         SELECT 'NHANVIEN' AS UserRole;
     END
-    -- Check if the user is a Nha Si (NHASI)
+    -- Kiểm tra User là Nha Si (NHASI)
     ELSE IF EXISTS (SELECT 1
     FROM NHASI
     WHERE SDT = @UserName AND MatKhau = @Password)
@@ -56,7 +84,7 @@ BEGIN
         -- Nha Si (NHASI) login successful
         SELECT 'NHASI' AS UserRole;
     END
-    -- Check if the user is a Benh Nhan (BENHNHAN)
+    -- Kiểm tra User là Benh Nhan (BENHNHAN)
     ELSE IF EXISTS (SELECT 1
     FROM BENHNHAN
     WHERE SDT = @UserName AND MatKhau = @Password)
@@ -71,163 +99,109 @@ BEGIN
     END
 END;
 GO
-EXEC DangNhap @UserName = 'userNHANVIEN', @Password = 'password';
-GO
+--//-------------------
 -- //1.Bệnh nhân (đã có tài khoản) 
-
--- Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap) 
-CREATE PROCEDURE DangNhap
-    @UserName NVARCHAR(50),
-    @Password NVARCHAR(50),
-    @UserRole NVARCHAR(50) OUTPUT
-AS
+-- 1.1/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap) : WROTE
+-- 1.2/Có quyền đặt lịch hẹn: 
+-- Được quyền chọn ngày giờ khám (gọi giao tác ChonThoiGianKham). 
+-- Được quyền chọn nha sĩ khám (gọi giao tác ChonNhaSiKham). 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'DatLichHen' AND type = 'P')
 BEGIN
-    SET @UserRole = 'INVALID';
-    -- Default value
-
-    -- Check if the user is a Quan Tri Vien (QTV)
-    IF EXISTS (SELECT 1
-    FROM QTV
-    WHERE SDT = @UserName AND MatKhau = @Password)
-    BEGIN
-        SET @UserRole = 'QTV';
-    END
-    -- Check if the user is a Nhan Vien (NHANVIEN)
-    ELSE IF EXISTS (SELECT 1
-    FROM NHANVIEN
-    WHERE SDT = @UserName AND MatKhau = @Password)
-    BEGIN
-        SET @UserRole = 'NHANVIEN';
-    END
-    -- Check if the user is a Nha Si (NHASI)
-    ELSE IF EXISTS (SELECT 1
-    FROM NHASI
-    WHERE SDT = @UserName AND MatKhau = @Password)
-    BEGIN
-        SET @UserRole = 'NHASI';
-    END
-    -- Check if the user is a Benh Nhan (BENHNHAN)
-    ELSE IF EXISTS (SELECT 1
-    FROM BENHNHAN
-    WHERE SDT = @UserName AND MatKhau = @Password)
-    BEGIN
-        SET @UserRole = 'BENHNHAN';
-    END
-END;
+    DROP PROCEDURE DatLichHen;
+    PRINT N'Đã hủy giao tác DatLichHen.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác DatLichHen chưa được tạo.';
+END
 GO
-DECLARE @UserRole NVARCHAR(50);
-
-EXEC DangNhap
-    @UserName = 'userNHANVIEN',
-    @Password = 'password',
-    @UserRole = @UserRole OUTPUT;
-
-PRINT 'User Role: ' + @UserRole;
-GO
--- Có quyền đặt lịch hẹn: 
 CREATE PROCEDURE DatLichHen
     @Ngay DATETIME,
+    @SDT varchar(10),
     @MaNhaSi INT,
     @CaDangKy NVARCHAR(50)
 AS
 BEGIN
-    -- Check if the selected time slot is available
-    IF NOT EXISTS (
-        SELECT 1
-    FROM LICHLAMVIEC
-    WHERE Ngay = @Ngay
-        AND MaNhaSi = @MaNhaSi
-        AND CaDangKy = @CaDangKy
-    )
-    BEGIN
-        -- Time slot is available, schedule the appointment
-        INSERT INTO LICHHEN
-            (NgayGioKham, MaNhaSi, TrangThaiLichHen)
-        VALUES
-            (@Ngay, @MaNhaSi, N'Đã đặt');
+    DECLARE @MaBenhNhan INT;
 
-        PRINT 'Đã đặt hẹn thành công.';
-    END
-    ELSE
-    BEGIN
-        -- Time slot is already booked
-        PRINT 'Vui lòng chọn khung giờ khác.';
-    END
-END;
-GO
--- Execute the stored procedure with sample values
-EXEC DatLichHen
-    @Ngay = '2023-01-01 10:00:00',
-    @MaNhaSi = 100,
-    @CaDangKy = 'Morning';
-GO
--- Được quyền chọn ngày giờ khám (gọi giao tác ChonThoiGianKham). 
-CREATE PROCEDURE ChonThoiGianKham
-    @Ngay DATETIME,
-    @MaNhaSi INT,
-    @MaBenhNhan INT
-AS
+    -- Kiểm tra tài khoản hợp lệ dựa trên SDT
+    SELECT @MaBenhNhan = MaBenhNhan
+    FROM BENHNHAN BN
+    WHERE BN.SDT = @SDT;
+
+    IF @MaBenhNhan IS NOT NULL
 BEGIN
-    -- Check for available time slots on the specified date and for the specific dentist
-    IF EXISTS (
+        -- Kiểm tra nếu có Ca trống
+        IF EXISTS (
         SELECT 1
-    FROM LICHLAMVIEC
-    WHERE Ngay = @Ngay
-        AND MaNhaSi = @MaNhaSi
-    )
-    BEGIN
-        -- Display available time slots for the patient to choose
-        SELECT
-            STT,
-            Ngay,
-            CaDangKy
         FROM LICHLAMVIEC
         WHERE Ngay = @Ngay
-            AND MaNhaSi = @MaNhaSi;
+            AND MaNhaSi = @MaNhaSi
+            AND CaDangKy = @CaDangKy
+    )
+    BEGIN
+            -- Khung giờ trống -> Đặt hẹn
+            INSERT INTO LICHHEN
+                (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
+            VALUES
+                (@Ngay, @MaBenhNhan, @MaNhaSi, N'Đã đặt');
 
-        -- Prompt the patient to choose a time slot
-        DECLARE @STT INT;
-        DECLARE @ChonCaDangKy NVARCHAR(50);
+            PRINT N'Đã đặt hẹn thành công.';
+        END
+    ELSE
+    BEGIN
+            -- Khung giờ muốn đặt đã hết
+            PRINT N'Vui lòng chọn khung giờ khác.';
+        END
+    END
+ELSE
+BEGIN
+        PRINT N'Không tìm thấy bệnh nhân với số điện thoại đã nhập.';
+    END
 
-        SET @STT = NULL;
-        SET @ChonCaDangKy = NULL;
+END;
 
-        WHILE @STT IS NULL OR @ChonCaDangKy IS NULL
-        BEGIN
-            PRINT 'Enter the STT (Time Slot ID) you want to choose:';
-            SET @STT = CAST(CONVERT(NVARCHAR(10),
-            READTEXT
-            ('STT')) AS INT);
+GO
 
-            PRINT 'Enter the chosen CaDangKy (Time Slot):';
-            SET @ChonCaDangKy = CONVERT(NVARCHAR(50),
-            READTEXT
-            ('ChonCaDangKy'));
-        END;
-
-        -- Insert the chosen time slot into LICHHEN
-        INSERT INTO LICHHEN
-            (NgayGioKham, MaNhaSi, MaBenhNhan, TrangThaiLichHen)
-        VALUES
-            (@Ngay, @MaNhaSi, @MaBenhNhan, N'Đã đặt');
-
-        PRINT 'Appointment scheduled successfully.';
+-- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'XemThongTinCaNhan' AND type = 'P')
+BEGIN
+    DROP PROCEDURE XemThongTinCaNhan;
+    PRINT N'Đã hủy giao tác XemThongTinCaNhan.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác XemThongTinCaNhan chưa được tạo.';
+END
+GO
+CREATE PROCEDURE XemThongTinCaNhan
+    @SDT VARCHAR(10)
+AS
+BEGIN
+    -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
+    IF EXISTS (SELECT 1
+    FROM BENHNHAN
+    WHERE SDT = @SDT)
+    BEGIN
+        -- Lấy thông tin cá nhân của bệnh nhân
+        SELECT
+            HoTen,
+            NgaySinh,
+            DiaChi,
+            SDT,
+            GioiTinh
+        FROM BENHNHAN
+        WHERE SDT = @SDT;
     END
     ELSE
     BEGIN
-        -- No available time slots on the specified date and for the specific dentist
-        PRINT 'No available time slots for the specified date and dentist.';
+        PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
     END
 END;
-GO
-EXEC ChonThoiGianKham
-    @Ngay = '2023-01-01',
-    @MaNhaSi = 100,
-    @MaBenhNhan = 1001;
-GO
--- Được quyền chọn nha sĩ khám (gọi giao tác ChonNhaSiKham). 
-
--- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
 
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi). 
 

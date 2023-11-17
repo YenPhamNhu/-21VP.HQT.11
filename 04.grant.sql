@@ -18,7 +18,7 @@ END
 GO
 USE [QLPKNK]
 GO
---Tạo user cho 5 login trên csdl QLPKNK:
+--Tạo user cho 4 login trên csdl QLPKNK:
 IF NOT EXISTS (SELECT [name]
 FROM [sys].[database_principals]
 WHERE [name] in ('userQTV','userNHANVIEN','userNHASI','userBENHNHAN'))
@@ -33,101 +33,72 @@ Begin
     FOR LOGIN [LoginBENHNHAN] WITH DEFAULT_SCHEMA=[dbo];
 end
 GO
---PHÂN QUYỀN: Quan Tri Vien
-IF EXISTS (
-    SELECT *
+-- PHÂN QUYỀN: Quan Tri Vien
+IF NOT EXISTS (SELECT *
 FROM sys.database_principals
-WHERE name = 'QTV'
-    and type = 'R'
-        )
+WHERE name = 'QTV' AND type = 'R')
 BEGIN
-    ALTER ROLE [QTV] ADD MEMBER [userQTV]
-END
-ELSE IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'QTV'
-    and type = 'R'
-        )
-BEGIN
-    --Quan Tri Vien (create db, create table, create proc, …)
-    -- GRANT ALTER ANY SCHEMA to userQTV
-    -- GRANT EXECUTE to userQTV
-    -- GRANT CONTROL to userQTV
-    -- GRANT SELECT , UPDATE, DELETE, INSERT TO userQTV;
-    -- GRANT CONTROL ON DATABASE::QLPKNK TO userQTV;
-    -- ALTER ROLE [QTV] ADD MEMBER [userQTV]
-    -- GRANT INSERT ON SCHEMA :: NHASI TO userQTV WITH GRANT OPTION;
-    GRANT INSERT ON SCHEMA :: NHASI TO guest;
-END
-GO
---PHÂN QUYỀN: NHASI
-IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'NHASI'
-    and type = 'R'
-        )
-BEGIN
-    ALTER ROLE [NHASI] ADD MEMBER [userNHASI]
-END
-ELSE IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'NHASI'
-    and type = 'R'
-        )
-BEGIN
-    --Users (select)
-    GRANT SELECT TO [NHASI]
-    ALTER ROLE [NHASI] ADD MEMBER [userNHASI]
-END
-GO
---PHÂN QUYỀN: NHANVIEN
-IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'NHANVIEN'
-    and type = 'R'
-        )
-BEGIN
-    ALTER ROLE [NHANVIEN] ADD MEMBER [userNHANVIEN]
-END
-ELSE IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'NHANVIEN'
-    and type = 'R'
-        )
-BEGIN
-    --Users (select)
-    GRANT SELECT TO [NHANVIEN]
-    ALTER ROLE [NHANVIEN] ADD MEMBER [userNHANVIEN]
-END
-GO
---PHÂN QUYỀN: BENHNHAN
-IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'BENHNHAN'
-    and type = 'R'
-        )
-BEGIN
-    ALTER ROLE [BENHNHAN] ADD MEMBER [userBENHNHAN]
-END
-ELSE IF EXISTS (
-    SELECT *
-FROM sys.database_principals
-WHERE name = 'BENHNHAN'
-    and type = 'R'
-        )
-BEGIN
-    --Users (select)
-    GRANT SELECT TO [BENHNHAN]
-    ALTER ROLE [BENHNHAN] ADD MEMBER [userBENHNHAN]
-END
-GO
+    CREATE ROLE [QTV];
+    ALTER ROLE [QTV] ADD MEMBER [userQTV];
 
+    GRANT ALTER ANY SCHEMA TO [userQTV];
+    GRANT EXECUTE TO [userQTV];
+    GRANT CONTROL TO [userQTV];
+    GRANT SELECT, UPDATE, DELETE, INSERT TO [userQTV];
+    GRANT CONTROL ON DATABASE::QLPKNK TO [userQTV];
+END
+ELSE
+BEGIN
+    ALTER ROLE [QTV] ADD MEMBER [userQTV];
+END
+
+-- PHÂN QUYỀN: NHASI
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'NHASI' AND type = 'R')
+BEGIN
+    CREATE ROLE [NHASI];
+    ALTER ROLE [NHASI] ADD MEMBER [userNHASI];
+
+    GRANT SELECT TO [NHASI];
+    GRANT INSERT TO [NHASI];
+END
+ELSE
+BEGIN
+    ALTER ROLE [NHASI] ADD MEMBER [userNHASI];
+END
+
+-- PHÂN QUYỀN: NHANVIEN
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'NHANVIEN' AND type = 'R')
+BEGIN
+    CREATE ROLE [NHANVIEN];
+    ALTER ROLE [NHANVIEN] ADD MEMBER [userNHANVIEN];
+
+    GRANT SELECT TO [NHANVIEN];
+    GRANT INSERT TO [NHANVIEN];
+END
+ELSE
+BEGIN
+    ALTER ROLE [NHANVIEN] ADD MEMBER [userNHANVIEN];
+END
+
+-- PHÂN QUYỀN: BENHNHAN
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'BENHNHAN' AND type = 'R')
+BEGIN
+    CREATE ROLE [BENHNHAN];
+    ALTER ROLE [BENHNHAN] ADD MEMBER [userBENHNHAN];
+
+    GRANT SELECT TO [BENHNHAN];
+    GRANT INSERT TO [BENHNHAN];
+END
+ELSE
+BEGIN
+    ALTER ROLE [BENHNHAN] ADD MEMBER [userBENHNHAN];
+END
 -- -- To retrieve all Users
 -- SELECT *
 -- FROM QLPKNK.sys.database_principals
@@ -136,7 +107,3 @@ GO
 -- SELECT *
 -- FROM QLPKNK.sys.sql_logins
 -- WHERE name LIKE 'Login%';
-
-
-
-

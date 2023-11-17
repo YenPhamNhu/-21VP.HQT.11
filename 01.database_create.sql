@@ -21,21 +21,7 @@ create table QTV
 	MatKhau varchar(8) not null,
 	constraint PK_QTV primary key (MaNhanVien)
 )
-IF OBJECT_ID('dbo.QTVLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.QTVLog;
-create table QTVLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaNhanVien int unique not null,
-	HoTen nvarchar(50) not null,
-	SDT varchar(10) unique not null,
-	Email varchar(255) unique not null,
-	MatKhau varchar(8) not null,
-	EncryptedMatKhau varbinary(MAX),
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-);
+
 GO
 --2/Tạo bảng nhân viên:
 --By default, the starting value = 10, and increment by 1 for each new record.
@@ -53,24 +39,7 @@ create table NHANVIEN
 	MatKhau varchar(8) not null,
 	constraint PK_NHANVIEN primary key (MaNhanVien)
 )
-IF OBJECT_ID('dbo.NHANVIENLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.NHANVIENLog;
-create table NHANVIENLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaNhanVien int unique not null,
-	Hoten nvarchar(50) not null,
-	SDT varchar(10) unique not null,
-	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	DiaChi nvarchar(50) not null,
-	TinhTrangHoatDong nvarchar(20) not null check (TinhTrangHoatDong = N'Còn làm' or TinhTrangHoatDong = N'Nghỉ làm'),
-	ViTri nvarchar(50) not null,
-	MatKhau varchar(8) not null,
-	EncryptedMatKhau varbinary(MAX),
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-);
+
 GO
 --3/Tạo bảng nha sĩ:
 --By default, the starting value = 100, and increment by 1 for each new record.
@@ -89,25 +58,7 @@ create table NHASI
 	MatKhau varchar(8) not null,
 	constraint PK_NHASI primary key (MaNhaSi)
 )
-IF OBJECT_ID('dbo.NHASILog', 'U') IS NOT NULL 
-  DROP TABLE dbo.NHASILog;
-create table NHASILog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaNhaSi int unique not null,
-	HoTen nvarchar(50) not null,
-	SDT varchar(10) unique not null,
-	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	NgaySinh datetime not null,
-	DiaChi nvarchar(50) not null,
-	ChuyenMon nvarchar(50) not null,
-	BangCap nvarchar(50) not null,
-	MatKhau varchar(8) not null,
-	EncryptedMatKhau varbinary(MAX),
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
+
 --4/Tạo bảng bệnh nhân:
 --By default, the starting value = 1000, and increment by 1 for each new record.
 IF OBJECT_ID('dbo.BENHNHAN', 'U') IS NOT NULL 
@@ -123,23 +74,7 @@ create table BENHNHAN
 	MatKhau varchar(8) not null,
 	constraint PK_BENHNHAN primary key (MaBenhNhan)
 )
-IF OBJECT_ID('dbo.BENHNHANLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.BENHNHANLog;
-create table BENHNHANLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaBenhNhan int unique not null,
-	HoTen nvarchar(50) not null,
-	SDT varchar(10) unique not null,
-	GioiTinh nvarchar(5) not null check (GioiTinh = N'Nam' or GioiTinh = N'Nữ'),
-	NgaySinh datetime not null,
-	DiaChi nvarchar(50) not null,
-	MatKhau varchar(8) not null,
-	EncryptedMatKhau varbinary(MAX),
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-);
+
 GO
 --5/Tạo bảng Nha sĩ đăng ký lịch làm việc:
 IF OBJECT_ID('dbo.LICHLAMVIEC', 'U') IS NOT NULL 
@@ -153,19 +88,6 @@ create table LICHLAMVIEC
 	constraint PK_LICHLAMVIEC primary key (STT)
 )
 
-IF OBJECT_ID('dbo.LICHLAMVIECLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.LICHLAMVIECLog;
-create table LICHLAMVIECLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	STT int,
-	Ngay datetime not null,
-	MaNhaSi int not null,
-	CaDangKy nvarchar(50) not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
 --6/Tạo bảng Lịch hẹn:
 IF OBJECT_ID('dbo.LICHHEN', 'U') IS NOT NULL 
   DROP TABLE dbo.LICHHEN;
@@ -179,46 +101,19 @@ create table LICHHEN
 	constraint PK_LICHHEN primary key (MaLichHen)
 )
 
-IF OBJECT_ID('dbo.LICHHENLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.LICHHENLog;
-create table LICHHENLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaLichHen int not null,
-	NgayGioKham datetime not null,
-	MaBenhNhan int not null,
-	MaNhaSi int not null,
-	TrangThaiLichHen nvarchar(50) not null check (TrangThaiLichHen = N'Đã đặt' or TrangThaiLichHen = N'Đã hủy'),
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
 --7/Tạo bảng Hồ sơ Lịch sử khám bệnh:
 IF OBJECT_ID('dbo.LICHSUKHAMBENH', 'U') IS NOT NULL 
   DROP TABLE dbo.LICHSUKHAMBENH;
 create table LICHSUKHAMBENH
 (
-	STT int not null IDENTITY(1,1) NOT NULL,
+	STT int IDENTITY(1,1) NOT NULL,
 	MaBenhNhan int not null,
 	MaNhaSiKham int not null,
 	GhiChu nvarchar(50),
 	NgayKham datetime not null,
 	constraint PK_LICHSUKHAMBENH primary key (STT, MaBenhNhan)
 )
-IF OBJECT_ID('dbo.LICHSUKHAMBENHLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.LICHSUKHAMBENHLog;
-create table LICHSUKHAMBENHLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	STT int not null,
-	MaBenhNhan int not null,
-	MaNhaSiKham int not null,
-	GhiChu nvarchar(50),
-	NgayKham datetime not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
+
 --8/Tạo bảng danh sách thuốc:
 IF OBJECT_ID('dbo.THUOC', 'U') IS NOT NULL 
   DROP TABLE dbo.THUOC;
@@ -234,22 +129,6 @@ create table THUOC
 	constraint PK_THUOC primary key (MaThuoc, NgayHetHan)
 )
 
-IF OBJECT_ID('dbo.THUOCLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.THUOCLog;
-create table THUOCLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaThuoc int not null,
-	NgayHetHan datetime not null,
-	TenThuoc nvarchar(50) not null,
-	DonViTinh nvarchar(50) not null,
-	DonGia int not null,
-	ChiDinh nvarchar(50),
-	SoLuongTonKho int not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
 --9/Tạo bảng đơn thuốc của bệnh nhân 
 IF OBJECT_ID('dbo.DONTHUOC', 'U') IS NOT NULL 
   DROP TABLE dbo.DONTHUOC;
@@ -266,23 +145,6 @@ create table DONTHUOC
 	constraint PK_DONTHUOC primary key (MaDonThuoc)
 )
 
-IF OBJECT_ID('dbo.DONTHUOCLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.DONTHUOCLog;
-create table DONTHUOCLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaDonThuoc int unique not null,
-	MaThuoc int not null,
-	MaBenhNhan int not null,
-	NgaySuDung datetime not null,
-	NgayHetHan datetime not null,
-	LieuDung nvarchar(50) not null,
-	STTLichSuKB int not null,
-	SoLuong int not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
 --10/Tạo bảng danh mục dịch vụ
 IF OBJECT_ID('dbo.DICHVU', 'U') IS NOT NULL 
   DROP TABLE dbo.DICHVU;
@@ -294,19 +156,7 @@ create table DICHVU
 	DonGia int not null,
 	constraint PK_DICHVU primary key (MaDichVu)
 )
-IF OBJECT_ID('dbo.DICHVULog', 'U') IS NOT NULL 
-  DROP TABLE dbo.DICHVULog;
-create table DICHVULog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaDichVu int unique not null,
-	TenDichVu nvarchar(50) not null,
-	MoTa nvarchar(255) not null,
-	DonGia int not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
+
 --11/Tạo bảng danh sách dịch vụ sử dụng của bệnh nhân
 IF OBJECT_ID('dbo.DICHVUSUDUNG', 'U') IS NOT NULL 
   DROP TABLE dbo.DICHVUSUDUNG;
@@ -321,21 +171,6 @@ create table DICHVUSUDUNG
 	constraint PK_DICHVUSUDUNG primary key (MaPhieuDVSD)
 )
 
-IF OBJECT_ID('dbo.DICHVUSUDUNGLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.DICHVUSUDUNGLog;
-create table DICHVUSUDUNGLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaPhieuDVSD int unique not null,
-	NgaySuDung datetime not null,
-	STTLichSuKB int not null,
-	MaBenhNhan int not null,
-	MaDichVu int not null,
-	SoLuong int not null default 0 ,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
 --12/Tạo bảng hóa đơn
 IF OBJECT_ID('dbo.HOADON', 'U') IS NOT NULL 
   DROP TABLE dbo.HOADON;
@@ -352,23 +187,6 @@ create table HOADON
 	constraint PK_THANHTOAN primary key (MaHoaDon, MaBenhNhan, STTLichSuKB)
 )
 
-IF OBJECT_ID('dbo.HOADONLog', 'U') IS NOT NULL 
-  DROP TABLE dbo.HOADONLog;
-create table HOADONLog
-(
-	logID INT IDENTITY(1,1) NOT NULL,
-	MaHoaDon int unique not null,
-	MaBenhNhan int not null,
-	STTLichSuKB int not null,
-	MaPhieuDVSD int not null,
-	TongTien int not null,
-	TinhTrangThanhToan nvarchar(50) not null check (TinhTrangThanhToan = N'Đã thanh toán' or TinhTrangThanhToan = N'Chưa thanh toán'),
-	NgayThanhToan datetime not null,
-	MaDonThuoc int not null,
-	ThaoTac NVARCHAR(50),
-	CapNhatVao DATETIME,
-	CapNhatBoi NVARCHAR(50)
-)
 -- Tạo khóa ngoại
 alter table LICHLAMVIEC
 add
