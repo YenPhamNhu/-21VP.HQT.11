@@ -268,7 +268,49 @@ GO
 
 -- Có quyền cập nhật lịch làm việc của mình (gọi giao tác CapNhatLichLamViec) 
 
--- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tinh. 
+-- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tinh. (NHÂN VIÊN)
+IF EXISTS (SELECT * 
+            FROM sys.procedures 
+            WHERE name = 'XemThongTinCaNhanNhanVien' AND type = 'P')
+    BEGIN
+        DROP PROCEDURE XemThongTinCaNhanNhanVien;
+        PRINT N'Đã huỷ giao tác XemThongTinCaNhanNhanVien';
+    END
+ELSE
+    BEGIN
+        Print 'Giao tác XemThongTinCaNhanNhanVien chưa dược tạo';
+    END
+GO
+CREATE PROCEDURE XemThongTinCaNhanNhanVien
+    @SDT VARCHAR(10)
+AS
+BEGIN 
+    BEGIN TRANSACTION
+    -- ktra nhân viên có tồn tại trong hệ thống không
+    IF EXISTS (SELECT 1 FROM NHANVIEN WHERE SDT = @SDT)
+        BEGIN  
+            -- Lấy thông tin cá nhân của nhân viên
+            SELECT 
+                Hoten,
+                SDT,
+                GioiTinh,
+                DiaChi,
+                TinhTrangHoatDong,
+                ViTri
+            FROM NHANVIEN
+            WHERE SDT = @SDT;
+
+            COMMIT TRANSACTION;
+        END
+    ELSE
+        BEGIN
+            ROLLBACK TRANSACTION;
+            PRINT N'Nhân viên không tồn tại trong hệ thống.';
+        END
+    COMMIT TRANSACTION;
+END
+-- EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
+-- GO
 
 -- Có quyền được xem thông tin của nha sĩ khác (gọi giao tác XemThongTinNhaSi) và nhân viên (gọi giao tác XemThongTinNhanVien) 
 
@@ -277,7 +319,50 @@ GO
 -- Có quyền ghi nhận thông tin vào hồ sơ bệnh nhân gồm: ngày, tháng, người thực hiện khám, dịch vụ sử dụng, danh sách thuốc được kê cho mỗi lần khám (gọi giao tác GhiNhanHoSoBenhAn). 
 
 -- Có quyền xem danh mục thuốc (gọi giao tác XemDanhMucThuoc) 
+IF EXISTS (SELECT * 
+            FROM sys.procedures 
+            WHERE name = 'XemDanhMucThuoc' AND type = 'P')
+    BEGIN
+        DROP PROCEDURE XemDanhMucThuoc;
+        PRINT N'Đã huỷ giao tác XemDanhMucThuoc';
+    END
+ELSE
+    BEGIN
+        Print 'Giao tác XemDanhMucThuoc chưa dược tạo';
+    END
+GO
+CREATE PROCEDURE XemDanhMucThuoc
+    @MaThuoc INT
+AS
+BEGIN 
+    BEGIN TRANSACTION
+    -- ktra mã thuốc có tồn tại trong hệ thống không
+    IF EXISTS (SELECT 1 FROM THUOC WHERE MaThuoc = @MaThuoc)
+        BEGIN  
+            -- Lấy thông tin thuốc
+            SELECT 
+                MaThuoc,
+                NgayHetHan ,
+                TenThuoc,
+                DonViTinh,
+                DonGia,
+                ChiDinh,
+                SoLuongTonKho
+            FROM THUOC
+            WHERE MaThuoc = @MaThuoc;
 
+            COMMIT TRANSACTION;
+        END
+    ELSE
+        BEGIN
+            ROLLBACK TRANSACTION;
+            PRINT N'Thuốc không tồn tại trong hệ thống.';
+        END
+    COMMIT TRANSACTION;
+END
+
+EXEC XemDanhMucThuoc @MaThuoc = 101;
+GO
 -- Có quyền được xem danh sách lịch hẹn  (gọi giao tác XemDanhSachLichHen) 
 
 -- Có quyền cập nhật lịch cá nhân của mình (gọi giao tác CapNhatLichCaNhan) 
@@ -297,8 +382,111 @@ GO
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi) và bệnh nhân (gọi giao tác XemThongTinBenhNhan) 
 
 -- Có quyền ghi nhận vào hệ thống thông tin đặt khám hoặc đăng kí cho khách hàng (gọi giao tiếp GhiNhanDatKhamBenh) 
+IF EXISTS (SELECT *
+            FROM sys.procedures
+            WHERE name = 'GhiNhanDatKhamBenh' AND type = 'P')
+    BEGIN
+        DROP PROCEDURE GhiNhanDatKhamBenh;
+        PRINT N'Đã huỷ giao tác GhiNhanDatKhamBenh.';
+    END
+ELSE
+    BEGIN
+        PRINT N'Giao tá GhiNhanDatKhamBenh chưa được tạo.';
+    END
+    GO
+CREATE PROCEDURE GhiNhanDatKhamBenh
+    @NgayGioKham DATETIME,
+    @MaBenhNhan INT, 
+    @MaNhaSi INT
+AS
+BEGIN   
+    BEGIN TRY
+        BEGIN TRANSACTION; 
+        INSERT INTO LICHHEN (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
+        VALUES (@NgayGioKham, @MaBenhNhan, @MaNhaSi, N'Đã đặt');
+        COMMIT;
+    END TRY
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION
+        PRINT N'Không thể ghi nhận lịch hẹn.'
+    END CATCH;
+END
+EXEC GhiNhanDatKhamBenh @NgayGioKham = '2023-11-19 09:30:00.000', @MaBenhNhan = 1, @MaNhaSi = 100;
+GO
+SELECT *
+FROM LICHHEN
 
+-- không có biết
+-- Có quyền tìm kiếm hồ sơ khám bệnh của bệnh nhân (gọi giao tác TimKiemHoSoBenhNhan) 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'TimKiemHoSoKhamBenh' AND type = 'P')
+BEGIN
+    DROP PROCEDURE TimKiemHoSoKhamBenh;
+    PRINT N'Đã hủy giao tác TimKiemHoSoKhamBenh.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác TimKiemHoSoKhamBenh chưa được tạo.';
+END
+GO
+CREATE PROCEDURE TimKiemHoSoKhamBenh
+    @MaBenhNhan INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Your SELECT statement to search for medical examination records
+        SELECT *
+        FROM LICHSUKHAMBENH
+        WHERE MaBenhNhan = @MaBenhNhan;
+
+        -- Your additional logic can go here
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        PRINT N'Không thể tìm kiếm hồ sơ khám bệnh của bệnh nhân.';
+    END CATCH;
+END;
+EXEC TimKiemHoSoKhamBenh @MaBenhNhan = 1001;
+GO
 -- Có quyền thông báo (in) cho khách hàng lịch đăng kí (gọi giao tác ThongBaoLichKham) 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'ThongBaoLichKham' AND type = 'P')
+BEGIN
+    DROP PROCEDURE ThongBaoLichKham;
+    PRINT N'Đã hủy giao tác ThongBaoLichKham.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác ThongBaoLichKham chưa được tạo.';
+END
+GO
+CREATE PROCEDURE ThongBaoLichKham
+    @MaBenhNhan INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Your SELECT statement to retrieve appointment schedule information
+        SELECT *
+        FROM LICHHEN AS LH
+        WHERE LH.MaBenhNhan = @MaBenhNhan;
+
+        -- Your additional logic for notifying or printing the appointment schedule can go here
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        PRINT N'Không thể thông báo lịch đăng ký cho khách hàng.';
+    END CATCH;
+END;
 
 -- Có quyền xem danh mục thuốc (gọi giao tác XemDanhMucThuoc) gồm mã thuốc, tên thuốc, đơn vị tính, chỉ định, số lượng tồn trong kho và ngày hết hạn của thuốc. 
 

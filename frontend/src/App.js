@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import About from './components/About.js';
-import Contact from './components/Contact.js';
-import Login from './components/Login.js'
-import Signup from './components/Signup.js'
-import './App.css';
+import Login from "./components/Login.js";
+import Signup from "./components/Signup.js";
+import "./App.css";
 import About from "./components/About.js";
 import Contact from "./components/Contact.js";
 import "./App.css";
@@ -22,16 +20,29 @@ import { MdEmail, MdInfo } from "react-icons/md";
 const Header = () => {
   return (
     <header class='container' id='head'>
-      <div id="logo"><a href="/"><img src='./icon_main.png' alt="Image" /></a></div>
-        <Link to="/about" class="nav-link"><a class='link-a'>Giới thiệu</a></Link>
-        <Link to="/contact" class="nav-link"><a class='link-a'>Dịch vụ</a></Link>
-        <Link to="/login" class="nav-link"><a class='link-a'>Đặt lịch hẹn</a></Link>
-        <Link to="/login" class="nav-link"><a class='link-a'>Đăng nhập</a></Link>
-        <Link to="/signup" class="nav-link"><a class='link-a'>Đăng ký</a></Link>
+      <div id='logo'>
+        <a href='/'>
+          <img src='./icon_main.png' alt='Image' />
+        </a>
+      </div>
+      <Link to='/about' class='nav-link'>
+        <a class='link-a'>Giới thiệu</a>
+      </Link>
+      <Link to='/contact' class='nav-link'>
+        <a class='link-a'>Dịch vụ</a>
+      </Link>
+      <Link to='/login' class='nav-link'>
+        <a class='link-a'>Đặt lịch hẹn</a>
+      </Link>
+      <Link to='/login' class='nav-link'>
+        <a class='link-a'>Đăng nhập</a>
+      </Link>
+      <Link to='/signup' class='nav-link'>
+        <a class='link-a'>Đăng ký</a>
+      </Link>
     </header>
   );
 };
-
 
 const Main = () => {
   return (
@@ -154,11 +165,11 @@ const App = () => {
       <Header />
       <hr id='hrtren'></hr>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path='/' element={<Main />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/contact' element={<Contact />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
       </Routes>
       <hr id='hrduoi'></hr>
       <Footer />

@@ -44,3 +44,7 @@ EXEC XemThongTinCaNhan @SDT = '0123456782';
 GO
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi). 
 EXEC XemThongTinNhaSi @MaNhaSi = 100;
+
+-- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tinh. (NHÂN VIÊN)
+EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
+GO
