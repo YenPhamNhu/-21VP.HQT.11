@@ -3,33 +3,27 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import About from './components/About.js';
 import Contact from './components/Contact.js';
+import Login from './components/Login.js'
+import Signup from './components/Signup.js'
 import './App.css';
 
 const Header = () => {
   return (
     <header class='container' id='head'>
-      <div id="logo"><img src='./icon_main.png' alt="Image" /></div>
-        <nav href="/about"><Link>Giới thiệu</Link></nav>
-        <nav href="/contact"><Link>Dịch vụ</Link></nav>
-        <nav href="/about"><Link>Đặt lịch hẹn</Link></nav>
-        <nav href="/contact"><Link>Đăng nhập</Link></nav>
-        <nav href="/about"><Link>Đăng ký</Link></nav>
+      <div id="logo"><a href="/"><img src='./icon_main.png' alt="Image" /></a></div>
+        <Link to="/about" class="nav-link"><a class='link-a'>Giới thiệu</a></Link>
+        <Link to="/contact" class="nav-link"><a class='link-a'>Dịch vụ</a></Link>
+        <Link to="/login" class="nav-link"><a class='link-a'>Đặt lịch hẹn</a></Link>
+        <Link to="/login" class="nav-link"><a class='link-a'>Đăng nhập</a></Link>
+        <Link to="/signup" class="nav-link"><a class='link-a'>Đăng ký</a></Link>
     </header>
   );
 };
 
-const Aside = () => {
-  return (
-    <aside class='container'>
-      <h3>Sidebar</h3>
-    </aside>
-  );
-};
 
 const Main = () => {
   return (
-    <main class='container'>
-      <Aside />
+    <main class='container' id='main'>
       <div>
         <h2>Main</h2>
       </div>
@@ -54,6 +48,8 @@ const App = () => {
         <Route path="/" element={<Main />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
       <hr id='hrduoi'></hr>
       <Footer />
