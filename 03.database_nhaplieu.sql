@@ -35,7 +35,7 @@ FROM LICHLAMVIEC
 INSERT INTO LICHLAMVIEC
   (Ngay, MaNhaSi, CaDangKy)
 VALUES
-  ('2023-11-13', 100, N'Sáng'),
+  ('2023-11-15', 100, N'Sáng'),
   ('2023-11-14', 101, N'Chiều')
 
 -- 6/LICHHEN
@@ -43,7 +43,11 @@ INSERT INTO LICHHEN
   (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
 VALUES
   ('2023-11-15 09:30:00', 1001, 100, N'Đã đặt'),
-  ('2023-11-16 14:00:00', 1000, 101, N'Đã hủy')
+  ('2023-11-14 14:00:00', 1000, 101, N'Đã hủy'),
+  ('2023-11-19 09:30:00', 1001, 100, N'Đã đặt'),
+  ('2023-11-21 14:00:00', 1000, 101, N'Đã đặt'),
+  ('2023-11-21 09:30:00', 1000, 100, N'Đã đặt'),
+  ('2023-11-30 14:00:00', 1000, 101, N'Đã đặt')
 
 -- 7/LICHSUKHAMBENH
 INSERT INTO LICHSUKHAMBENH
@@ -59,8 +63,8 @@ VALUES
   (1, '2025-01-01', N'Paracetamol', N'Viên', 5000, N'Giảm đau', 100),
   (2, '2024-02-01', N'Amoxicillin', N'Viên', 8000, N'Kháng sinh', 150),
   (3, '2026-03-01', N'Aspirin', N'Viên', 6000, N'Giảm đau', 120),
-  (2, '2025-04-01', N'Ibuprofen', N'Viên', 7000, N'Giảm đau', 80),
-  (1, '2025-05-01', N'Cetirizine', N'Viên', 9000, N'Chống dị ứng', 200);
+  (4, '2025-04-01', N'Ibuprofen', N'Viên', 7000, N'Giảm đau', 80),
+  (5, '2025-05-01', N'Cetirizine', N'Viên', 9000, N'Chống dị ứng', 200);
 -- SELECT * FROM THUOC
 -- 9/DICHVU
 INSERT INTO DICHVU
@@ -87,11 +91,35 @@ VALUES
   ('2023-11-15 10:30:00', 1, 1001, 3, 1)
 
 -- 12/HOADON
+-- 12/HOADON
+
 INSERT INTO HOADON
   (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc)
 VALUES
-  (1001, 1, 2, 500000, N'Chưa thanh toán', '2023-11-17 10:00:00', 2),
-  (1000, 2, 1, 300000, N'Đã thanh toán', '2023-11-17 10:00:00', 1)
+  (1001, 1, 2,
+    (SELECT SUM(DVSD.SoLuong * DV.DonGia)
+    FROM DICHVUSUDUNG DVSD
+      INNER JOIN DICHVU DV ON DV.MaDichVu = DVSD.MaDichvu
+    WHERE DVSD.MaPhieuDVSD = 2) + 
+        (SELECT SUM(dt.SoLuong * T.DonGia)
+    FROM DONTHUOC DT
+      INNER JOIN THUOC T ON DT.MaThuoc = T.MaThuoc
+    WHERE DT.MaDonThuoc = 2) 
+        ,
+    N'Chưa thanh toán', '2023-11-17 10:00:00', 2
+    ),
+  (1000, 2, 1,
+    (SELECT SUM(DVSD.SoLuong * DV.DonGia)
+    FROM DICHVUSUDUNG DVSD
+      INNER JOIN DICHVU DV ON DV.MaDichVu = DVSD.MaDichvu
+    WHERE DVSD.MaPhieuDVSD = 1) + 
+        (SELECT SUM(dt.SoLuong * T.DonGia)
+    FROM DONTHUOC DT
+      INNER JOIN THUOC T ON DT.MaThuoc = T.MaThuoc
+    WHERE DT.MaDonThuoc = 1)
+    , N'Đã thanh toán', '2023-11-17 10:00:00', 1);
+
+
 SELECT *
 FROM QTV
 SELECT *
@@ -108,12 +136,12 @@ SELECT *
 FROM LICHSUKHAMBENH
 SELECT *
 FROM THUOC
-
-SELECT *
-FROM DICHVU
 SELECT *
 FROM DONTHUOC
-SELECT *
-FROM DICHVUSUDUNG
+-- SELECT *
+-- FROM DICHVU
+
+-- SELECT *
+-- FROM DICHVUSUDUNG
 SELECT *
 FROM HOADON

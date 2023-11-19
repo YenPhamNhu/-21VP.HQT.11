@@ -82,7 +82,7 @@ IF OBJECT_ID('dbo.LICHLAMVIEC', 'U') IS NOT NULL
 create table LICHLAMVIEC
 (
 	STT int unique not null identity(1,1),
-	Ngay datetime not null,
+	Ngay date not null,
 	MaNhaSi int not null,
 	CaDangKy nvarchar(50) not null,
 	constraint PK_LICHLAMVIEC primary key (STT)

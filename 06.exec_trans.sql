@@ -47,4 +47,69 @@ EXEC XemThongTinNhaSi @MaNhaSi = 100;
 
 -- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tinh. (NHÂN VIÊN)
 EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
+
+-- Có quyền được cập nhật thông tin cá nhân của bệnh nhân (gọi giao tác CapNhatThongTin) 
+EXEC CapNhatThongTin --Bệnh nhân không tồn tại trong hệ thống. Cập nhật không thành công
+    @SDT = '0123456786',
+    @HoTen = N'Bệnh nhân cập nhật',
+    @GioiTinh = N'Nam',
+    @NgaySinh = '2020-01-01',
+    @DiaChi = 'Địa chỉ BN Cập nhật'
+
+EXEC CapNhatThongTin --Cập nhật thông tin thành công.
+    @SDT = '0123456782',
+    @HoTen = N'Bệnh nhân cập nhật',
+    @GioiTinh = N'Nam',
+    @NgaySinh = '2020-01-01',
+    @DiaChi = 'Địa chỉ BN Cập nhật'
 GO
+-- Có quyền được xem hồ sơ bệnh án (lịch sử khám chữa bệnh) được nha sĩ ghi nhận lại trong quá trình điều trị (gọi giao tác XemHoSoBenhAn) 
+EXEC XemHoSoBenhAn @SDT = '0123456781'
+
+EXEC XemThongTinHoaDon @SDT = '0123456781', @STTLichSuKB = 1;
+EXEC XemTrangThaiThanhToan @SDT = '0123456781', @STTLichSuKB = 1;
+
+EXEC CapNhatLichLamViec
+@SDT_NhaSi = '0123456777',
+    @Ngay = '2023-11-29',
+    @CaDangKy = N'Chiều'
+
+EXEC GhiNhanDatKhamBenh
+    @SDT = '0123456780',
+    @NgayGioKham = '2023-11-14',
+    @TenNhaSi = N'Nha sĩ 2'
+
+EXEC GhiNhanHoSoBenhAn
+    @SDT = '0123456780',
+    @NgayGioKham = '2023-11-14',
+    @TenNhaSi = N'Nha sĩ 2'
+
+EXEC ThongBaoLichKham
+
+GO
+EXEC XemDanhMucThuoc @MaThuoc = 101;
+
+-- Execute the stored procedure to add a new drug to the inventory
+EXEC QuanLyKhoThuoc
+    @MaThuoc = 101,
+    @NgayHetHan = '2023-12-31',
+    @TenThuoc = 'Paracetamol',
+    @DonViTinh = 'Tablet',
+    @DonGia = 10,
+    @ChiDinh = 'Pain relief',
+    @SoLuongTonKho = 100,
+    @ThaoTac = 'ThemMoi';
+
+-- Execute the stored procedure to update drug information in the inventory
+EXEC QuanLyKhoThuoc
+    @MaThuoc = 101,
+    @NgayHetHan = '2023-12-31',
+    @TenThuoc = 'Paracetamol',
+    @DonViTinh = 'Tablet',
+    @DonGia = 12,
+    @ChiDinh = 'Pain relief',
+    @SoLuongTonKho = 150,
+    @ThaoTac = 'CapNhat';
+
+-- Execute the stored procedure to view current inventory status
+EXEC QuanLyKhoThuoc @ThaoTac = 'XemTonKho';
