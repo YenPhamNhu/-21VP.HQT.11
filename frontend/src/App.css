@@ -1,5 +1,4 @@
-.container
-{
+.container {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto;
   grid-template-rows: auto auto auto auto auto auto;
@@ -8,8 +7,7 @@
   height: 100%;
 }
 
-img
-{
+img {
   max-width: 80px;
   max-height: 80px;
 }
@@ -17,20 +15,18 @@ img
 .header {
   grid-area: 1/1/1/6;
 }
-nav
-{
+nav {
   padding: 10%;
 }
-nav a
-{
+nav a {
   color: white;
   text-decoration: none;
-  background-color: #04364A;
-  border: 15px solid #04364A;
+  background-color: #04364a;
+  border: 15px solid #04364a;
 }
-#head ,#foot
-{
-  background-color: #64CCC5;
+#head,
+#foot {
+  background-color: #64ccc5;
 }
 
 .aside {
@@ -44,25 +40,98 @@ nav a
 
 .footer {
   grid-area: 6/1/6/6;
-  background-color: #64CCC5;
+  background-color: #64ccc5;
   text-align: center;
+  padding-left: 10%;
 }
 
-#hrtren
-{
+#hrtren {
   grid-area: 2/1/2/6;
-  border: 5px solid #04364A;
+  border: 5px solid #04364a;
   margin-block-start: 0em;
   margin-block-end: 0em;
   margin-inline-start: auto;
   margin-inline-end: auto;
 }
-#hrduoi
-{
+#hrduoi {
   margin-block-start: 0em;
   margin-block-end: 0em;
   margin-inline-start: auto;
   margin-inline-end: auto;
   grid-area: 5/1/5/6;
-  border: 5px solid #04364A;
+  border: 5px solid #04364a;
+}
+
+/* FOOTER */
+.container #footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+#foot {
+  background-color: #64ccc5;
+  color: #04364a;
+  padding: 20px 0;
+  text-align: justify;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-section {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.footer-section h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.footer-section p {
+  margin: 0;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+.footer-section div {
+  margin: 0;
+  padding-bottom: 10px;
+}
+
+.footer-section a {
+  color: #04364a;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+  padding-left: 15%;
+}
+
+.footer-section a:hover {
+  color: whitesmoke; /* Change the color on hover as needed */
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  font-style: oblique;
+}
+
+.link:hover {
+  color: #61dafb;
+}
+
+p .Link {
+  padding-left: 10px;
+}
+
+.cus-icon {
+  display: flex;
+  justify-content: space-between;
+  max-width: 100px; /* Điều chỉnh giá trị tối đa của chiều rộng nếu cần */
+  margin: 0 auto; /* Canh giữa biểu tượng trong ô */
+}
+
+img {
+  padding-left: 40%;
 }
