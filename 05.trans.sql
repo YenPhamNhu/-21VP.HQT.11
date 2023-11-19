@@ -279,6 +279,25 @@ GO
 -- Có quyền xem danh mục thuốc (gọi giao tác XemDanhMucThuoc) 
 
 -- Có quyền được xem danh sách lịch hẹn  (gọi giao tác XemDanhSachLichHen) 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'XemDanhSachLichHen' AND type = 'P')
+BEGIN
+    DROP PROCEDURE XemThongTinCaNhan;
+    PRINT N'Đã hủy giao tác XemDanhSachLichHen.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác XemDanhSachLichHen chưa được tạo.';
+END
+GO
+CREATE PROCEDURE XemDanhSachLichHen
+AS
+BEGIN
+    BEGIN TRANSACTION;
+        SELECT * FROM LICHHEN
+    COMMIT TRANSACTION;
+END;
 
 -- Có quyền cập nhật lịch cá nhân của mình (gọi giao tác CapNhatLichCaNhan) 
 

@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import About from './components/About.js';
-import Contact from './components/Contact.js';
-import Login from './components/Login.js'
-import Signup from './components/Signup.js'
+import About from './screens/About.js';
+import Contact from './screens/Contact.js';
+import Login from './screens/Login.js'
+import Signup from './screens/Signup.js'
 import './App.css';
-import About from "./components/About.js";
-import Contact from "./components/Contact.js";
-import "./App.css";
 import { FaAngleRight } from "react-icons/fa6";
 import {
   FaMapMarkerAlt,
@@ -36,8 +33,17 @@ const Header = () => {
 const Main = () => {
   return (
     <main class='container' id='main'>
-      <div>
-        <h2>Main</h2>
+      <div className="image-container">
+        <img
+          src="banner1.png"
+          alt="Image 1"
+          className="image fade-in active"
+        />
+        <img
+          src="banner2.png"
+          alt="Image 2"
+          className="image fade-out"
+        />
       </div>
     </main>
   );
@@ -119,7 +125,7 @@ const Footer = () => {
       <div className='footer-section'>
         <h4 className='text-uppercase fw-bold mb-4'>LIÊN HỆ</h4>
         <p>
-          <Link to='#' className='link' style={{ paddingLeft: "0px" }}>
+          <Link className='link' to="/about" style={{ paddingLeft: "0px" }}>
             <MdInfo /> About us
           </Link>
         </p>
@@ -147,7 +153,13 @@ const Footer = () => {
     </footer>
   );
 };
-
+const Cpyright = () =>
+{
+  return (
+    <div classname='text-center p-3' style={{backgroundColor:'#04364a',textAlign:'center',color:'white',textDecoration:'none'}} >
+      &copy;2023<Link classname="link" id='chigsa' href='#'>Chigsa.com</Link></div>
+  )
+}
 const App = () => {
   return (
     <BrowserRouter>
@@ -162,6 +174,7 @@ const App = () => {
       </Routes>
       <hr id='hrduoi'></hr>
       <Footer />
+      <Cpyright/>
     </BrowserRouter>
   );
 };
