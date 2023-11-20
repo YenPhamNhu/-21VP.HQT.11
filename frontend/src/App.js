@@ -33,7 +33,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
-      <hr id='hrtren'></hr>
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/about' element={<About />} />

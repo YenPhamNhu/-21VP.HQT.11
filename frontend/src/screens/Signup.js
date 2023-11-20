@@ -45,7 +45,7 @@ const Signup = () => {
           <Form.Label>Xác nhận mật khẩu:</Form.Label>
           <Form.Control type="password" required />
         </Form.Group>
-        <div id='alrtk'>Đã có tài khoản?  <Link to='/login' id='uptolog'>Đăng nhập</Link></div>
+        <div id='alrtk'>Đã có tài khoản?  <Link to='/login' id='uptolog' onClick={() => window.scrollTo(0, 0)}>Đăng nhập</Link></div>
        
         
         <Button type="submit">Đăng Ký</Button>
