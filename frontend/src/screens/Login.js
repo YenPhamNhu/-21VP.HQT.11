@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
-import './Login.css'
+import '../screen.css/Login.css'
 const Login = () => {
   return (
     <div className="login-box">

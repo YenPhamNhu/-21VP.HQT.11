@@ -15,6 +15,7 @@ width: 100px;
 height: 100px;
 display: block;
 margin-bottom: 20px;
+padding-left: 35%;
 }
 
 .login-box form {
