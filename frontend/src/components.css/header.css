@@ -7,12 +7,9 @@ max-height: 80px;
 #head
 {
 background-color: #64CCC5;
-}
-
-
-#head {
 grid-area: 1/1/1/6;
 }
+
 .nav-link
 {
 position:relative;
