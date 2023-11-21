@@ -1065,3 +1065,164 @@ BEGIN
     END
 END;
 GO
+
+-- Có quyền thanh đổi trạng thái thanh toán của hóa đơn (gọi giao tác ThayDoiTrangThaiThanhToan).
+CREATE PROCEDURE ThayDoiTrangThaiThanhToan
+    @SDT VARCHAR(10),
+    @STTLichSuKB INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    -- Bắt đầu giao dịch
+
+    -- Kiểm tra xem bệnh nhân có tồn tại không
+    IF EXISTS (SELECT 1
+    FROM BENHNHAN
+    BEGIN
+        -- Kiểm tra xem lịch sử khám bệnh có tồn tại không
+        IF EXISTS (SELECT 1
+        FROM LICHSUKHAMBENH
+        WHERE STT = @STTLichSuKB AND MaBenhNhan = (SELECT MaBenhNhan
+            FROM BENHNHAN
+            WHERE SDT = @SDT))
+        BEGIN
+            -- Cập nhật trạng thái thanh toán của hóa đơn
+            UPDATE HOADON
+            SET TinhTrangThanhToan = N'Đã thanh toán'
+            WHERE STTLichSuKB = @STTLichSuKB AND MaBenhNhan = (SELECT MaBenhNhan
+                FROM BENHNHAN
+                WHERE SDT = @SDT);
+
+            PRINT N'Cập nhật trạng thái thanh toán thành công.';
+            COMMIT TRANSACTION;
+        -- Thực hiện giao dịch
+        END
+        ELSE
+        BEGIN
+            ROLLBACK TRANSACTION;
+            -- Hủy giao dịch nếu lịch sử khám bệnh không tồn tại
+            PRINT N'Lịch sử khám bệnh không tồn tại.';
+        END
+    END
+    ELSE
+    BEGIN
+        ROLLBACK TRANSACTION;
+        -- Hủy giao dịch nếu bệnh nhân không tồn tại
+        PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
+    END
+END;
+GO
+
+-- Có quyền chỉnh thêm, xóa, sửa tài khoản của nhân viên, nha sĩ, bệnh nhận (gọi giao tác QuanLyTaiKhoan) 
+IF OBJECT_ID('dbo.QuanLyTaiKhoan', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.QuanLyTaiKhoan;
+GO
+
+CREATE PROCEDURE QuanLyTaiKhoan
+    @SDT VARCHAR(10),
+    @HoTen NVARCHAR(50),
+    @GioiTinh NVARCHAR(5),
+    @NgaySinh DATETIME,
+    @DiaChi NVARCHAR(50),
+    @MatKhau VARCHAR(8),
+    @TinhTrangHoatDong NVARCHAR(20),
+    @ViTri NVARCHAR(50),
+    @ChuyenMon NVARCHAR(50),
+    @BangCap NVARCHAR(50),
+    @Email VARCHAR(255),
+    @TinhTrangThanhToan NVARCHAR(50)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    DECLARE @ExistingUserCount INT;
+
+    -- Kiểm tra xem tài khoản đã tồn tại chưa
+    SELECT @ExistingUserCount = COUNT(*)
+    FROM (
+                                    SELECT SDT
+            FROM QTV
+        UNION
+            SELECT SDT
+            FROM NHANVIEN
+        UNION
+            SELECT SDT
+            FROM NHASI
+        UNION
+            SELECT SDT
+            FROM BENHNHAN
+    ) AS Users
+    WHERE SDT = @SDT;
+
+    -- Nếu tài khoản đã tồn tại, in ra thông báo và rollback
+    IF @ExistingUserCount > 0
+    BEGIN
+        ROLLBACK TRANSACTION;
+        PRINT N'Tài khoản đã tồn tại. Thực hiện không thành công.';
+        RETURN;
+    END
+
+    -- Thêm mới tài khoản dựa vào loại người dùng (QTV, NHANVIEN, NHASI, BENHNHAN)
+    IF @ViTri IS NULL -- Đây là bệnh nhân
+    BEGIN
+        INSERT INTO BENHNHAN
+            (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @MatKhau);
+    END
+    ELSE IF @ChuyenMon IS NULL -- Đây là nhân viên
+    BEGIN
+        INSERT INTO NHANVIEN
+            (HoTen, SDT, GioiTinh, DiaChi, TinhTrangHoatDong, ViTri, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @DiaChi, @TinhTrangHoatDong, @ViTri, @MatKhau);
+    END
+    ELSE -- Đây là nha sĩ
+    BEGIN
+        INSERT INTO NHASI
+            (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, ChuyenMon, BangCap, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @ChuyenMon, @BangCap, @MatKhau);
+    END
+
+    -- Kiểm tra tài khoản đã thêm thành công
+    IF @@ERROR <> 0
+    BEGIN
+        ROLLBACK TRANSACTION;
+        PRINT N'Có lỗi khi thêm tài khoản. Thực hiện không thành công.';
+        RETURN;
+    END
+
+    -- Thêm email cho Quan Tri Vien (QTV)
+    IF @Email IS NOT NULL
+    BEGIN
+        UPDATE QTV
+        SET Email = @Email
+        WHERE SDT = @SDT;
+    END
+
+    -- Thêm thông tin cho hóa đơn của bệnh nhân
+    IF @TinhTrangThanhToan IS NOT NULL
+    BEGIN
+        INSERT INTO HOADON
+            (MaBenhNhan, STTLichSuKB, TinhTrangThanhToan)
+        VALUES
+            (
+                (SELECT MaBenhNhan
+                FROM BENHNHAN
+                WHERE SDT = @SDT),
+                (SELECT STT
+                FROM LICHSUKHAMBENH
+                WHERE MaBenhNhan = (SELECT MaBenhNhan
+                FROM BENHNHAN
+                WHERE SDT = @SDT)),
+                @TinhTrangThanhToan
+        );
+    END
+
+    -- Commit giao dịch nếu không có lỗi xảy ra
+    COMMIT TRANSACTION;
+
+    PRINT N'Thực hiện thành công.';
+END;
+GO
