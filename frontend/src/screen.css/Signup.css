@@ -1,4 +1,5 @@
-.signup-box {
+.signup-box 
+{
     width: 300px;
     margin: 50px auto;
     background-color: #04364A;
@@ -20,7 +21,8 @@
   .signup-box form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+
+    flex: 1;
   }
   
   .signup-box form .row {
