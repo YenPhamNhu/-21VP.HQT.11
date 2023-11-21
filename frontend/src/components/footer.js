@@ -37,27 +37,27 @@ return (
         NỔI BẬT
         </h4>
         <p>
-        <Link to='#' className='link'>
+        <Link to='/service' className='link' onClick={() => window.scrollTo(0, 0)}>
             Niềng răng thẩm mỹ
         </Link>
         </p>
         <p>
-        <Link to='#' className='link'>
+        <Link to='/service' className='link' onClick={() => window.scrollTo(0, 0)}>
             Cấy ghép Implant
         </Link>
         </p>
         <p>
-        <Link to='#' className='link'>
+        <Link to='/service' className='link' onClick={() => window.scrollTo(0, 0)}>
             Bọc răng sứ
         </Link>
         </p>
         <p>
-        <Link to='#' className='link'>
+        <Link to='/service' className='link' onClick={() => window.scrollTo(0, 0)}>
             Mặt dán sứ Veneer
         </Link>
         </p>
         <p>
-        <Link to='#' className='link'>
+        <Link to='/service' className='link' onClick={() => window.scrollTo(0, 0)}>
             Điều trị tuỷ
         </Link>
         </p>

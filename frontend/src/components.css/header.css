@@ -7,31 +7,42 @@ max-height: 80px;
 #head
 {
 background-color: #64CCC5;
+display: flex;
+align-items: center;
+grid-row: 1;
+}
+
+#logomain {
+  float: left;
+  width: 10%;
+  height: 10%;
 }
 
 
-#head {
-grid-area: 1/1/1/6;
-}
-.nav-link
-{
-position:relative;
-text-decoration: none;
-text-align: center;
-padding-top: 10%;
-height: 40px;
-width: 250px;
-margin-left: 10%;
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #04364a;
+  overflow: hidden;
 }
 
-.link-a
-{
-color: white;
-padding: 5% 15% 5% 15%;
-background-color: #04364A;
-border: 5px inset #1C6EA4;
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 40px 40px;
+  text-decoration: none;
+  font-size: 17px;
 }
-.link-a:hover
-{
-border: 5px outset #1C6EA4;
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04364a;
+  color: white;
 }

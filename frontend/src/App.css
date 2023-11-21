@@ -1,19 +1,10 @@
 .container {
   display: grid;
-  grid-template-columns: 10% 18% 18% 18% 18% 18%;
-  grid-template-rows: 20% 5% 50% 5% 10% 10%;
+  grid-template-rows: 30px minmax(200px,500px) 100px;
   width: 100%;
-  height: 100%;
 }
 
-#hrtren {
-  grid-area: 2/1/2/6;
-  border: 5px solid #04364a;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  margin-inline-start: 0em;
-  margin-inline-end: 0em;
-}
+
 #hrduoi {
   margin-block-start: 0em;
   margin-block-end: 0em;
