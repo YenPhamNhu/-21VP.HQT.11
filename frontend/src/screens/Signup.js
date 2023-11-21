@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button} from 'react-bootstrap';
+import { Form, Button,FloatingLabel} from 'react-bootstrap';
 import '../screen.css/Signup.css'
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 

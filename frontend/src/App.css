@@ -1,6 +1,4 @@
 .container {
-  display: grid;
-  grid-template-rows: 30px minmax(200px,500px) 100px;
   width: 100%;
 }
 
@@ -10,7 +8,6 @@
   margin-block-end: 0em;
   margin-inline-start: 0em;
   margin-inline-end: 0em;
-  grid-area: 4/1/4/6;
   border: 5px solid #04364a;
 }
 
