@@ -31,7 +31,7 @@ export default function App() {
                   <MDBIcon icon='gem' className='me-3' />
                   Chigsa
                 </h6>
-                <p>
+                <p fontWeight='bolder'>
                   Chigsa, đội ngũ chuyên gia nha khoa tận tâm với trang thiết bị
                   hiện đại, cam kết mang lại trải nghiệm chăm sóc nha khoa chất
                   lượng cao. Chúng tôi không chỉ điều trị vấn đề nha khoa mà còn
@@ -93,23 +93,23 @@ export default function App() {
                 <h6 className='text-uppercase fw-bold mb-4'>Giờ mở cửa</h6>
                 <div className='mb-2'>
                   <FaAngleRight />
-                  Thứ hai <span> 9.00 AM - 19.00 PM</span>
+                  Thứ hai <span> 9.00 - 19.00 </span>
                 </div>
                 <div className='mb-2'>
                   <FaAngleRight />
-                  Thứ ba <span> 9.00 AM - 19.00 PM</span>
+                  Thứ ba <span> 9.00 - 19.00 </span>
                 </div>
                 <div className='mb-2'>
                   <FaAngleRight />
-                  Thứ tư <span> 9.00 AM - 19.00 PM</span>
+                  Thứ tư <span> 9.00 - 19.00 </span>
                 </div>
                 <div className='mb-2'>
                   <FaAngleRight />
-                  Thứ năm <span> 9.00 AM - 19.00 PM</span>
+                  Thứ năm <span> 9.00 - 19.00 </span>
                 </div>
                 <div className='mb-2'>
                   <FaAngleRight />
-                  Thứ sáu <span> 9.00 AM - 19.00 PM</span>
+                  Thứ sáu <span> 9.00 - 19.00 </span>
                 </div>
               </MDBCol>
 

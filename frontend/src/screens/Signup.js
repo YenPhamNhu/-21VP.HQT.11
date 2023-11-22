@@ -18,31 +18,27 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 const Signup = () => {
   return (
-    <MDBContainer fluid className='bg-dark'>
+    <MDBContainer fluid>
       <MDBRow className='d-flex justify-content-center align-items-center h-100'>
         <MDBCol>
           <MDBCard className='my-4'>
             <MDBRow className='g-0'>
-              <MDBCol md='6' className='d-none d-md-block'>
-                <MDBCardImage
+              <MDBCol md='6' className='d-none d-md-block' marginTop='5%'>
+                <MDBCardImage  paddingTop='15%' width='40%' height='40%'
                   src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp'
                   alt='Sample photo'
-                  className='rounded-start'
+                  className="d-flex align-items-center mx-auto"
                   fluid
                 />
               </MDBCol>
 
               <MDBCol md='6'>
                 <MDBCardBody className='text-black d-flex flex-column justify-content-center'>
-                  <h3 className='mb-5 text-uppercase fw-bold'>
-                    Student registration form
-                  </h3>
-
                   <MDBRow>
                     <MDBCol md='6'>
                       <MDBInput
                         wrapperClass='mb-4'
-                        label='First Name'
+                        label='Họ và tên'
                         size='lg'
                         id='form1'
                         type='text'
@@ -52,24 +48,39 @@ const Signup = () => {
                     <MDBCol md='6'>
                       <MDBInput
                         wrapperClass='mb-4'
-                        label='Last Name'
+                        label='Số điện thoại'
                         size='lg'
                         id='form2'
-                        type='text'
+                        type='tel'
                       />
                     </MDBCol>
                   </MDBRow>
-
+                  
+                  <MDBRow>
+                  <MDBCol md='6'>
                   <MDBInput
                     wrapperClass='mb-4'
-                    label='Birthday'
+                    label='Địa chỉ'
                     size='lg'
                     id='form3'
                     type='text'
-                  />
+                    />
+                  </MDBCol>
+                  <MDBCol md='6'>
+                  <MDBInput
+                    wrapperClass='mb-4'
+                    label='Ngày sinh'
+                    size='lg'
+                    id='form4'
+                    type='date'
+                    />
+                  </MDBCol>
+                  </MDBRow>
 
-                  <div className='d-md-flex ustify-content-start align-items-center mb-4'>
-                    <h6 class='fw-bold mb-0 me-4'>Gender: </h6>
+                  <MDBRow>
+                  <MDBCol md='6'>
+                  <div className='d-md-flex ustify-content-start align-items-center mb-4' id="gender">
+                    <h6 class='mb-0 me-4'>Giới tính: </h6>
                     <MDBRadio
                       name='inlineRadio'
                       id='inlineRadio1'
@@ -84,72 +95,44 @@ const Signup = () => {
                       label='Male'
                       inline
                     />
-                    <MDBRadio
-                      name='inlineRadio'
-                      id='inlineRadio3'
-                      value='option3'
-                      label='Other'
-                      inline
-                    />
                   </div>
-
-                  {/* <MDBRow>
-                    <MDBCol md='6'>
-                      <MDBSelect
-                        className='mb-4'
-                        size='lg'
-                        data={[
-                          { text: "State", value: 1 },
-                          { text: "Option 1", value: 2 },
-                          { text: "Option 2", value: 3 },
-                          { text: "Option 3", value: 4 },
-                        ]}
-                      />
-                    </MDBCol>
-
-                    <MDBCol md='6'>
-                      <MDBSelect
-                        className='mb-4'
-                        size='lg'
-                        data={[
-                          { text: "City", value: 1 },
-                          { text: "Option 1", value: 2 },
-                          { text: "Option 2", value: 3 },
-                          { text: "Option 3", value: 4 },
-                        ]}
-                      />
-                    </MDBCol>
-                  </MDBRow> */}
-
+                  </MDBCol>
+                  <MDBCol md='6'>
                   <MDBInput
                     wrapperClass='mb-4'
-                    label='Pincode'
-                    size='lg'
-                    id='form4'
-                    type='text'
-                  />
-                  <MDBInput
-                    wrapperClass='mb-4'
-                    label='Course'
+                    label='Email'
                     size='lg'
                     id='form5'
-                    type='text'
-                  />
+                    type='email'
+                    />
+                  </MDBCol>
+                  </MDBRow>
+
+               
+                  <MDBRow>
+                  <MDBCol md='6'>
                   <MDBInput
                     wrapperClass='mb-4'
-                    label='Email ID'
+                    label='Mật khẩu'
                     size='lg'
                     id='form6'
-                    type='text'
+                    type='password'
+                  /></MDBCol>
+                  <MDBCol md='6'>
+                  <MDBInput
+                    wrapperClass='mb-4'
+                    label='Nhập lại mật khẩu'
+                    size='lg'
+                    id='form7'
+                    type='password'
                   />
-
+                  </MDBCol>
+                  </MDBRow>
+                 
                   <div className='d-flex justify-content-end pt-3'>
-                    <MDBBtn color='light' size='lg'>
-                      Reset all
-                    </MDBBtn>
-                    <MDBBtn className='ms-2' color='warning' size='lg'>
-                      Submit form
-                    </MDBBtn>
+                  <MDBBtn className='ms-2' color='warning' size='lg' style={{ marginLeft: '20%', marginRight: '40%' }}>
+                    Submit form
+                  </MDBBtn>
                   </div>
                 </MDBCardBody>
               </MDBCol>
