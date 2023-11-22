@@ -18,22 +18,28 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 const Signup = () => {
   return (
-    <MDBContainer fluid>
+    <MDBContainer fluid style={{ margin: "40px 10px",padding: "5px 50px"}}>
       <MDBRow className='d-flex justify-content-center align-items-center h-100'>
         <MDBCol>
           <MDBCard className='my-4'>
             <MDBRow className='g-0'>
-              <MDBCol md='6' className='d-none d-md-block' marginTop='5%'>
+              <MDBCol md='6' className='d-none d-md-block' marginTop='5%' >
                 <MDBCardImage  paddingTop='15%' width='40%' height='40%'
                   src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp'
-                  alt='Sample photo'
+                  alt='Sample photo' 
                   className="d-flex align-items-center mx-auto"
                   fluid
+                  
                 />
               </MDBCol>
 
               <MDBCol md='6'>
                 <MDBCardBody className='text-black d-flex flex-column justify-content-center'>
+                <MDBRow>
+                <MDBCol md="12" className="d-flex justify-content-center">
+                  <img src="logicon.png" alt="Logo" className="img-fluid" />
+                </MDBCol>
+            </MDBRow>
                   <MDBRow>
                     <MDBCol md='6'>
                       <MDBInput
@@ -131,7 +137,7 @@ const Signup = () => {
                  
                   <div className='d-flex justify-content-end pt-3'>
                   <MDBBtn className='ms-2' color='warning' size='lg' style={{ marginLeft: '20%', marginRight: '40%' }}>
-                    Submit form
+                    Đăng ký
                   </MDBBtn>
                   </div>
                 </MDBCardBody>

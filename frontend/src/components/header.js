@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom'; //
 import Image from 'react-bootstrap/Image';
 import "../components.css/header.css"
-function CollapsibleExample() {
+function Header() {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" id='navbar'>
       <Container id="conta">
@@ -26,4 +26,4 @@ function CollapsibleExample() {
   );
 }
 
-export default CollapsibleExample;
+export default Header;
