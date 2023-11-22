@@ -1,74 +1,26 @@
-.container #footer {
-max-width: 1200px;
-margin: 0 auto;
-padding: 0 20px;
-}
-
-#foot {
-background-color: #64ccc5;
-color: #04364a;
-padding: 20px 0;
-text-align: justify;
-display: flex;
-justify-content: space-between;
-flex-wrap: wrap;
-}
-
-.footer-section {
-flex: 1;
-margin-bottom: 20px;
-}
-
-.footer-section h4 {
-font-size: 18px;
-margin-bottom: 10px;
-}
-
-.footer-section p {
-margin: 0;
-padding-bottom: 10px;
-padding-left: 10px;
-}
-
-.footer-section div {
-margin: 0;
-padding-bottom: 10px;
-}
-
-.footer-section a {
-color: #04364a;
-text-decoration: none;
-transition: color 0.3s ease-in-out;
-padding-left: 15%;
-}
-
-.footer-section a:hover {
-color: whitesmoke; /* Change the color on hover as needed */
-}
-
 .link {
-color: white;
-text-decoration: none;
-font-style: oblique;
+  color: white;
+  text-decoration: none;
+  font-style: oblique;
 }
 
 .link:hover {
-color: #61dafb;
+  color: #61dafb;
 }
 
 p .Link {
-padding-left: 10px;
+  padding-left: 10px;
 }
 
 .cus-icon {
-display: flex;
-justify-content: space-between;
-max-width: 100px; /* Điều chỉnh giá trị tối đa của chiều rộng nếu cần */
-margin: 0 auto; /* Canh giữa biểu tượng trong ô */
+  display: flex;
+  justify-content: space-between;
+  max-width: 200px;
+  margin: 0 auto;
 }
 
 #footer-img {
-padding-left: 40%;
-max-width: 80px;
-max-height: 80px;
+  padding-left: 40%;
+  max-width: 80px;
+  max-height: 80px;
 }

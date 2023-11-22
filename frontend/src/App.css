@@ -2,7 +2,6 @@
   width: 100%;
 }
 
-
 #hrduoi {
   margin-block-start: 0em;
   margin-block-end: 0em;
@@ -11,11 +10,7 @@
   border: 5px solid #04364a;
 }
 
-#chigsa
-{
-text-decoration: none;
-color: white
+#chigsa {
+  text-decoration: none;
+  color: white;
 }
-
-
-

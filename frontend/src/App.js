@@ -10,25 +10,6 @@ import Footer from "./components/footer.js";
 import Main from "./components/main.js";
 import Header from "./components/header.js";
 
-const Cpyright = () => {
-  return (
-    <div
-      classname='text-center p-3'
-      style={{
-        backgroundColor: "#04364a",
-        textAlign: "center",
-        color: "white",
-        textDecoration: "none",
-      }}
-    >
-      &copy;2023
-      <Link classname='link' id='chigsa' href='#'>
-        Chigsa.com
-      </Link>
-    </div>
-  );
-};
-
 const App = () => {
   return (
     <BrowserRouter>
@@ -42,7 +23,6 @@ const App = () => {
       </Routes>
       <hr id='hrduoi'></hr>
       <Footer />
-      <Cpyright />
     </BrowserRouter>
   );
 };
