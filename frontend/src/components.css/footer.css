@@ -1,11 +1,11 @@
 .link {
-  color: white;
+  color: #04364a;
   text-decoration: none;
   font-style: oblique;
 }
 
 .link:hover {
-  color: #61dafb;
+  color: whitesmoke;
 }
 
 p .Link {

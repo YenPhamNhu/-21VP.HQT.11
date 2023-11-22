@@ -19,8 +19,8 @@ import "../components.css/footer.css";
 export default function App() {
   return (
     <MDBFooter
-      className='text-center text-lg-start text-muted text-dark'
-      style={{ background: "#64ccc5" }}
+      className='text-center text-lg-start'
+      style={{ background: "#64ccc5", color: "#04364a" }}
     >
       <MDBRow className='mt-3'>
         <section className=''>
