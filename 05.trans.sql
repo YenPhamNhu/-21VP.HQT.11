@@ -190,7 +190,7 @@ IF EXISTS (SELECT *
 FROM sys.procedures
 WHERE name = N'XemThongTinCaNhan' AND type = 'P')
 BEGIN
-    DROP PROCEDURE XemThongTinCaNhan;
+    DROP PROCEDURE XemThongTinCaNhanBenhNhan;
     PRINT N'Đã hủy giao tác XemThongTinCaNhan.';
 END
 ELSE
@@ -198,7 +198,7 @@ BEGIN
     PRINT N'Giao tác XemThongTinCaNhan chưa được tạo.';
 END
 GO
-CREATE PROCEDURE XemThongTinCaNhan
+CREATE PROCEDURE XemThongTinCaNhanBenhNhan
     @SDT VARCHAR(10)
 AS
 BEGIN
@@ -634,17 +634,17 @@ GO
 -- Create the stored procedure
 IF EXISTS (SELECT *
 FROM sys.procedures
-WHERE name = 'GhiNhanHoSoBenhAn' AND type = 'P')
+WHERE name = 'TaoHoSoBenhAn' AND type = 'P')
     BEGIN
-    DROP PROCEDURE GhiNhanHoSoBenhAn;
-    PRINT N'Đã huỷ giao tác GhiNhanHoSoBenhAn';
+    DROP PROCEDURE TaoHoSoBenhAn;
+    PRINT N'Đã huỷ giao tác TaoHoSoBenhAn';
 END
 ELSE
     BEGIN
-    Print N'Giao tác GhiNhanHoSoBenhAn chưa dược tạo';
+    Print N'Giao tác TaoHoSoBenhAn chưa dược tạo';
 END
 GO
-CREATE PROCEDURE GhiNhanHoSoBenhAn
+CREATE PROCEDURE TaoHoSoBenhAn
     @SDT VARCHAR(10),
     @NgayGioKham DATETIME,
     @HoTenNhaSi NVARCHAR(50)
@@ -672,44 +672,21 @@ BEGIN
         -- Check if the dentist exists
         IF @MaNhaSi IS NOT NULL
         BEGIN
-            -- Check if the appointment exists
-            IF EXISTS (
-                    SELECT 1
-            FROM LICHHEN
-            WHERE NgayGioKham = @NgayGioKham
-                AND MaBenhNhan = @MaBenhNhan
-                AND MaNhaSi = @MaNhaSi
-                )
-            BEGIN
-                -- Insert into LICHSUKHAMBENH
-                INSERT INTO LICHSUKHAMBENH
-                    (MaBenhNhan, MaNhaSiKham, NgayKham)
-                VALUES
-                    (@MaBenhNhan, @MaNhaSi, @NgayGioKham);
+            -- Insert into LICHSUKHAMBENH
+            INSERT INTO LICHSUKHAMBENH
+                (MaBenhNhan, MaNhaSiKham, NgayKham)
+            VALUES
+                (@MaBenhNhan, @MaNhaSi, @NgayGioKham);
 
-                SET @STTLichSuKB = SCOPE_IDENTITY();
+            SET @STTLichSuKB = SCOPE_IDENTITY();
 
-                -- Insert into DICHVUSUDUNG (if any)
-                INSERT INTO DICHVUSUDUNG
-                    (NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong)
-                SELECT @NgayGioKham, @STTLichSuKB, @MaBenhNhan, MaDichVu, 1
-                FROM DICHVU;
-
-                -- Insert into DONTHUOC (if any)
-                INSERT INTO DONTHUOC
-                    (MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong)
-                SELECT MaThuoc, @MaBenhNhan, @NgayGioKham, DATEADD(month, 1, @NgayGioKham), 'Lieu dung', @STTLichSuKB, 1
-                FROM THUOC
-                WHERE SoLuongTonKho > 0 AND NgayHetHan > GETDATE();
-
-                COMMIT TRANSACTION;
-                PRINT 'Ghi nhận hồ sơ bệnh án thành công.';
-            END
-            ELSE
-            BEGIN
-                ROLLBACK TRANSACTION;
-                PRINT 'Không tìm thấy thông tin lịch hẹn cho bệnh nhân và nha sĩ đã nhập.';
-            END
+            -- Insert into DICHVUSUDUNG (if any)
+            INSERT INTO DICHVUSUDUNG
+                (NgaySuDung, STTLichSuKB, MaBenhNhan, MaDichVu, SoLuong)
+            SELECT @NgayGioKham, @STTLichSuKB, @MaBenhNhan, MaDichVu, 1
+            FROM DICHVU;
+            COMMIT TRANSACTION;
+            PRINT 'Tạo hồ sơ bệnh án thành công.';
         END
         ELSE
         BEGIN
@@ -910,8 +887,8 @@ BEGIN
 
         -- Your SELECT statement to search for medical examination records
         SELECT *
-    FROM LICHSUKHAMBENH
-    WHERE MaBenhNhan = @MaBenhNhan;
+        FROM LICHSUKHAMBENH
+        WHERE MaBenhNhan = @MaBenhNhan;
 
         -- Your additional logic can go here
 
@@ -1226,3 +1203,438 @@ BEGIN
     PRINT N'Thực hiện thành công.';
 END;
 GO
+
+-- Đổi mật khẩu
+CREATE PROCEDURE DoiMatKhau
+    @SDT VARCHAR(10),
+    @OldPassword VARCHAR(8),
+    @NewPassword VARCHAR(8)
+AS
+BEGIN
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Kiểm tra xem mật khẩu cũ có khớp với mật khẩu hiện tại không
+        DECLARE @CurrentPassword VARCHAR(8);
+        SELECT @CurrentPassword = MatKhau 
+        FROM (
+            SELECT SDT
+            FROM NHANVIEN
+        UNION
+            SELECT SDT
+            FROM NHASI
+        UNION
+            SELECT SDT
+            FROM BENHNHAN
+        ) AS Users
+        WHERE SDT = @SDT;
+
+        -- Thay đổi mật khẩu
+        IF @CurrentPassword <> @OldPassword
+        BEGIN
+            THROW 50001, 'Mật khẩu cũ không khớp', 1;
+        END
+        UPDATE Users SET PMatKhau = @NewPassword WHERE SDT = @SDT;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END
+GO
+
+--QUên mật khẩu (gửi link qua email và truy cập bằng link)
+CREATE PROCEDURE QuenMatKhau
+    @SDT VARCHAR(10),
+    @NewPassword VARCHAR(8)
+AS
+BEGIN
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * 
+        FROM (
+            SELECT SDT
+            FROM NHANVIEN
+        UNION
+            SELECT SDT
+            FROM NHASI
+        UNION
+            SELECT SDT
+            FROM BENHNHAN
+        ) AS Users
+        WHERE SDT = @SDT)
+        BEGIN
+            THROW 50001, 'TAI KHOAN KHONG TON TAI', 1;
+        END
+
+        UPDATE Users SET MatKhau = @NewPassword WHERE SDT = @SDT;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END
+GO
+--Xem thông tin cá nhân quản trị viên
+CREATE PROCEDURE XemThongTinQTV
+    @MaQTV INT
+AS
+BEGIN
+    -- Kiểm tra xem MaQTV có tồn tại không
+    IF EXISTS (
+        SELECT 1
+    FROM QTV
+    WHERE MaNhanVien = @MaQTV
+    )
+    BEGIN
+        -- Lấy thông tin của QTV
+        SELECT
+            HoTen AS 'Họ Tên',
+            SDT AS 'Số Điện Thoại',
+            EMAIL as 'Email'
+        FROM QTV
+        WHERE MaNhanVien = @MaQTV;
+    END
+    ELSE
+    BEGIN
+        -- Nếu MaQTV không tồn tại
+        PRINT 'Không tìm thấy thông tin cho MaQTV = ' + CAST(@MaQTV AS int);
+    END
+END;
+GO
+-- caajp nhajat thoong tin nha six
+CREATE PROCEDURE CapNhatThongTinNhaSi
+    @SDT VARCHAR(10),
+    @HoTen NVARCHAR(50),
+    @GioiTinh NVARCHAR(5),
+    @NgaySinh DATETIME,
+    @DiaChi NVARCHAR(50),
+    @ChuyenMon nvarchar(50),
+	@BangCap nvarchar(50)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
+    IF EXISTS (SELECT 1
+    FROM NHASI
+    WHERE SDT = @SDT)
+    BEGIN
+        -- Cập nhật thông tin cá nhân của bệnh nhân
+        UPDATE NHASI
+        SET
+            HoTen = @HoTen,
+            GioiTinh = @GioiTinh,
+            NgaySinh = @NgaySinh,
+            DiaChi = @DiaChi,
+            ChuyenMon = @ChuyenMon,
+            BangCap = @BangCap
+        WHERE SDT = @SDT;
+
+        COMMIT TRANSACTION;
+        PRINT N'Cập nhật thông tin thành công.';
+    END
+    ELSE
+    BEGIN
+        -- Nha sĩ không tồn tại
+        ROLLBACK TRANSACTION;
+        PRINT N'Nha sĩ không tồn tại trong hệ thống. Cập nhật không thành công.';
+    END
+END;
+GO
+--Cap nhat thong tin nhanvien
+CREATE PROCEDURE CapNhatThongTinNhanVien
+    @SDT VARCHAR(10),
+    @HoTen NVARCHAR(50),
+    @GioiTinh NVARCHAR(5),
+    @DiaChi NVARCHAR(50),
+	@ViTri nvarchar(50)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    -- Kiểm tra xem Nhân viên có tồn tại trong hệ thống hay không
+    IF EXISTS (SELECT 1
+    FROM NHANVIEN
+    WHERE SDT = @SDT)
+    BEGIN
+        -- Cập nhật thông tin cá nhân của Nhân viên
+        UPDATE NHANVIEN
+        SET
+            HoTen = @HoTen,
+            GioiTinh = @GioiTinh,
+            DiaChi = @DiaChi,
+            ViTri = @ViTri
+        WHERE SDT = @SDT;
+
+        COMMIT TRANSACTION;
+        PRINT N'Cập nhật thông tin thành công.';
+    END
+    ELSE
+    BEGIN
+        -- NNhân viên không tồn tại
+        ROLLBACK TRANSACTION;
+        PRINT N'Nhân viên không tồn tại trong hệ thống. Cập nhật không thành công.';
+    END
+END;
+GO
+
+
+--Cap nhat thong tin QTV
+CREATE PROCEDURE CapNhatThongTinQTV
+    @SDT VARCHAR(10),
+    @HoTen NVARCHAR(50),
+    @Email varchar(255)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    -- Kiểm tra xem QTV có tồn tại trong hệ thống hay không
+    IF EXISTS (SELECT 1
+    FROM QTV
+    WHERE SDT = @SDT)
+    BEGIN
+        -- Cập nhật thông tin cá nhân của QTV 
+        UPDATE QTV
+        SET
+            HoTen = @HoTen,
+            Email = @Email
+        WHERE SDT = @SDT;
+
+        COMMIT TRANSACTION;
+        PRINT N'Cập nhật thông tin thành công.';
+    END
+    ELSE
+    BEGIN
+        -- QTV không tồn tại
+        ROLLBACK TRANSACTION;
+        PRINT N'QTV không tồn tại trong hệ thống. Cập nhật không thành công.';
+    END
+END;
+GO
+
+--Cập nhật trạng thái lịch hẹn (Hủy lịch hẹn)
+CREATE PROCEDURE CapNhatTrangThaiLichHen
+    @MaLichHen INT,
+    @TrangThaiMoi NVARCHAR(50)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- Kiểm tra xem lịch hẹn có tồn tại hay không
+        IF NOT EXISTS (SELECT * FROM LICHHEN WHERE MaLichHen = @MaLichHen)
+        BEGIN
+            THROW 50001, 'Lịch hẹn không tồn tại', 1;
+        END
+
+        -- Cập nhật trạng thái mới cho lịch hẹn
+        UPDATE LICHHEN SET TrangThaiLichHen = @TrangThaiMoi WHERE MaLichHen = @MaLichHen;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- QTV có thể xóa lịch hẹn
+CREATE PROCEDURE XoaLichHen
+    @MaLichHen INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Kiểm tra xem lịch hẹn có tồn tại hay không
+        IF NOT EXISTS (SELECT * FROM LICHHEN WHERE MaLichHen = @MaLichHen)
+        BEGIN
+            THROW 50001, 'Lịch hẹn không tồn tại', 1;
+        END
+
+        -- Xóa lịch hẹn
+        DELETE FROM LICHHEN WHERE MaLichHen = @MaLichHen;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+GO
+--Xem đơn thuốc
+CREATE PROCEDURE XemDonThuoc
+    @MaDonThuoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Kiểm tra xem đơn thuốc có tồn tại hay không
+        IF NOT EXISTS (SELECT * FROM DONTHUOC WHERE MaDonThuoc = @MaDonThuoc)
+        BEGIN
+            THROW 50001, 'Đơn thuốc không tồn tại', 1;
+        END
+
+        -- Lấy thông tin về đơn thuốc
+        SELECT MaDonThuoc, MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong
+        FROM DONTHUOC
+        WHERE MaDonThuoc = @MaDonThuoc;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+go
+
+--Xóa tài khoản
+CREATE PROCEDURE XoaTaiKhoan
+    @SDT varchar(10)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Kiểm tra xem tài khoản có tồn tại hay không
+        IF NOT EXISTS (SELECT * FROM (
+            SELECT SDT
+            FROM NHANVIEN
+        UNION
+            SELECT SDT
+            FROM NHASI
+        UNION
+            SELECT SDT
+            FROM BENHNHAN
+        ) AS Users
+        WHERE SDT = @SDT)
+        BEGIN
+            THROW 50001, 'Tài khoản không tồn tại', 1;
+        END
+
+        -- Xóa tài khoản
+        DELETE FROM Users
+        WHERE SDT = @SDT;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- QTV cập nhật tình trạng thái hoạt động(khóa/kích hoạt)
+CREATE PROCEDURE CapNhatTinhTrangHoatDongNhanVien
+    @MaNhanVien INT,
+    @TinhTrangHoatDong NVARCHAR(20)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Kiểm tra xem nhân viên có tồn tại hay không
+        IF NOT EXISTS (SELECT * FROM NHANVIEN WHERE MaNhanVien = @MaNhanVien)
+        BEGIN
+            THROW 50001, 'Nhân viên không tồn tại', 1;
+        END
+
+        -- Cập nhật tình trạng hoạt động của nhân viên
+        UPDATE NHANVIEN
+        SET TinhTrangHoatDong = @TinhTrangHoatDong
+        WHERE MaNhanVien = @MaNhanVien;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+go
+
+--Nha sĩ ghi nhận hồ sơ bệnh án
+CREATE PROCEDURE CapNhatHoSoBenhAn
+    @STT int,
+    @MaBenhNhan INT,
+    @MaNhaSiKham INT,
+    @GhiChu NVARCHAR(50),
+    @MaThuoc INT,
+    @NgaySuDung DATETIME,
+    @NgayHetHan DATETIME,
+    @LieuDung NVARCHAR(50),
+    @SoLuong INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Kiểm tra xem bệnh nhân có tồn tại hay không
+        IF NOT EXISTS (SELECT * FROM LICHSUKHAMBENH WHERE MaBenhNhan = @MaBenhNhan AND STT = @STT)
+        BEGIN
+            THROW 50001, 'Hồ sơ khám bệnh không tồn tại', 1;
+        END
+
+        -- Cập nhật thông tin lịch sử khám bệnh
+        UPDATE LICHSUKHAMBENH
+        SET GhiChu = @GhiChu,
+            NgayKham = GETDATE()
+        WHERE MaBenhNhan = @MaBenhNhan AND STT = @STT;
+
+        -- Thêm đơn thuốc
+        INSERT INTO DONTHUOC
+                (@MaThuoc, @MaBenhNhan, @NgaySuDung, @NgayHetHan, @LieuDung, @STT, @SoLuong)
+            SELECT @MaThuoc, @MaBenhNhan, @NgayGioKham, DATEADD(month, 1, GETDATE()), 'Lieu dung', @STT, 1
+            FROM THUOC
+            WHERE SoLuongTonKho > 0 AND NgayHetHan > GETDATE();
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+GO
+
+--Lập hóa đơn thanh toán
+
+
