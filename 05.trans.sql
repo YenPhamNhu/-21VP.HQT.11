@@ -1636,5 +1636,53 @@ END;
 GO
 
 --Lập hóa đơn thanh toán
+CREATE PROCEDURE LapHoaDonThanhToan
+    @STTLichSuKB int
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    
+    DECLARE @MaBenhNhan int;
+    DECLARE @MaPhieuDVSD int;
+    DECLARE @TongTien int;
+    DECLARE @MaDonThuoc int;
+    
+    IF NOT EXISTS (SELECT 1 FROM LICHSUKHAMBENH WHERE STT = @STTLichSuKB)
+    BEGIN
+        RAISERROR('Không tìm thấy STTLichSuKB', 16, 1);
+        ROLLBACK;
+        RETURN;
+    END
+    
+    -- Lấy thông tin mã bệnh nhân từ bảng LICHSUKHAMBENH
+    SELECT @MaBenhNhan = MaBenhNhan
+    FROM LICHSUKHAMBENH
+    WHERE STT = @STTLichSuKB;
+    
+    -- Lấy thông tin mã phiếu dịch vụ sử dụng từ bảng DICHVUSUDUNG
+    SELECT @MaPhieuDVSD = MaPhieuDVSD
+    FROM DICHVUSUDUNG
+    WHERE STTLichSuKB = @STTLichSuKB;
+    
+    -- Tính tổng tiền từ bảng DONTHUOC và DICHVUSUDUNG
+    SELECT @TongTien = SUM(DT.SoLuong * T.DonGia) + SUM(DV.SoLuong * D.DonGia)
+    FROM DONTHUOC DT
+    INNER JOIN THUOC T ON DT.MaThuoc = T.MaThuoc
+    LEFT JOIN DICHVUSUDUNG DV ON DT.STTLichSuKB = DV.STTLichSuKB
+    LEFT JOIN DICHVU D ON DV.MaDichVu = D.MaDichVu
+    WHERE DT.STTLichSuKB = @STTLichSuKB;
 
+    -- Lấy mã hóa đơn mới
+    SET @MaHoaDon = SCOPE_IDENTITY();
+    
+    -- Thêm hóa đơn vào bảng HOADON
+    INSERT INTO HOADON
+    VALUES (@MaHoaDon, @MaBenhNhan, @STTLichSuKB, @MaPhieuDVSD, @TongTien, 'Chưa thanh toán', GETDATE(), @MaDonThuoc);
+
+    -- Commit transaction
+    COMMIT TRANSACTION;
+    
+    -- Trả về thông tin mã hóa đơn mới
+    SELECT @MaHoaDon AS MaHoaDon;
+END
 
