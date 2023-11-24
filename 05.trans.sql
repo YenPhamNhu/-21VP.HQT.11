@@ -1646,6 +1646,7 @@ BEGIN
     DECLARE @MaPhieuDVSD int;
     DECLARE @TongTien int;
     DECLARE @MaDonThuoc int;
+	DECLARE @MaHoaDon int;
     
     IF NOT EXISTS (SELECT 1 FROM LICHSUKHAMBENH WHERE STT = @STTLichSuKB)
     BEGIN
@@ -1676,8 +1677,8 @@ BEGIN
     SET @MaHoaDon = SCOPE_IDENTITY();
     
     -- Thêm hóa đơn vào bảng HOADON
-    INSERT INTO HOADON
-    VALUES (@MaHoaDon, @MaBenhNhan, @STTLichSuKB, @MaPhieuDVSD, @TongTien, 'Chưa thanh toán', GETDATE(), @MaDonThuoc);
+    INSERT INTO HOADON (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc)
+VALUES (@MaBenhNhan, @STTLichSuKB, @MaPhieuDVSD, @TongTien, N'Chưa thanh toán', GETDATE(), @MaDonThuoc);
 
     -- Commit transaction
     COMMIT TRANSACTION;
