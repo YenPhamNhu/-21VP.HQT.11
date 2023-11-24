@@ -1204,6 +1204,9 @@ BEGIN
 END;
 GO
 
+IF OBJECT_ID('dbo.DoiMatKhau', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.DoiMatKhau;
+GO
 -- Đổi mật khẩu
 CREATE PROCEDURE DoiMatKhau
     @SDT VARCHAR(10),
@@ -1219,13 +1222,13 @@ BEGIN
         DECLARE @CurrentPassword VARCHAR(8);
         SELECT @CurrentPassword = MatKhau 
         FROM (
-            SELECT SDT
+            SELECT SDT, MatKhau
             FROM NHANVIEN
         UNION
-            SELECT SDT
+            SELECT SDT, MatKhau
             FROM NHASI
         UNION
-            SELECT SDT
+            SELECT SDT, MatKhau
             FROM BENHNHAN
         ) AS Users
         WHERE SDT = @SDT;
@@ -1235,7 +1238,9 @@ BEGIN
         BEGIN
             THROW 50001, 'Mật khẩu cũ không khớp', 1;
         END
-        UPDATE Users SET PMatKhau = @NewPassword WHERE SDT = @SDT;
+        UPDATE NHANVIEN SET MatKhau = @NewPassword WHERE SDT = @SDT;
+        UPDATE NHASI SET MatKhau = @NewPassword WHERE SDT = @SDT;
+        UPDATE BENHNHAN SET MatKhau = @NewPassword WHERE SDT = @SDT;
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -1247,6 +1252,9 @@ BEGIN
     END CATCH;
 END
 GO
+
+EXEC DoiMatKhau @SDT = '0123456780', @OldPassword = '12345678', @NewPassword = 'qwe12345';
+
 
 --QUên mật khẩu (gửi link qua email và truy cập bằng link)
 CREATE PROCEDURE QuenMatKhau
@@ -1274,7 +1282,9 @@ BEGIN
             THROW 50001, 'TAI KHOAN KHONG TON TAI', 1;
         END
 
-        UPDATE Users SET MatKhau = @NewPassword WHERE SDT = @SDT;
+        UPDATE NHANVIEN SET MatKhau = @NewPassword WHERE SDT = @SDT;
+        UPDATE NHASI SET MatKhau = @NewPassword WHERE SDT = @SDT;
+        UPDATE BENHNHAN SET MatKhau = @NewPassword WHERE SDT = @SDT;
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -1539,8 +1549,9 @@ BEGIN
         END
 
         -- Xóa tài khoản
-        DELETE FROM Users
-        WHERE SDT = @SDT;
+        DELETE FROM NHANVIEN WHERE SDT = @SDT;
+        DELETE FROM NHASI WHERE SDT = @SDT;
+        DELETE FROM BENHNHAN WHERE SDT = @SDT;
 
         COMMIT TRANSACTION;
     END TRY
@@ -1678,7 +1689,7 @@ BEGIN
     
     -- Thêm hóa đơn vào bảng HOADON
     INSERT INTO HOADON (MaBenhNhan, STTLichSuKB, MaPhieuDVSD, TongTien, TinhTrangThanhToan, NgayThanhToan, MaDonThuoc)
-VALUES (@MaBenhNhan, @STTLichSuKB, @MaPhieuDVSD, @TongTien, N'Chưa thanh toán', GETDATE(), @MaDonThuoc);
+	VALUES (@MaBenhNhan, @STTLichSuKB, @MaPhieuDVSD, @TongTien, N'Chưa thanh toán', GETDATE(), @MaDonThuoc);
 
     -- Commit transaction
     COMMIT TRANSACTION;
