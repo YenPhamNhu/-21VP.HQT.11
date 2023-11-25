@@ -39,7 +39,7 @@ EXEC DatLichHen
     @CaDangKy = N'Chiều';
 GO
 -- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
-EXEC XemThongTinCaNhan @SDT = '0123456782';
+EXEC XemThongTinCaNhanBenhNhan @SDT = '0123456782';
 
 GO
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi). 
@@ -92,7 +92,7 @@ EXEC GhiNhanHoSoBenhAn
 EXEC ThongBaoLichKham
 
 GO
-EXEC XemDanhMucThuoc @MaThuoc = 101;
+EXEC XemDanhMucThuoc;
 EXEC XemDanhSachLichHen;
 EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
 
@@ -207,6 +207,17 @@ EXEC QuanLyKhoThuoc
     @SoLuongTonKho = 100,
     @ThaoTac = 'ThemMoi';
 
+EXEC QuanLyKhoThuoc
+    @MaThuoc = 101,
+    @NgayHetHan = '2023-12-10',
+    @TenThuoc = 'Aspirin',
+    @DonViTinh = 'Viên',
+    @DonGia = 10,
+    @ChiDinh = 'Giảm đau',
+    @SoLuongTonKho = 100,
+    @ThaoTac = 'ThemMoi';
+
+
 -- Execute the stored procedure to update drug information in the inventory
 EXEC QuanLyKhoThuoc
     @MaThuoc = 101,
@@ -220,3 +231,7 @@ EXEC QuanLyKhoThuoc
 
 -- Execute the stored procedure to view current inventory status
 EXEC QuanLyKhoThuoc @ThaoTac = 'XemTonKho';
+
+EXEC DoiMatKhau @SDT = '0123456780'
+, @OldPassword = '12345678'
+, @NewPassword = 'qwe12345';

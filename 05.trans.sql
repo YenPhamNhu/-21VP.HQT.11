@@ -1,52 +1,4 @@
 -- //0.Người dùng khách (người dùng chưa đăng nhập) 
-
--- 0.1/Có quyền đăng kí tài khoản (gọi giao tác TaoTaiKhoanBenhNhan) 
--- bằng cách cung cấp họ tên, ngày sinh, giới tính, số điện thoại
--- , địa chỉ, mật khẩu (mạnh). 
-IF EXISTS (SELECT *
-FROM sys.procedures
-WHERE name = N'TaoTaiKhoanBenhNhan' AND type = 'P')
-BEGIN
-    DROP PROCEDURE TaoTaiKhoanBenhNhan;
-    PRINT N'Đã hủy giao tác TaoTaiKhoanBenhNhan.';
-END
-ELSE
-BEGIN
-    PRINT N'Giao tác TaoTaiKhoanBenhNhan chưa được tạo.';
-END
-GO
-
-CREATE PROCEDURE TaoTaiKhoanBenhNhan
-    @HoTen NVARCHAR(50),
-    @SDT VARCHAR(10),
-    @GioiTinh NVARCHAR(5),
-    @NgaySinh DATETIME,
-    @DiaChi NVARCHAR(50),
-    @MatKhau VARCHAR(8)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-
-    IF NOT EXISTS (SELECT 1
-    FROM BENHNHAN
-    WHERE SDT = @SDT)
-    BEGIN
-        INSERT INTO BENHNHAN
-            (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau)
-        VALUES
-            (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @MatKhau);
-        PRINT N'Tạo tài khoản thành công';
-        COMMIT TRANSACTION;
-    END
-    ELSE
-    BEGIN
-        -- SDT đã tồn tại, In ra màn hình
-        ROLLBACK TRANSACTION;
-        PRINT N'Số điện thoại đã tồn tại. Tạo tài khoản không thành công';
-    END
-END
-GO
-
 --//-------------------
 -- 0.2/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap)
 IF EXISTS (SELECT *
@@ -61,7 +13,6 @@ BEGIN
     PRINT N'Giao tác DangNhap chưa được tạo.';
 END
 GO
-
 CREATE PROCEDURE DangNhap
     @UserName NVARCHAR(50),
     @Password NVARCHAR(50)
@@ -202,25 +153,30 @@ CREATE PROCEDURE XemThongTinCaNhanBenhNhan
     @SDT VARCHAR(10)
 AS
 BEGIN
+    BEGIN TRANSACTION;
+
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
     WHERE SDT = @SDT)
-    BEGIN
-        -- Lấy thông tin cá nhân của bệnh nhân
-        SELECT
-            HoTen,
-            NgaySinh,
-            DiaChi,
-            SDT,
-            GioiTinh
-        FROM BENHNHAN
-        WHERE SDT = @SDT;
-    END
+        BEGIN
+            -- Lấy thông tin cá nhân của bệnh nhân
+            SELECT
+                HoTen,
+                NgaySinh,
+                DiaChi,
+                SDT,
+                GioiTinh
+            FROM BENHNHAN
+            WHERE SDT = @SDT;
+            
+        END
     ELSE
-    BEGIN
-        PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
-    END
+        BEGIN
+            ROLLBACK TRANSACTION;
+            PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
+        END
+    COMMIT TRANSACTION;
 END;
 GO
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi). 
@@ -241,30 +197,33 @@ CREATE PROCEDURE XemThongTinNhaSi
     @MaNhaSi INT
 AS
 BEGIN
+    BEGIN TRANSACTION;
     -- Kiểm tra xem MaNhaSi có tồn tại không
-    IF EXISTS (
-        SELECT 1
-    FROM NHASI
-    WHERE MaNhaSi = @MaNhaSi
-    )
-    BEGIN
-        -- Lấy thông tin của NhaSi
-        SELECT
-            HoTen AS 'Họ Tên',
-            SDT AS 'Số Điện Thoại',
-            GioiTinh AS 'Giới Tính',
-            NgaySinh AS 'Ngày Sinh',
-            DiaChi AS 'Địa Chỉ',
-            ChuyenMon AS 'Chuyên Khoa',
-            BangCap AS 'Bằng'
+        IF EXISTS (
+            SELECT 1
         FROM NHASI
-        WHERE MaNhaSi = @MaNhaSi;
-    END
-    ELSE
-    BEGIN
-        -- Nếu MaNhaSi không tồn tại
-        PRINT 'Không tìm thấy thông tin cho MaNhaSi = ' + CAST(@MaNhaSi AS NVARCHAR(10));
-    END
+        WHERE MaNhaSi = @MaNhaSi
+        )
+        BEGIN
+            -- Lấy thông tin của NhaSi
+            SELECT
+                HoTen AS 'Họ Tên',
+                SDT AS 'Số Điện Thoại',
+                GioiTinh AS 'Giới Tính',
+                NgaySinh AS 'Ngày Sinh',
+                DiaChi AS 'Địa Chỉ',
+                ChuyenMon AS 'Chuyên Khoa',
+                BangCap AS 'Bằng'
+            FROM NHASI
+            WHERE MaNhaSi = @MaNhaSi;
+            COMMIT TRANSACTION;
+        END
+        ELSE
+        BEGIN
+            ROLLBACK TRANSACTION;
+            -- Nếu MaNhaSi không tồn tại
+            PRINT 'Không tìm thấy thông tin cho MaNhaSi = ' + CAST(@MaNhaSi AS NVARCHAR(10));
+        END
 END;
 GO
 
@@ -368,7 +327,6 @@ BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
     END
-
     COMMIT TRANSACTION;
 END;
 GO
@@ -687,30 +645,15 @@ ELSE
 END
 GO
 CREATE PROCEDURE XemDanhMucThuoc
-    @MaThuoc INT
 AS
 BEGIN
     BEGIN TRANSACTION
-    -- ktra mã thuốc có tồn tại trong hệ thống không
-    IF EXISTS (SELECT 1
-    FROM THUOC
-    WHERE MaThuoc = @MaThuoc)
-        BEGIN
         -- Lấy thông tin thuốc
-        SELECT
-            MaThuoc,
-            NgayHetHan ,
-            TenThuoc,
-            DonViTinh,
-            DonGia,
-            ChiDinh,
-            SoLuongTonKho
+        SELECT *
         FROM THUOC
-        WHERE MaThuoc = @MaThuoc;
 
         COMMIT TRANSACTION;
-    END
-    ELSE
+
         BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Thuốc không tồn tại trong hệ thống.';
@@ -784,6 +727,7 @@ BEGIN
 END;
 EXEC TimKiemHoSoKhamBenh @MaBenhNhan = 1001;
 GO
+
 -- Có quyền thông báo (in) cho khách hàng lịch đăng kí (gọi giao tác ThongBaoLichKham) 
 IF EXISTS (SELECT *
 FROM sys.procedures
@@ -828,43 +772,6 @@ BEGIN
 END;
 GO
 
-
--- Có quyền xem danh mục thuốc (gọi giao tác XemDanhMucThuoc) gồm mã thuốc, tên thuốc, đơn vị tính, chỉ định, số lượng tồn trong kho và ngày hết hạn của thuốc. 
-
--- Có quyền tìm kiếm hồ sơ khám bệnh của bệnh nhân (gọi giao tác TimKiemHoSoBenhNhan) 
--- để lấy thông tin khám gồm dịch vụ, phí khám, đơn thuốc để lập hóa đơn thanh toán (gọi giao tác LapHoaDonThanhToan) 
-IF EXISTS (SELECT *
-FROM sys.procedures
-WHERE name = N'TimKiemHoSoBenhNhan' AND type = 'P')
-BEGIN
-    DROP PROCEDURE TimKiemHoSoBenhNhan;
-    PRINT N'Đã hủy giao tác TimKiemHoSoBenhNhan.';
-END
-ELSE
-BEGIN
-    PRINT N'Giao tác TimKiemHoSoBenhNhan chưa được tạo.';
-END
-GO
-CREATE PROCEDURE TimKiemHoSoBenhNhan
-    @TenBenhNhan NVARCHAR(50)
-AS
-BEGIN
-    SELECT
-        MaBenhNhan,
-        HoTen,
-        SDT,
-        GioiTinh,
-        NgaySinh,
-        DiaChi
-    FROM
-        BENHNHAN
-    WHERE
-        HoTen LIKE '%' + @TenBenhNhan + '%';
-END;
-GO
-EXEC TimKiemHoSoBenhNhan @TenBenhNhan = 'Benh Nhan';
-GO
-
 -- Có quyền thêm, xóa, sửa thông tin thuốc trong kho thuốc (gọi giao tác QuanLyKhoThuoc)  
 IF EXISTS (SELECT *
 FROM sys.procedures
@@ -889,40 +796,44 @@ CREATE PROCEDURE QuanLyKhoThuoc
     @ThaoTac NVARCHAR(50)
 AS
 BEGIN
-    IF @ThaoTac = 'ThemMoi'
-    BEGIN
-        -- Add a new drug to the inventory
-        INSERT INTO THUOC
-            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
-        VALUES
-            (@MaThuoc, @NgayHetHan, @TenThuoc, @DonViTinh, @DonGia, @ChiDinh, @SoLuongTonKho);
-        PRINT 'Drug added to inventory successfully.';
-    END
-    ELSE IF @ThaoTac = 'CapNhat'
-    BEGIN
-        -- Update drug information in the inventory
-        UPDATE THUOC
-        SET
-            NgayHetHan = @NgayHetHan,
-            TenThuoc = @TenThuoc,
-            DonViTinh = @DonViTinh,
-            DonGia = @DonGia,
-            ChiDinh = @ChiDinh,
-            SoLuongTonKho = @SoLuongTonKho
-        WHERE MaThuoc = @MaThuoc AND NgayHetHan = @NgayHetHan;
-        PRINT 'Drug information updated successfully.';
-    END
-    ELSE IF @ThaoTac = 'XemTonKho'
-    BEGIN
-        -- View current inventory status
-        SELECT *
-        FROM THUOC;
-    END
-    ELSE
-    BEGIN
-        -- Invalid operation
-        PRINT 'Invalid operation.';
-    END
+    BEGIN TRANSACTION;
+        IF @ThaoTac = 'ThemMoi'
+        BEGIN
+            -- Add a new drug to the inventory
+            INSERT INTO THUOC
+                (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
+            VALUES
+                (@MaThuoc, @NgayHetHan, @TenThuoc, @DonViTinh, @DonGia, @ChiDinh, @SoLuongTonKho);
+            PRINT 'Drug added to inventory successfully.';
+            COMMIT TRANSACTION;
+        END
+        ELSE IF @ThaoTac = 'CapNhat'
+        BEGIN
+            -- Update drug information in the inventory
+            UPDATE THUOC
+            SET
+                NgayHetHan = @NgayHetHan,
+                TenThuoc = @TenThuoc,
+                DonViTinh = @DonViTinh,
+                DonGia = @DonGia,
+                ChiDinh = @ChiDinh,
+                SoLuongTonKho = @SoLuongTonKho
+            WHERE MaThuoc = @MaThuoc AND NgayHetHan = @NgayHetHan;
+            PRINT 'Drug information updated successfully.';
+            COMMIT TRANSACTION;
+        END
+        ELSE IF @ThaoTac = 'XemTonKho'
+        BEGIN
+            -- View current inventory status
+            SELECT *
+            FROM THUOC;
+        END
+        ELSE
+        BEGIN
+            ROLLBACK TRANSACTION;
+            -- Invalid operation
+            PRINT 'Invalid operation.';
+        END
 END;
 GO
 
@@ -1171,11 +1082,6 @@ BEGIN
     THROW;
     END CATCH;
 END
-GO
-
-EXEC DoiMatKhau @SDT = '0123456780'
-, @OldPassword = '12345678'
-, @NewPassword = 'qwe12345';
 
 GO
 -- Quên mật khẩu (gửi link qua email và truy cập bằng link)
@@ -1250,26 +1156,30 @@ CREATE PROCEDURE XemThongTinQTV
     @SDT VARCHAR(10)
 AS
 BEGIN
-    -- Kiểm tra xem SDT có tồn tại không
-    IF EXISTS (
-        SELECT 1
-    FROM QTV
-    WHERE SDT = @SDT
-    )
-    BEGIN
-        -- Lấy thông tin của QTV
-        SELECT
-            HoTen AS 'Họ Tên',
-            SDT AS 'Số Điện Thoại',
-            EMAIL as 'Email'
+    BEGIN TRANSACTION;
+        -- Kiểm tra xem SDT có tồn tại không
+        IF EXISTS (
+            SELECT 1
         FROM QTV
-        WHERE SDT = @SDT;
-    END
+        WHERE SDT = @SDT
+        )
+        BEGIN
+            -- Lấy thông tin của QTV
+            SELECT
+                HoTen AS 'Họ Tên',
+                SDT AS 'Số Điện Thoại',
+                EMAIL as 'Email'
+            FROM QTV
+            WHERE SDT = @SDT;
+            
+            COMMIT TRANSACTION
+        END
     ELSE
-    BEGIN
-        -- Nếu SDT không tồn tại
-        PRINT 'Không tìm thấy thông tin QTV cho SDT = ' + @SDT;
-    END
+        BEGIN
+            ROLLBACK TRANSACTION;
+            -- Nếu SDT không tồn tại
+            PRINT 'Không tìm thấy thông tin QTV cho SDT = ' + @SDT;
+        END
 END;
 
 GO
@@ -1508,7 +1418,6 @@ BEGIN
     END CATCH;
 END;
 GO
-
 
 --Xem đơn thuốc
 IF EXISTS (SELECT *
