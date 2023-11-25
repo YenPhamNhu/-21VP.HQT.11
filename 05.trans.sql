@@ -139,14 +139,14 @@ GO
 -- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
 IF EXISTS (SELECT *
 FROM sys.procedures
-WHERE name = N'XemThongTinCaNhan' AND type = 'P')
+WHERE name = N'XemThongTinCaNhanBenhNhan' AND type = 'P')
 BEGIN
     DROP PROCEDURE XemThongTinCaNhanBenhNhan;
-    PRINT N'Đã hủy giao tác XemThongTinCaNhan.';
+    PRINT N'Đã hủy giao tác XemThongTinCaNhanBenhNhan.';
 END
 ELSE
 BEGIN
-    PRINT N'Giao tác XemThongTinCaNhan chưa được tạo.';
+    PRINT N'Giao tác XemThongTinCaNhanBenhNhan chưa được tạo.';
 END
 GO
 CREATE PROCEDURE XemThongTinCaNhanBenhNhan
@@ -535,7 +535,7 @@ BEGIN
     IF EXISTS (SELECT 1
     FROM NHANVIEN
     WHERE SDT = @SDT)
-        BEGIN
+    BEGIN
         -- Lấy thông tin cá nhân của nhân viên
         SELECT
             Hoten,
@@ -550,7 +550,7 @@ BEGIN
         COMMIT TRANSACTION;
     END
     ELSE
-        BEGIN
+    BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Nhân viên không tồn tại trong hệ thống.';
     END
@@ -988,33 +988,6 @@ BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Có lỗi khi thêm tài khoản. Thực hiện không thành công.';
         RETURN;
-    END
-
-    -- Thêm email cho Quan Tri Vien (QTV)
-    IF @Email IS NOT NULL
-    BEGIN
-        UPDATE QTV
-        SET Email = @Email
-        WHERE SDT = @SDT;
-    END
-
-    -- Thêm thông tin cho hóa đơn của bệnh nhân
-    IF @TinhTrangThanhToan IS NOT NULL
-    BEGIN
-        INSERT INTO HOADON
-            (MaBenhNhan, STTLichSuKB, TinhTrangThanhToan)
-        VALUES
-            (
-                (SELECT MaBenhNhan
-                FROM BENHNHAN
-                WHERE SDT = @SDT),
-                (SELECT STT
-                FROM LICHSUKHAMBENH
-                WHERE MaBenhNhan = (SELECT MaBenhNhan
-                FROM BENHNHAN
-                WHERE SDT = @SDT)),
-                @TinhTrangThanhToan
-        );
     END
 
     -- Commit giao dịch nếu không có lỗi xảy ra
@@ -1544,12 +1517,12 @@ BEGIN
 
     BEGIN TRY
         -- Kiểm tra xem nhân viên có tồn tại hay không
-        IF NOT EXISTS (SELECT *
+    IF NOT EXISTS (SELECT *
     FROM NHANVIEN
     WHERE MaNhanVien = @MaNhanVien)
-        BEGIN
+    BEGIN
             THROW 50001, 'Nhân viên không tồn tại', 1;
-        END
+    END
 
         -- Cập nhật tình trạng hoạt động của nhân viên
         UPDATE NHANVIEN
@@ -1557,8 +1530,7 @@ BEGIN
         WHERE MaNhanVien = @MaNhanVien;
 
         COMMIT TRANSACTION;
-    END
-    TRY
+    END TRY
     BEGIN CATCH
     -- Nếu xảy ra lỗi, rollback transaction
     ROLLBACK TRANSACTION;
