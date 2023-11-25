@@ -61,7 +61,7 @@ const Services = () => {
             key={service.name}
             className='service d-flex flex-wrap justify-content: space-between'
           >
-             <Link to={`/service${service.url}`}>
+             <Link to={`/service/${service.url}`}>
               <img src={service.img} alt={service.name} />
               <br></br>
               <p>{service.name}</p>

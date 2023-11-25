@@ -19,6 +19,7 @@ const {
 } = serviceControll;
 
 router.get("/services/getAllService", getAllService);
+router.get("/services/getServiceById/:MaDichVu", getServiceById);
 
 module.exports = {
 	routes: router,
