@@ -189,13 +189,20 @@ EXEC CapNhatHoSoBenhAn
     @NgaySuDung = '2023-01-31 00:00:00.000',
     @LieuDung = N'2 viên/ngày',
     @SoLuong = 12
-SELECT * FROM LICHSUKHAMBENH WHERE STT = 1
-SELECT * FROM DICHVUSUDUNG WHERE STTLichSuKB =1 
-SELECT * FROM DONTHUOC WHERE STTLichSuKB =1 
-SELECT * FROM HOADON
+SELECT *
+FROM LICHSUKHAMBENH
+WHERE STT = 1
+SELECT *
+FROM DICHVUSUDUNG
+WHERE STTLichSuKB =1
+SELECT *
+FROM DONTHUOC
+WHERE STTLichSuKB =1
+SELECT *
+FROM HOADON
 EXEC LapHoaDonThanhToan
-    @STTLichSuKB = 3
-    
+    @STTLichSuKB = 1
+
 -- Execute the stored procedure to add a new drug to the inventory
 EXEC QuanLyKhoThuoc
     @MaThuoc = 101,
