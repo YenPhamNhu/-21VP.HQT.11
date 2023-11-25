@@ -13,7 +13,8 @@ INSERT INTO NHANVIEN
   (Hoten, SDT, GioiTinh, DiaChi, TinhTrangHoatDong, ViTri, MatKhau)
 VALUES
   (N'Nhân viên 1', '0123456789', N'Nam', N'Địa chỉ NV1', N'Còn làm', N'Vị trí NV1', '12345678'),
-  (N'Nhân viên 2', '0123456788', N'Nữ', N'Địa chỉ NV2', N'Còn làm', N'Vị trí NV2', '12345678')
+  (N'Nhân viên 2', '0123456788', N'Nữ', N'Địa chỉ NV2', N'Còn làm', N'Vị trí NV2', '12345678'),
+  (N'Nhân viên 3', '0123456798', N'Nữ', N'Địa chỉ NV3', N'Còn làm', N'Vị trí NV3', '12345678')
 
 -- 3/NHASI
 INSERT INTO NHASI

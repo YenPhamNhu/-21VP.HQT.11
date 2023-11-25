@@ -1,0 +1,42 @@
+USE QLPKNK;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+-- sử dụng một biến @STT để đại diện cho STT của lịch sử khám bệnh và 
+-- kiểm tra xem STT đó đã tồn tại cho Bệnh nhân A hay chưa. Nếu chưa tồn tại, 
+-- thêm thông tin mới vào bảng LICHSUKHAMBENH
+BEGIN TRAN;
+
+-- Bác sĩ X mở phiếu khám cho Bệnh nhân A, ghi thông tin vào bảng LICHSUKHAMBENH.
+DECLARE @STT INT, @MaBenhNhan INT, @MaNhaSiKham INT, @GhiChu NVARCHAR(50), @NgayKham DATETIME;
+
+-- Gán giá trị cho các biến
+SET @STT = 1;
+SET @MaBenhNhan = 1001;
+SET @MaNhaSiKham = 100;
+SET @GhiChu = 'Khám lần đầu';
+SET @NgayKham = '2023-11-16';
+
+-- Kiểm tra xem đã tồn tại STT này cho Bệnh nhân A hay chưa
+IF NOT EXISTS (SELECT 1
+FROM LICHSUKHAMBENH
+WHERE STT = @STT AND MaBenhNhan = @MaBenhNhan)
+BEGIN
+    -- Thêm thông tin vào bảng LICHSUKHAMBENH
+    INSERT INTO LICHSUKHAMBENH
+        (STT, MaBenhNhan, MaNhaSiKham, GhiChu, NgayKham)
+    VALUES
+        (@STT, @MaBenhNhan, @MaNhaSiKham, @GhiChu, @NgayKham);
+
+    -- In ra thông báo cho biết giao dịch thành công
+    PRINT N'Ghi chú khám bệnh cho Bệnh nhân A đã được thêm thành công.';
+END
+ELSE
+BEGIN
+    -- In ra thông báo nếu STT đã tồn tại cho Bệnh nhân A
+    PRINT N'Ghi chú khám bệnh cho Bệnh nhân A đã tồn tại.';
+END
+
+-- Chờ 20 giây (sử dụng WAITFOR DELAY '00:00:20';)
+WAITFOR DELAY '00:00:20';
+
+-- Kết thúc giao dịch
+COMMIT TRAN;
