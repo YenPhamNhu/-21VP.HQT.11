@@ -2,7 +2,7 @@ import React from "react";
 import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol, MDBInput} from "mdb-react-ui-kit";
 
 
-const Forgetpass = () => {
+const Resetpass = () => {
   return (
     <MDBContainer fluid style={{ margin: "40px 10px"}} >
       <MDBRow className="d-flex justify-content-center align-items-center" id='logcontain'>
@@ -11,24 +11,28 @@ const Forgetpass = () => {
             <MDBCardBody className="text-black d-flex flex-column justify-content-center" id='logcontain'>
               <MDBRow>
               <MDBRow>
-                <MDBCol md="10">
+                <MDBCol md="12">
                     <MDBInput
                     wrapperClass="mb-4"
-                    label="Email"
+                    label="Mật khẩu mới"
                     size="lg"
-                    id="forgetemail"
-                    type="email"
+                    id="resetpass"
+                    type="password"
                     />
-                </MDBCol>
-
-                <MDBCol md="2">
-                    <MDBBtn className="ms-2" color="warning" size="sm" style={{height:'42px',lineHeight:'42px'}}>
-                    Gửi Lại
-                    </MDBBtn>
                 </MDBCol>
                 </MDBRow>
               </MDBRow>
-           
+              <MDBRow>
+                <MDBCol md="12">
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Nhập lại mật khẩu"
+                    size="lg"
+                    id="resetpass1"
+                    type="password"
+                  />
+                </MDBCol>
+              </MDBRow>
               
               <div className="d-flex justify-content-center pt-3">
                 <MDBBtn className="ms-2" color="warning" size="lg">
@@ -44,4 +48,4 @@ const Forgetpass = () => {
   );
 };
 
-export default Forgetpass;
+export default Resetpass;

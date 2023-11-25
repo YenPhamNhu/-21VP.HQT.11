@@ -9,7 +9,7 @@
 #main_sel
 {
   color: white;
-  padding: 25px 50px;
+  padding: 25px 70px;
 }
 
 
@@ -26,9 +26,10 @@
 .login-button,
 .signup-button {
   /* Button-like styling */
-  background-color: #007bff;
+  background-color: #2a7fa0;
   color: white;
-  padding: 10px 30px;
+  padding: 10px 20px;
+  margin: 10px 20px;
   border: none;
   cursor: pointer;
 }

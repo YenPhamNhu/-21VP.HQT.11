@@ -10,6 +10,7 @@ import Main from "./components/main.js";
 import Header from "./components/header.js";
 import Forgetpass from "./screens/Forgetpass.js"
 import ServiceDetails from "./screens/Service_detail.js"
+import Resetpass from "./screens/Resetpass.js"
 const App = () => {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/forgetpass' element={<Forgetpass/>}/>
+        <Route path='/resetpass' element={<Resetpass/>}/>
         <Route path='/service/:number' element={<ServiceDetails/>}/>
       </Routes>
       <hr id='hrduoi'></hr>

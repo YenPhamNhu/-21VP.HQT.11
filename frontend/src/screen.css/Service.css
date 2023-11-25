@@ -12,6 +12,7 @@ h2 {
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+  padding-left: 10%;
 }
 
 .grid > * {

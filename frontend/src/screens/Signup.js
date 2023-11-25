@@ -1,7 +1,5 @@
 import React from "react";
-// import { Form, Button, FloatingLabel } from "react-bootstrap";
 import "../screen.css/Signup.css";
-// import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import {
   MDBBtn,
   MDBContainer,
@@ -12,7 +10,6 @@ import {
   MDBCol,
   MDBInput,
   MDBRadio,
-  // MDBSelect,
 } from "mdb-react-ui-kit";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -24,12 +21,11 @@ const Signup = () => {
           <MDBCard className='my-4'>
             <MDBRow className='g-0'>
               <MDBCol md='6' className='d-none d-md-block' marginTop='5%' >
-                <MDBCardImage  paddingTop='15%' width='40%' height='40%'
+                <MDBCardImage width='40%' height='40%'
                   src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp'
                   alt='Sample photo' 
                   className="d-flex align-items-center mx-auto"
                   fluid
-                  
                 />
               </MDBCol>
 

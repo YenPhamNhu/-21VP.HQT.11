@@ -47,7 +47,7 @@ const Login = () => {
                 </MDBCol>
 
                 <MDBCol md="6" className="d-flex justify-content-end">
-                  <Nav.Link as={Link} to="/forgetpass">Quên mật khẩu?</Nav.Link>
+                  <Nav.Link as={Link} to="/forgetpass" className="text-primary">Quên mật khẩu?</Nav.Link>
                 </MDBCol>
               </MDBRow>
               <div className="d-flex justify-content-center pt-3">
@@ -56,7 +56,7 @@ const Login = () => {
                 </MDBBtn>
               </div>
               <div className="d-flex justify-content-center pt-3">
-              <Nav.Link as={Link} to='/signup'>Chưa có tài khoản? Đăng ký</Nav.Link>
+              <Nav.Link as={Link} to='/signup' className="text-primary">Chưa có tài khoản? Đăng ký</Nav.Link>
               </div>
             </MDBCardBody>
           </MDBCard>
