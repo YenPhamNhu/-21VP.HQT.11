@@ -39,7 +39,7 @@ EXEC DatLichHen
     @CaDangKy = N'Chiều';
 GO
 -- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
-EXEC XemThongTinCaNhan @SDT = '0123456782';
+EXEC XemThongTinCaNhanBenhNhan @SDT = '0123456782';
 
 GO
 -- Có quyền được xem thông tin của nha sĩ (gọi giao tác XemThongTinNhaSi). 
@@ -70,24 +70,138 @@ EXEC XemThongTinHoaDon @SDT = '0123456781', @STTLichSuKB = 1;
 EXEC XemTrangThaiThanhToan @SDT = '0123456781', @STTLichSuKB = 1;
 
 EXEC CapNhatLichLamViec
-@SDT_NhaSi = '0123456777',
+    @MaNhaSi = 100,
     @Ngay = '2023-11-29',
     @CaDangKy = N'Chiều'
 
+SELECT *
+FROM LICHHEN
 EXEC GhiNhanDatKhamBenh
     @SDT = '0123456780',
-    @NgayGioKham = '2023-11-14',
-    @TenNhaSi = N'Nha sĩ 2'
+    @NgayGioKham = '2023-11-29 15:00:00.000',
+    @TenNhaSi = N'Nha sĩ 1'
+SELECT *
+FROM LICHHEN
+
 
 EXEC GhiNhanHoSoBenhAn
     @SDT = '0123456780',
     @NgayGioKham = '2023-11-14',
-    @TenNhaSi = N'Nha sĩ 2'
+    @HoTenNhaSi = N'Nha sĩ 2'
 
 EXEC ThongBaoLichKham
 
 GO
-EXEC XemDanhMucThuoc @MaThuoc = 101;
+EXEC XemDanhMucThuoc;
+EXEC XemDanhSachLichHen;
+EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
+
+--Cập nhật từ chưa thanh toán sang đã thanh toán
+EXEC ThayDoiTrangThaiThanhToan 
+ @SDT = '0123456781',
+    @STTLichSuKB = 1
+SELECT *
+FROM HOADON
+GO
+
+EXEC QuanLyTaiKhoan
+@HoTen = N'Benh nhan 3', 
+@SDT  = '0123455775', 
+@GioiTinh = N'Nữ', 
+@NgaySinh = '2001-09-23', 
+@DiaChi = N'Dia chi Benh Nhan 3', 
+@MatKhau = '012345678',
+@TinhTrangHoatDong = NULL,
+@ViTri = NULL,
+@ChuyenMon = NULL,
+@BangCap  = NULL,
+@Email  = NULL,
+@TinhTrangThanhToan  = NULL
+SELECT *
+FROM BENHNHAN
+GO
+EXEC DoiMatKhau 
+@SDT = '0123456780'
+, @OldPassword = 'qwe12345'
+, @NewPassword = '12345678';
+GO
+EXEC XemThongTinQTV 
+@SDT = '0337432114'
+GO
+SELECT *
+FROM NHASI
+EXEC CapNhatThongTinNhaSi
+@SDT = '0123456785',
+    @HoTen = N'Nha sĩ 2',
+    @GioiTinh = N'Nam',
+    @NgaySinh = '1984-02-02 00:00:00.000',
+    @DiaChi = 'Địa chỉ BS3',
+    @ChuyenMon = N'Chuyên môn 3',
+    @BangCap = N'TS'
+
+SELECT *
+FROM NHANVIEN
+EXEC CapNhatThongTinNhanVien
+    @SDT = '0123456798',
+    @HoTen = N'Nguyễn Văn A',
+    @GioiTinh= N'Nam',
+    @DiaChi= N'123 Cao Thắng, HCMC',
+    @ViTri ='Receptionist'
+
+SELECT *
+FROM QTV
+EXEC CapNhatThongTinQTV
+@SDT = '0337432114',
+@HoTen = 'Phạm Thị Như Yến',
+@Email = 'ptnyen21@vp.fitus.edu.vn'
+EXEC CapNhatThongTinQTV
+
+SELECT *
+FROM LICHHEN
+EXEC CapNhatTrangThaiLichHen
+@MaLichHen = 11,
+    @TrangThaiMoi = N'Đã hủy'
+SELECT *
+FROM LICHHEN
+EXEC XoaLichHen
+@MaLichHen = 11
+
+SELECT *
+FROM DONTHUOC
+EXEC XemDonThuoc
+@MaDonThuoc = 2
+
+SELECT *
+FROM BENHNHAN
+EXEC XoaTaiKhoan
+@SDT = '0123455775'
+
+SELECT *
+FROM DONTHUOC
+SELECT *
+FROM LICHSUKHAMBENH
+EXEC CapNhatHoSoBenhAn
+    @STT = 3,
+    @MaBenhNhan = 1000,
+    @MaNhaSiKham = 101,
+    @GhiChu = N'Ghi chú 2',
+    @MaThuoc = '101',
+    @NgaySuDung = '2023-01-31 00:00:00.000',
+    @LieuDung = N'2 viên/ngày',
+    @SoLuong = 12
+SELECT *
+FROM LICHSUKHAMBENH
+WHERE STT = 1
+SELECT *
+FROM DICHVUSUDUNG
+WHERE STTLichSuKB =1
+SELECT *
+FROM DONTHUOC
+WHERE STTLichSuKB =1
+SELECT *
+FROM HOADON
+EXEC LapHoaDonThanhToan
+    @STTLichSuKB = 1
 
 -- Execute the stored procedure to add a new drug to the inventory
 EXEC QuanLyKhoThuoc
@@ -99,6 +213,17 @@ EXEC QuanLyKhoThuoc
     @ChiDinh = 'Pain relief',
     @SoLuongTonKho = 100,
     @ThaoTac = 'ThemMoi';
+
+EXEC QuanLyKhoThuoc
+    @MaThuoc = 101,
+    @NgayHetHan = '2023-12-10',
+    @TenThuoc = 'Aspirin',
+    @DonViTinh = 'Viên',
+    @DonGia = 10,
+    @ChiDinh = 'Giảm đau',
+    @SoLuongTonKho = 100,
+    @ThaoTac = 'ThemMoi';
+
 
 -- Execute the stored procedure to update drug information in the inventory
 EXEC QuanLyKhoThuoc
@@ -113,3 +238,7 @@ EXEC QuanLyKhoThuoc
 
 -- Execute the stored procedure to view current inventory status
 EXEC QuanLyKhoThuoc @ThaoTac = 'XemTonKho';
+
+EXEC DoiMatKhau @SDT = '0123456780'
+, @OldPassword = '12345678'
+, @NewPassword = 'qwe12345';
