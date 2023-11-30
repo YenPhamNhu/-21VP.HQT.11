@@ -1,4 +1,5 @@
 import React from 'react';
+import "../components.css/main.css";
 import "../components/banner.js"
 import Banner from '../components/banner.js';
 
