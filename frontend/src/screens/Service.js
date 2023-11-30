@@ -1,8 +1,6 @@
 import React from "react";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../screen.css/Service.css";
-
-
 
 const Services = () => {
   const services = [
@@ -53,15 +51,15 @@ const Services = () => {
     },
   ];
   return (
-    <div className='services'>
-      <h2>Dịch vụ</h2>
+    <div className='services mt-4'>
+      <h2 className='mb-4'>Dịch vụ</h2>
       <div className='grid'>
         {services.map((service) => (
           <div
             key={service.name}
             className='service d-flex flex-wrap justify-content: space-between'
           >
-             <Link to={`/service/${service.url}`}>
+            <Link to={`/service/${service.url}`}>
               <img src={service.img} alt={service.name} />
               <br></br>
               <p>{service.name}</p>

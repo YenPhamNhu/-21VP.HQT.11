@@ -24,7 +24,7 @@ const About = () => {
           và nhu cầu của từng bệnh nhân, đồng hành cùng họ trên hành trình duy
           trì sức khỏe nha khoa và làm đẹp nụ cười.
         </p>
-        <h3 className='text-dark mt-3 uppercase'>Dịch vụ</h3>
+        <h3 className='text-dark mt-3 uppercase'>Dịch vụ nổi bật</h3>
         <p>
           Phòng Khám Nha Khoa của chúng tôi cung cấp một loạt các dịch vụ tiêu
           biểu với mục tiêu cải thiện và duy trì sức khỏe nha khoa của bệnh
