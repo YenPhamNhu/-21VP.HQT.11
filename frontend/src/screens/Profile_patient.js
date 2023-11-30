@@ -3,11 +3,10 @@ import Navbar from "../components/sidebar.js"
 
 
 
-const MainPatient = () => {
+const ProfilePatient = () => {
 return (
   <Navbar>
-    
   </Navbar>
 );
 };
-export default MainPatient;
+export default ProfilePatient;

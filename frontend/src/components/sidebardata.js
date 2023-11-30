@@ -6,31 +6,31 @@ import * as IoIcons from 'react-icons/io';
 export const SidebarData = [
   {
     title: 'Thông tin cá nhân',
-    path: '/',
+    path: '/patient/detail',
     icon: <AiIcons.AiFillHome />,
     cName: 'nav-text'
   },
   {
     title: 'Đặt lịch hẹn',
-    path: '/reports',
+    path: '/patient/setdate',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   },
   {
     title: 'Nha sĩ',
-    path: '/products',
+    path: '/patient/dentist',
     icon: <FaIcons.FaCartPlus />,
     cName: 'nav-text'
   },
   {
     title: 'Hồ sơ bệnh án',
-    path: '/team',
+    path: '/patient/profile',
     icon: <IoIcons.IoMdPeople />,
     cName: 'nav-text'
   },
   {
     title: 'Thanh toán',
-    path: '/messages',
+    path: '/patient/payment',
     icon: <FaIcons.FaEnvelopeOpenText />,
     cName: 'nav-text'
   },
