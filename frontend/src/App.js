@@ -11,6 +11,7 @@ import Header from "./components/header.js";
 import Forgetpass from "./screens/Forgetpass.js"
 import ServiceDetails from "./screens/Service_detail.js"
 import Resetpass from "./screens/Resetpass.js"
+import MainPatient from "./screens/main_patient.js";
 const App = () => {
   return (
     <BrowserRouter>
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/forgetpass' element={<Forgetpass/>}/>
         <Route path='/resetpass' element={<Resetpass/>}/>
         <Route path='/service/:number' element={<ServiceDetails/>}/>
+        <Route path='/patient' element={<MainPatient />} />
       </Routes>
       <hr id='hrduoi'></hr>
       <Footer />
