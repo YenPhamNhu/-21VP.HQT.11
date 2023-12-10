@@ -105,6 +105,7 @@ SET TenDichVu = N'Mặt dán sứ Veneer',
     DonGia = 35000000
 WHERE TenDichVu = N'Xử lý tủy răng';
 
+
 -- đơn vị tính: hàm
 UPDATE DICHVU
 SET TenDichVu = N'Tẩy trắng răng', 
@@ -123,6 +124,8 @@ VALUES
   (N'Bệnh lý nha chu', N'Tủy răng cung cấp dinh dưỡng, giúp răng vững chắc. Viêm tủy răng, nếu không điều trị kịp thời, sẽ gây hậu quả nghiêm trọng cho sức khỏe. Điều trị sớm giúp tránh đau nhức, ổn định khả năng ăn nhai, ngăn chặn tiêu xương, mất răng và các biến chứng khác.', 800000),
 -- đơn bị tính: răng 
   (N'Hàn trám răng', N'Hàn trám răng là kỹ thuật mà bác sĩ sẽ sử dụng vật liệu trám bít để khôi phục lại hình dáng và chức năng của răng. Phương pháp này được sử dụng phổ biến trong nha khoa bởi mang lại ý nghĩa cả về thẩm mỹ lẫn điều trị và phòng ngừa bệnh lý răng miệng.', 400000);
+
+
 -- 10/DONTHUOC
 INSERT INTO DONTHUOC
   (MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong)
