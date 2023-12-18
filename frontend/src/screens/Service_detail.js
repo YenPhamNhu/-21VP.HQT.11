@@ -43,25 +43,25 @@ const ServiceDetails = () => {
         {/* <p>MaDichVu: {service.MaDichVu}</p> */}
         <table
           class='table table-bordered mb-5'
-          style={{ width: "50%", marginLeft: "5%", fontSize: "20px" }}
+          style={{ width: "55%", marginLeft: "5%", fontSize: "20px" }}
         >
           <thead>
             <tr className='table-info'>
               <th>Mô tả</th>
               <th style={{ width: "20%" }}>Đơn vị tính</th>
-              <th>Đơn giá</th>
+              <th style={{ width: "20%" }}>Đơn giá </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{service.MoTa}</td>
-              <td> hàm hoặc răng </td>
-              <td>{service.DonGia.toLocaleString()}</td>
+              <td>{service.DonViTinh} </td>
+              <td>{service.DonGia.toLocaleString()} VNĐ</td>
             </tr>
           </tbody>
         </table>
         <img
-          src={`/images_services/${service.MaDichVu}.png`}
+          src={`/images_services/B&A/${service.MaDichVu}.png`}
           alt=''
           className='me-5'
           style={{ objectFit: "contain", objectPosition: "0px 0px" }}

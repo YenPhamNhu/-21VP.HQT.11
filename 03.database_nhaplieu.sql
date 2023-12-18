@@ -125,6 +125,9 @@ VALUES
 -- đơn bị tính: răng 
   (N'Hàn trám răng', N'Hàn trám răng là kỹ thuật mà bác sĩ sẽ sử dụng vật liệu trám bít để khôi phục lại hình dáng và chức năng của răng. Phương pháp này được sử dụng phổ biến trong nha khoa bởi mang lại ý nghĩa cả về thẩm mỹ lẫn điều trị và phòng ngừa bệnh lý răng miệng.', 400000);
 
+UPDATE DICHVU
+SET TenDichVu = N'Điều trị tuỷ'
+WHERE TenDichVu = N'Bệnh lý nha chu' AND DonGia = 800000;
 
 -- 10/DONTHUOC
 INSERT INTO DONTHUOC
