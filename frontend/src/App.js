@@ -11,12 +11,12 @@ import Header from './components/header.js';
 import Forgetpass from './screens/Forgetpass.js';
 import ServiceDetails from './screens/Service_detail.js';
 import Resetpass from './screens/Resetpass.js';
-import MainPatient from './screens/main_patient.js';
-import DetailPatient from './screens/Detail_patient.js';
-import SetdatePatient from './screens/Setdate_patient.js';
-import DentistPatient from './screens/Dentist_patient.js';
-import ProfilePatient from './screens/Profile_patient.js';
-import PaymentPatient from './screens/Payment_patient.js';
+import MainPatient from './screens/Patient/main_patient.js';
+import DetailPatient from './screens/Patient/Detail_patient.js';
+import SetdatePatient from './screens/Patient/Setdate_patient.js';
+import DentistPatient from './screens/Patient/Dentist_patient.js';
+import ProfilePatient from './screens/Patient/Profile_patient.js';
+import PaymentPatient from './screens/Patient/Payment_patient.js';
 
 const App = () => {
   return (
