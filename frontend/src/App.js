@@ -11,12 +11,19 @@ import Header from './components/header.js';
 import Forgetpass from './screens/Forgetpass.js';
 import ServiceDetails from './screens/Service_detail.js';
 import Resetpass from './screens/Resetpass.js';
-import MainPatient from './screens/Patient/main_patient.js';
+import MainPatient from './screens/Patient/Main_patient.js';
 import DetailPatient from './screens/Patient/Detail_patient.js';
 import SetdatePatient from './screens/Patient/Setdate_patient.js';
 import DentistPatient from './screens/Patient/Dentist_patient.js';
 import ProfilePatient from './screens/Patient/Profile_patient.js';
 import PaymentPatient from './screens/Patient/Payment_patient.js';
+import MainEmployee from './screens/Employee/Main_employee.js';
+import DetailEmployee from './screens/Employee/Detail_employee.js';
+import SearchEmployee from './screens/Employee/Employee_search.js';
+import ListDate from './screens/Employee/ListDate_employee.js';
+import ListMed from './screens/Employee/ListMed_employee.js';
+import Schedule from './screens/Employee/Schedule_employee.js';
+import UpdatePatient from './screens/Employee/UpdateProfile_patient.js';
 
 const App = () => {
   return (
@@ -37,6 +44,13 @@ const App = () => {
         <Route path="/patient/dentist" element={<DentistPatient />} />
         <Route path="/patient/profile" element={<ProfilePatient />} />
         <Route path="/patient/payment" element={<PaymentPatient />} />
+        <Route path="/employee" element={<MainEmployee />} />
+        <Route path="/employee/detail" element={<DetailEmployee />} />
+        <Route path="/employee/search" element={<SearchEmployee />} />
+        <Route path="/employee/listdate" element={<ListDate />} />
+        <Route path="/employee/listmed" element={<ListMed />} />
+        <Route path="/employee/schedule" element={<Schedule />} />
+        <Route path="/employee/updatepatient" element={<UpdatePatient />} />
       </Routes>
       <hr id="hrduoi"></hr>
       <Footer />
