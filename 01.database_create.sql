@@ -154,6 +154,7 @@ create table DICHVU
 	TenDichVu nvarchar(50) not null,
 	MoTa nvarchar(255) not null,
 	DonGia int not null,
+	DonViTinh nvarchar(50) not null
 	constraint PK_DICHVU primary key (MaDichVu)
 )
 

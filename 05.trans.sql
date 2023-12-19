@@ -1,4 +1,48 @@
+
 -- //0.Người dùng khách (người dùng chưa đăng nhập) 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'TaoTaiKhoanBenhNhan' AND type = 'P')
+BEGIN
+    DROP PROCEDURE TaoTaiKhoanBenhNhan;
+    PRINT N'Đã hủy giao tác TaoTaiKhoanBenhNhan.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác TaoTaiKhoanBenhNhan chưa được tạo.';
+END
+GO
+
+CREATE PROCEDURE TaoTaiKhoanBenhNhan
+    @HoTen NVARCHAR(50),
+    @SDT VARCHAR(10),
+    @GioiTinh NVARCHAR(5),
+    @NgaySinh DATETIME,
+    @DiaChi NVARCHAR(50),
+    @MatKhau VARCHAR(8)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    IF NOT EXISTS (SELECT 1
+    FROM BENHNHAN
+    WHERE SDT = @SDT)
+    BEGIN
+        INSERT INTO BENHNHAN
+            (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @MatKhau);
+        PRINT N'Tạo tài khoản thành công';
+        COMMIT TRANSACTION;
+    END
+    ELSE
+    BEGIN
+        -- SDT đã tồn tại, In ra màn hình
+        ROLLBACK TRANSACTION;
+        PRINT N'Số điện thoại đã tồn tại. Tạo tài khoản không thành công';
+    END
+END
+GO
 --//-------------------
 -- 0.2/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap)
 IF EXISTS (SELECT *
@@ -389,7 +433,7 @@ BEGIN
                 LEFT JOIN DICHVUSUDUNG DVSD ON HD.MaPhieuDVSD = DVSD.MaPhieuDVSD
                 LEFT JOIN DICHVU DV ON DVSD.MaDichVu = DV.MaDichVu
             WHERE HD.STTLichSuKB = @STTLichSuKB AND HD.MaBenhNhan = @MaBenhNhan;
-
+			--select * from DICHVU
             COMMIT TRANSACTION;
         END
         ELSE

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol, MDBInput,MDBCheckbox} from "mdb-react-ui-kit";
+// import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol, MDBInput,MDBCheckbox} from "mdb-react-ui-kit";
 import { Link } from 'react-router-dom'; 
-import Nav from 'react-bootstrap/Nav';
-import Validation from './LoginValidation'
+// import Nav from 'react-bootstrap/Nav';
+// import Validation from './LoginValidation'
 function Login(){
   const [values, setValues] = useState({
-    phone: "",
-    password: ""
+    SDT: "",
+    MatKhau: ""
   });
   const [errors, setErrors] = useState({});
 
@@ -20,42 +20,41 @@ function Login(){
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      // Proceed with form submission
+
     }
   };
 
   const Validation = (values) => {
-    // Perform your validation logic here
-    // Validate the phone and password fields
     const errors = {};
 
-    if (!values.phone) {
-      errors.phone = "Vui lòng nhập số điện thoại";
+    if (!values.SDT) {
+      errors.SDT = "Vui lòng nhập số điện thoại";
     }
 
-    if (!values.password) {
-      errors.password = "Vui lòng nhập mật khẩu";
+    if (!values.MatKhau) {
+      errors.MatKhau = "Vui lòng nhập mật khẩu";
     }
 
     return errors;
   };
   return(
+    // HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau
     <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
       <div className="bg-white p-3 rounded w-25">
         <form action="" onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="phone"><strong>Số điện thoại</strong></label>
-            <input type="phone" placeholder="Số điện thoại" name='phone'
+            <label htmlFor="SDT"><strong>Số điện thoại</strong></label>
+            <input type="SDT" placeholder="Số điện thoại" name='SDT'
             onChange={handleInput}
             className="form-control rounded-0"/>
-            {errors.phone && <span className="text-danger">{errors.phone}</span>}
+            {errors.SDT && <span className="text-danger">{errors.SDT}</span>}
           </div>
           <div className="mb-3">
-            <label htmlFor="password"><strong>Mật khẩu</strong></label>
-            <input type="password" placeholder="Mật khẩu" name='password'
+            <label htmlFor="MatKhau"><strong>Mật khẩu</strong></label>
+            <input type="MatKhau" placeholder="Mật khẩu" name='MatKhau'
             onChange={handleInput}
             className="form-control rounded-0"/>
-            {errors.password && <span className="text-danger">{errors.password}</span>}
+            {errors.MatKhau && <span className="text-danger">{errors.MatKhau}</span>}
           </div>
           <button type="submit" className="btn btn-success w-100 rounded-0">Đăng nhập</button>
           <Link to='/signup' className="btn btn-default border w-100 bg-light rounded-0 text-deccoration-none">Chưa có tài khoản? Đăng ký</Link>
@@ -96,7 +95,7 @@ function Login(){
 //                     label="Mật khẩu"
 //                     size="lg"
 //                     id="logpass"
-//                     type="password"
+//                     type="MatKhau"
 //                   />
 //                 </MDBCol>
 //               </MDBRow>
@@ -104,7 +103,7 @@ function Login(){
 //                 <MDBCol md="6" className="d-flex justify-content-start">
 //                   <MDBCheckbox
 //                     label="Ghi nhớ mật khẩu"
-//                     id="rememberPassword"
+//                     id="rememberMatKhau"
 //                   />
 //                 </MDBCol>
 

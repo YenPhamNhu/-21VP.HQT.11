@@ -1,3 +1,4 @@
+USE QLPKNK
 -- //0.Người dùng khách (người dùng chưa đăng nhập) 
 --//-------------------
 -- 0.1/Có quyền đăng kí tài khoản (gọi giao tác TaoTaiKhoanBenhNhan) 
@@ -94,7 +95,7 @@ EXEC ThongBaoLichKham
 GO
 EXEC XemDanhMucThuoc;
 EXEC XemDanhSachLichHen;
-EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
+EXEC XemThongTinCaNhanNhanVien @SDT = '0123456788';
 
 --Cập nhật từ chưa thanh toán sang đã thanh toán
 EXEC ThayDoiTrangThaiThanhToan 
@@ -154,7 +155,6 @@ EXEC CapNhatThongTinQTV
 @SDT = '0337432114',
 @HoTen = 'Phạm Thị Như Yến',
 @Email = 'ptnyen21@vp.fitus.edu.vn'
-EXEC CapNhatThongTinQTV
 
 SELECT *
 FROM LICHHEN
@@ -242,29 +242,4 @@ EXEC QuanLyKhoThuoc @ThaoTac = 'XemTonKho';
 EXEC DoiMatKhau @SDT = '0123456780'
 , @OldPassword = '12345678'
 , @NewPassword = 'qwe12345';
-
--- ADD COL DONVITINH VÀO TABLE DICHVU
-ALTER TABLE DICHVU
-ADD DonViTinh nvarchar(50);
-UPDATE DICHVU
-SET DonViTinh = N'Răng'
-WHERE TenDichVu = N'Nhổ răng khôn';
-UPDATE DICHVU
-SET DonViTinh = N'Răng'
-WHERE TenDichVu = N'Bệnh lý nha chu';
-UPDATE DICHVU
-SET DonViTinh = N'Răng'
-WHERE TenDichVu = N'Hàn trám răng';
-UPDATE DICHVU
-SET DonViTinh = N'Hàm'
-WHERE TenDichVu = N'Tẩy trắng răng';
-UPDATE DICHVU
-SET DonViTinh = N'Hàm'
-WHERE TenDichVu = N'Mặt dán sứ Veneer';
-UPDATE DICHVU
-SET DonViTinh = N'Hàm'
-WHERE TenDichVu = N'Niềng răng thẩm mỹ';
-UPDATE DICHVU
-SET DonViTinh = N'Trụ'
-WHERE TenDichVu = N'Cấy ghép Implant ';
 
