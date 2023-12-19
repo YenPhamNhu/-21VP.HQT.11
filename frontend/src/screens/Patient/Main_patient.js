@@ -1,13 +1,12 @@
 import React from 'react';
-import Navbar from "./sidebar.js"
+import Sidebar from '../../components/sidebar'
 
 
 
-const MainPatient = () => {
-return (
-  <Navbar>
-    
-  </Navbar>
-);
-};
-export default MainPatient;
+export default function Home() {
+  return (
+    <div>
+     <Sidebar/>
+    </div>
+  );
+}
