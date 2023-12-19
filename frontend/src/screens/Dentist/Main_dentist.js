@@ -1,10 +1,11 @@
 import React from 'react';
+import Sidebar from '../../components/sidebar_dentist.js'
 
 
 export default function Home() {
   return (
     <div>
-     Xem thông tin cá nhân.
+     <Sidebar/>
     </div>
   );
 }
