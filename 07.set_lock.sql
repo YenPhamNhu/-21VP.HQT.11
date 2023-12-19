@@ -1687,15 +1687,3 @@ BEGIN
     -- Trả về thông tin mã hóa đơn mới
     SELECT @MaHoaDon AS MaHoaDon;
 END
-
-CREATE LOGIN NGOCHAN2 WITH PASSWORD = '12345678';
-
--- Use the target database
-USE QLPKNK;
--- Replace with your actual database name
-
--- Create a user for the login in the database
-CREATE USER NGOCHAN2 FOR LOGIN NGOCHAN2;
-
--- Add the user to the db_owner role
-ALTER ROLE db_owner ADD MEMBER NGOCHAN2;
