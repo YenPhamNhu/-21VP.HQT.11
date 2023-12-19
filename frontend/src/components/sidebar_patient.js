@@ -8,15 +8,17 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import PaymentIcon from '@mui/icons-material/Payment';
+import BookIcon from '@mui/icons-material/Book';
+import { Link } from 'react-router-dom';
+import MenuIcon from "@mui/icons-material/Menu";
 
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
-    top: false,
     left: false,
-    bottom: false,
-    right: false,
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -31,6 +33,14 @@ export default function SwipeableTemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
+  const links = [
+    { text: 'Thông tin cá nhân', icon: <AccountCircleIcon />, to: '/patient/detail' },
+    { text: 'Đặt lịch hẹn', icon: <CalendarMonthIcon />, to: '/patient/setdate' },
+    { text: 'Nha sĩ', icon: <LocalHospitalIcon />, to: '/patient/dentist' },
+    { text: 'Hồ sơ bệnh án', icon: <BookIcon />, to: '/patient/profile' },
+    { text: 'Thanh toán', icon: <PaymentIcon />, to: '/patient/payment' }
+  ];
+
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -39,38 +49,24 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+        {links.map((item, index) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton component={Link} to={item.to}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
     </Box>
   );
 
   return (
     <div>
-      {['left', 'right', 'top', 'bottom'].map((anchor) => (
+      {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Button onClick={toggleDrawer(anchor, true)} startIcon={<MenuIcon style={{ fontSize: 50 }} />} ></Button>
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}
