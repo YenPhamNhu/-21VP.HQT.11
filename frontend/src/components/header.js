@@ -29,10 +29,10 @@ function Header() {
           </Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link as={Link} to='/login' className='login-button'>
+          <Nav.Link as={Link} to='/login' className='login-button' style={{borderRadius:'15px'}}>
             Đăng nhập
           </Nav.Link>
-          <Nav.Link as={Link} to='/signup' className='signup-button'>
+          <Nav.Link as={Link} to='/signup' className='signup-button'style={{borderRadius:'15px'}} >
             Đăng ký
           </Nav.Link>
         </Nav>

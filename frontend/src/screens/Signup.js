@@ -10,6 +10,10 @@ import {
   MDBCol,
   MDBCard,
   MDBCardImage,
+  MDBInput,
+  MDBRadio,
+  MDBCardBody,
+  MDBBtn
 } from "mdb-react-ui-kit";
 
 function Signup() {
@@ -81,6 +85,12 @@ function Signup() {
 
     return errors;
   };
+
+  const hoverStyles = {
+    color: 'red',
+  };
+
+
 
   return (
     <MDBContainer fluid style={{ margin: "40px 10px", padding: "5px 50px" }}>
@@ -200,10 +210,12 @@ function Signup() {
                       className='btn btn-success w-100 rounded-0'
                     >
                       Đăng ký
-                    </button>
+                    </button>  
                     <Link
                       to='/login'
-                      className='btn btn-default border w-100 bg-light rounded-0 text-decoration-none'
+                      className='w-100'
+                      style={{ textDecoration: 'none', color: 'black', transition: 'color 0.3s ease' }}
+                       hoverStyle={hoverStyles}
                     >
                       Có tài khoản? Đăng nhập
                     </Link>
@@ -216,6 +228,7 @@ function Signup() {
       </MDBRow>
     </MDBContainer>
   );
-}
+};
+
 
 export default Signup;

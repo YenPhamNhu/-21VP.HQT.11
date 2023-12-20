@@ -105,6 +105,7 @@ function Login() {
             
               <MDBRow>
                 <MDBCol md="12">
+                {errors.SDT && <span className="text-danger">{errors.SDT}</span>}
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Số điện thoại"
@@ -115,11 +116,13 @@ function Login() {
                     value={values.SDT}
                     onChange={handleInput}
                     errorMessage={errors.SDT}
+                    required
                   />
                 </MDBCol>
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12">
+                {errors.SDT && <span className="text-danger">{errors.MatKhau}</span>}
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Mật khẩu"
@@ -130,6 +133,7 @@ function Login() {
                     onChange={handleInput}
                     errorMessage={errors.MatKhau} 
                     name='MatKhau'
+                    required
                   />
                 </MDBCol>
               </MDBRow>

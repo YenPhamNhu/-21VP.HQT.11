@@ -39,6 +39,10 @@ import AccountManage from './screens/Admin/AccountManagement.js';
 import Dashboard from './screens/Admin/Dashboard.js';
 import InfoAppo from './screens/Admin/InfoAppointement.js';
 import StoreMed from './screens/Admin/StoreMed.js';
+import SidebarPatient from './components/sidebar_patient.js'
+import SidebarEmployee from './components/sidebar.employee.js'
+import SidebarDentist from './components/sidebar_dentist.js'
+import SidebarAdmin from './components/sidebar_admin.js'
 // import { Link } from 'react-router-dom';
 
 const USER_TYPES = {
@@ -49,8 +53,13 @@ const USER_TYPES = {
   DENTIST_USER: "Dentist User",
 };
 
-const CURRENT_USER_TYPE = USER_TYPES.PUBLIC;
-
+//Chỉnh cái này để chuyển router
+const CURRENT_USER_TYPE = USER_TYPES.PATIENT_USER;
+const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
+const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
+const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
+const isDentistElement = CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER;
+const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
 // function AppRoutes(){
 //   return (
 //     <div>
@@ -66,7 +75,11 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <Header />
+      {isPublicElement && <Header />}
+      {isPatientElement && <SidebarPatient />}
+      {isAdminElement && <SidebarAdmin />}
+      {isDentistElement && <SidebarDentist />}
+      {isEmployeeElement && <SidebarEmployee />}
         <Routes>
           <Route path="/" element={<PublicElement> <Main /> </PublicElement>} />
           <Route path="/about" element={<PublicElement> <About /> </PublicElement>} />
