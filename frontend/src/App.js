@@ -76,12 +76,14 @@ function App() {
           <Route path="/forgetpass" element={<PublicElement> <Forgetpass /> </PublicElement>} />
           <Route path="/resetpass" element={<PublicElement> <Resetpass /> </PublicElement>} />
           <Route path="/service/:number" element={<PublicElement> <ServiceDetails /> </PublicElement>} />
+          
           <Route path="/patient" element={<PatientElement> <MainPatient /> </PatientElement>} />
           <Route path="/patient/detail" element={<PatientElement> <DetailPatient /> </PatientElement>} />
           <Route path="/patient/setdate" element={<PatientElement> <SetdatePatient /> </PatientElement>} />
           <Route path="/patient/dentist" element={<PatientElement> <DentistPatient /> </PatientElement>} />
           <Route path="/patient/profile" element={<PatientElement> <ProfilePatient /> </PatientElement>} />
           <Route path="/patient/payment" element={<PatientElement> <PaymentPatient /> </PatientElement>} />
+
           <Route path="/dentist" element={<DentistElement> <MainDentist /> </DentistElement>} />
           <Route path="/dentist/detail" element={<DentistElement> <DetailDentist /> </DentistElement>} />
           <Route path="/dentist/search" element={<DentistElement> <SearchDentist /> </DentistElement>} />
@@ -99,6 +101,7 @@ function App() {
           <Route path="/employee/searchprofile" element={<EmployeeElement> <SearchProfileEmployee /> </EmployeeElement>} />
           <Route path="/employee/setdate" element={<EmployeeElement> <SetdateEmployee /> </EmployeeElement>} />
           <Route path="/employee/updatepatient" element={<EmployeeElement> <UpdatePatientEmployee /> </EmployeeElement>} />
+
           <Route path="/admin" element={<AdminElement> <MainAdmin /> </AdminElement>} />
           <Route path="/admin/detail" element={<AdminElement> <DetailAdmin /> </AdminElement>} />
           <Route path="/admin/account" element={<AdminElement> <AccountManage /> </AdminElement>} />

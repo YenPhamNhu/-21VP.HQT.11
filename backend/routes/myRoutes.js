@@ -45,7 +45,7 @@ const {
 } = serviceControll;
 
 router.get("/services/getAllService", getAllService);
-// router.get("/services/getServiceById/:MaDichVu", getServiceById);
+router.get("/services/getServiceById/:MaDichVu", getServiceById);
 
 // service_usages
 router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
