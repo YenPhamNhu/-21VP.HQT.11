@@ -22,11 +22,11 @@ const getServiceById = async (req, res, next) => {
       serviceMap[service.MaDichVu] = service;
     }
     const serviceId = req.params.MaDichVu;
-    console.log('MaDichVu:', serviceMap[serviceId]);
+    console.log("MaDichVu:", serviceMap[serviceId]);
     const service = serviceMap[serviceId];
 
     if (!service) {
-      res.status(404).send('Service not found');
+      res.status(404).send("Service not found");
       return;
     }
 
@@ -35,8 +35,22 @@ const getServiceById = async (req, res, next) => {
     res.status(400).send(error.message);
   }
 };
+
+// dich vu su dung
+const service_usagesData = require("../data/service_usages");
+const getAllServiceUsage = async (req, res, next) => {
+  try {
+    const service_usages_list = await service_usagesData.getServiceUsage();
+    res.send(service_usages_list);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
-	getAllService,
-	getServiceById,
-	// deleteAllUser,
+  getAllService,
+  getServiceById,
+  // deleteAllUser,
+
+  getAllServiceUsage,
 };
