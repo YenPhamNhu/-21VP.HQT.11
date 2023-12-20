@@ -24,21 +24,21 @@ import ListDate from './screens/Dentist/ListDate_dentist.js';
 import ListMed from './screens/Dentist/ListMed_dentist.js';
 import Schedule from './screens/Dentist/Schedule_dentist.js';
 import UpdatePatient from './screens/Dentist/UpdateProfile_patient.js';
-import MainEmployee from './screens/employee/Main_employee.js';
-import CreateProfile from './screens/employee/CreateProfile_employee.js';
-import DetailEmployee from './screens/employee/Detail_employee.js';
-import ListMedEmployee from './screens/employee/ListMed_employee.js';
-import PaymentEmployee from './screens/employee/Payment_employee.js';
-import SearchEmployee from './screens/employee/Search_employee.js';
-import SearchProfileEmployee from './screens/employee/SearchProfile_employee.js';
-import SetdateEmployee from './screens/employee/Setdate_employee.js';
-import UpdatePatientEmployee from './screens/employee/UpdatePatient_employee.js';
-import MainAdmin from './screens/admin/Main_admin.js';
-import DetailAdmin from './screens/admin/Detail_admin.js';
-import AccountManage from './screens/admin/AccountManagement.js';
-import Dashboard from './screens/admin/Dashboard.js';
-import InfoAppo from './screens/admin/InfoAppointement.js';
-import StoreMed from './screens/admin/StoreMed.js';
+import MainEmployee from './screens/Employee/Main_employee.js';
+import CreateProfile from './screens/Employee/CreateProfile_employee.js';
+import DetailEmployee from './screens/Employee/Detail_employee.js';
+import ListMedEmployee from './screens/Employee/ListMed_employee.js';
+import PaymentEmployee from './screens/Employee/Payment_employee.js';
+import SearchEmployee from './screens/Employee/Search_employee.js';
+import SearchProfileEmployee from './screens/Employee/SearchProfile_employee.js';
+import SetdateEmployee from './screens/Employee/Setdate_employee.js';
+import UpdatePatientEmployee from './screens/Employee/UpdatePatient_employee.js';
+import MainAdmin from './screens/Admin/Main_admin.js';
+import DetailAdmin from './screens/Admin/Detail_admin.js';
+import AccountManage from './screens/Admin/AccountManagement.js';
+import Dashboard from './screens/Admin/Dashboard.js';
+import InfoAppo from './screens/Admin/InfoAppointement.js';
+import StoreMed from './screens/Admin/StoreMed.js';
 
 
 
