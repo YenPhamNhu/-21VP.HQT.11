@@ -1,24 +1,19 @@
 #navbar {
   background-color: #04364a;
 }
-#conta
-{
+#conta {
   margin-top: -1%;
   margin-bottom: -0.5%;
 }
-#main_sel
-{
+#main_sel {
   color: white;
   padding: 25px 70px;
 }
 
-
-#main_sel:hover
-{
+#main_sel:hover {
   background-color: #115e7d;
 }
-#link_img
-{
+#link_img {
   margin-right: -15%;
   margin-bottom: -5px;
 }
@@ -34,7 +29,6 @@
   cursor: pointer;
 }
 
-.signup-button
-{
+.signup-button {
   margin-left: 10px;
 }
