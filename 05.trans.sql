@@ -198,7 +198,7 @@ CREATE PROCEDURE XemThongTinCaNhanBenhNhan
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -242,6 +242,7 @@ CREATE PROCEDURE XemThongTinNhaSi
 AS
 BEGIN
     BEGIN TRANSACTION;
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem MaNhaSi có tồn tại không
         IF EXISTS (
             SELECT 1
@@ -294,7 +295,7 @@ CREATE PROCEDURE CapNhatThongTin
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -339,7 +340,7 @@ CREATE PROCEDURE XemHoSoBenhAn
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -530,7 +531,7 @@ CREATE PROCEDURE CapNhatLichLamViec
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem NhaSi đã đăng ký CaDangKy cho Ngay hay chưa
     IF NOT EXISTS (
         SELECT 1
@@ -576,6 +577,7 @@ CREATE PROCEDURE XemThongTinCaNhanNhanVien
 AS
 BEGIN
     BEGIN TRANSACTION
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- ktra nhân viên có tồn tại trong hệ thống không
     IF EXISTS (SELECT 1
     FROM NHANVIEN
@@ -732,10 +734,6 @@ GO
 -- //3.Nhân viên (đã có tài khoản) 
 
 -- Có quyền ghi nhận vào hệ thống thông tin đặt khám hoặc đăng kí cho khách hàng (gọi giao tiếp GhiNhanDatKhamBenh) 
-EXEC GhiNhanDatKhamBenh
-    @SDT = '0123456780',
-    @NgayGioKham = '2023-11-14',
-    @TenNhaSi = N'Nha sĩ 2'
 -- Có quyền tìm kiếm hồ sơ khám bệnh của bệnh nhân (gọi giao tác TimKiemHoSoBenhNhan) 
 IF EXISTS (SELECT *
 FROM sys.procedures
@@ -842,6 +840,7 @@ CREATE PROCEDURE QuanLyKhoThuoc
 AS
 BEGIN
     BEGIN TRANSACTION;
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
         IF @ThaoTac = 'ThemMoi'
         BEGIN
             -- Add a new drug to the inventory
@@ -902,7 +901,7 @@ AS
 BEGIN
     BEGIN TRANSACTION;
     -- Bắt đầu giao dịch
-
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem bệnh nhân có tồn tại không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -1175,6 +1174,7 @@ CREATE PROCEDURE XemThongTinQTV
 AS
 BEGIN
     BEGIN TRANSACTION;
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
         -- Kiểm tra xem SDT có tồn tại không
         IF EXISTS (
             SELECT 1
@@ -1225,7 +1225,7 @@ CREATE PROCEDURE CapNhatThongTinNhaSi
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM NHASI
@@ -1275,7 +1275,7 @@ CREATE PROCEDURE CapNhatThongTinNhanVien
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem Nhân viên có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM NHANVIEN
@@ -1323,7 +1323,7 @@ CREATE PROCEDURE CapNhatThongTinQTV
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem QTV có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM QTV
@@ -1457,7 +1457,7 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     BEGIN TRY
         -- Kiểm tra xem đơn thuốc có tồn tại hay không
         IF NOT EXISTS (SELECT *
@@ -1503,7 +1503,7 @@ CREATE PROCEDURE XoaTaiKhoan
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     BEGIN TRY
         -- Kiểm tra xem tài khoản có tồn tại hay không
         IF NOT EXISTS (SELECT *
@@ -1559,7 +1559,7 @@ CREATE PROCEDURE CapNhatTinhTrangHoatDongNhanVien
 AS
 BEGIN
     BEGIN TRANSACTION;
-
+	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     BEGIN TRY
         -- Kiểm tra xem nhân viên có tồn tại hay không
     IF NOT EXISTS (SELECT *
@@ -1614,6 +1614,7 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRANSACTION;
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
     BEGIN TRY
         -- Kiểm tra xem bệnh nhân có tồn tại trong lịch sử khám bệnh hay không
