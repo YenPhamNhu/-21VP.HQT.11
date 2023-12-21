@@ -23,21 +23,23 @@ EXEC DangNhap @UserName = '0337432114', @Password = '12345678';
 -- Được quyền chọn ngày giờ khám (gọi giao tác ChonThoiGianKham). 
 -- Được quyền chọn nha sĩ khám (gọi giao tác ChonNhaSiKham). 
 GO
+--select * from LICHHEN
+--select * FROM LICHLAMVIEC
 EXEC DatLichHen
-    @Ngay = '2023-11-13',
-    @SDT = '0123456780',
-    @MaNhaSi = 100,
-    @CaDangKy = N'Sáng';
-EXEC DatLichHen
-    @Ngay = '2023-11-13',
+    @Ngay = '2023-12-20',
     @SDT = '0123456780',
     @MaNhaSi = 100,
     @CaDangKy = N'Chiều';
-EXEC DatLichHen
-    @Ngay = '2023-11-13',
-    @SDT = '0123456787',
-    @MaNhaSi = 100,
-    @CaDangKy = N'Chiều';
+--EXEC DatLichHen
+--    @Ngay = '2023-11-13',
+--    @SDT = '0123456780',
+--    @MaNhaSi = 100,
+--    @CaDangKy = N'Chiều';
+--EXEC DatLichHen
+--    @Ngay = '2023-11-13',
+--    @SDT = '0123456787',
+--    @MaNhaSi = 100,
+--    @CaDangKy = N'Chiều';
 GO
 -- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
 EXEC XemThongTinCaNhanBenhNhan @SDT = '0123456782';
@@ -72,7 +74,7 @@ EXEC XemTrangThaiThanhToan @SDT = '0123456781', @STTLichSuKB = 1;
 
 EXEC CapNhatLichLamViec
     @MaNhaSi = 100,
-    @Ngay = '2023-11-29',
+    @Ngay = '2023-12-20',
     @CaDangKy = N'Chiều'
 
 SELECT *

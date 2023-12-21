@@ -126,6 +126,56 @@ BEGIN
 END
 GO
 
+--CREATE PROCEDURE DatLichHen
+--    @Ngay DATETIME,
+--    @SDT VARCHAR(10),
+--    @MaNhaSi INT,
+--    @CaDangKy NVARCHAR(50)
+--AS
+--BEGIN
+--    BEGIN TRANSACTION;
+
+--    DECLARE @MaBenhNhan INT;
+
+--    -- Kiểm tra tài khoản hợp lệ dựa trên SDT
+--    SELECT @MaBenhNhan = MaBenhNhan
+--    FROM BENHNHAN BN
+--    WHERE BN.SDT = @SDT;
+
+--    IF @MaBenhNhan IS NOT NULL
+--    BEGIN
+--        -- Kiểm tra nếu có Ca trống
+--        IF EXISTS (
+--            SELECT 1
+--        FROM LICHLAMVIEC
+--        WHERE Ngay = @Ngay
+--            AND MaNhaSi = @MaNhaSi
+--            AND CaDangKy = @CaDangKy
+--        )
+--        BEGIN
+--            -- Khung giờ trống -> Đặt hẹn
+--            INSERT INTO LICHHEN
+--                (NgayGioKham, MaBenhNhan, MaNhaSi, TrangThaiLichHen)
+--            VALUES
+--                (@Ngay, @MaBenhNhan, @MaNhaSi, N'Đã đặt');
+
+--            PRINT N'Đã đặt hẹn thành công.';
+--        END
+--        ELSE
+--        BEGIN
+--            -- Khung giờ muốn đặt đã hết
+--            ROLLBACK TRANSACTION;
+--            PRINT N'Vui lòng chọn khung giờ khác.';
+--        END
+--    END
+--    ELSE
+--    BEGIN
+--        ROLLBACK TRANSACTION;
+--        PRINT N'Không tìm thấy bệnh nhân với số điện thoại đã nhập.';
+--    END
+
+--    COMMIT TRANSACTION;
+--END;
 CREATE PROCEDURE DatLichHen
     @Ngay DATETIME,
     @SDT VARCHAR(10),
@@ -147,10 +197,10 @@ BEGIN
         -- Kiểm tra nếu có Ca trống
         IF EXISTS (
             SELECT 1
-        FROM LICHLAMVIEC
-        WHERE Ngay = @Ngay
-            AND MaNhaSi = @MaNhaSi
-            AND CaDangKy = @CaDangKy
+            FROM LICHLAMVIEC
+            WHERE Ngay = @Ngay
+                AND MaNhaSi = @MaNhaSi
+                AND CaDangKy = @CaDangKy
         )
         BEGIN
             -- Khung giờ trống -> Đặt hẹn
@@ -165,13 +215,15 @@ BEGIN
         BEGIN
             -- Khung giờ muốn đặt đã hết
             ROLLBACK TRANSACTION;
-            PRINT N'Vui lòng chọn khung giờ khác.';
+            PRINT N'Xin vui lòng chọn khung giờ khác. ';
+            RETURN; 
         END
     END
     ELSE
     BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Không tìm thấy bệnh nhân với số điện thoại đã nhập.';
+        RETURN;
     END
 
     COMMIT TRANSACTION;
@@ -572,16 +624,50 @@ ELSE
     Print N'Giao tác XemThongTinCaNhanNhanVien chưa dược tạo';
 END
 GO
+--CREATE PROCEDURE XemThongTinCaNhanNhanVien
+--    @SDT VARCHAR(10)
+--AS
+--BEGIN
+--    BEGIN TRANSACTION
+--	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+--    -- ktra nhân viên có tồn tại trong hệ thống không
+--    IF EXISTS (SELECT 1
+--    FROM NHANVIEN
+--    WHERE SDT = @SDT)
+--    BEGIN
+--        -- Lấy thông tin cá nhân của nhân viên
+--        SELECT
+--            Hoten,
+--            SDT,
+--            GioiTinh,
+--            DiaChi,
+--            TinhTrangHoatDong,
+--            ViTri
+--        FROM NHANVIEN
+--        WHERE SDT = @SDT;
+
+--        COMMIT TRANSACTION;
+--    END
+--    ELSE
+--    BEGIN
+--        ROLLBACK TRANSACTION;
+--        PRINT N'Nhân viên không tồn tại trong hệ thống.';
+--    END
+--    COMMIT TRANSACTION;
+--END
 CREATE PROCEDURE XemThongTinCaNhanNhanVien
     @SDT VARCHAR(10)
 AS
 BEGIN
-    BEGIN TRANSACTION
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-    -- ktra nhân viên có tồn tại trong hệ thống không
-    IF EXISTS (SELECT 1
-    FROM NHANVIEN
-    WHERE SDT = @SDT)
+    BEGIN TRANSACTION;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+    -- Kiểm tra nhân viên có tồn tại trong hệ thống không
+    IF EXISTS (
+        SELECT 1
+        FROM NHANVIEN
+        WHERE SDT = @SDT
+    )
     BEGIN
         -- Lấy thông tin cá nhân của nhân viên
         SELECT
@@ -601,8 +687,8 @@ BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Nhân viên không tồn tại trong hệ thống.';
     END
-    COMMIT TRANSACTION;
-END
+END;
+
 GO
 -- EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
 -- GO
@@ -694,19 +780,23 @@ GO
 CREATE PROCEDURE XemDanhMucThuoc
 AS
 BEGIN
-    BEGIN TRANSACTION
-        -- Lấy thông tin thuốc
-        SELECT *
-        FROM THUOC
+    BEGIN TRANSACTION;
 
-        COMMIT TRANSACTION;
+    -- Lấy thông tin thuốc
+    SELECT *
+    FROM THUOC;
 
-        BEGIN
+    IF @@ROWCOUNT = 0
+    BEGIN
         ROLLBACK TRANSACTION;
         PRINT N'Thuốc không tồn tại trong hệ thống.';
     END
-    COMMIT TRANSACTION;
-END
+    ELSE
+    BEGIN
+        COMMIT TRANSACTION;
+    END
+END;
+
 
 GO
 -- Có quyền được xem danh sách lịch hẹn  (gọi giao tác XemDanhSachLichHen) 
@@ -1055,50 +1145,53 @@ BEGIN
 END
 GO
 -- Đổi mật khẩu
+-- Đổi mật khẩu
 CREATE PROCEDURE DoiMatKhau
     @SDT VARCHAR(10),
     @OldPassword VARCHAR(8),
     @NewPassword VARCHAR(8)
 AS
 BEGIN
-
     BEGIN TRANSACTION;
 
     BEGIN TRY
         -- Kiểm tra xem mật khẩu cũ có khớp với mật khẩu hiện tại không
         DECLARE @CurrentPassword VARCHAR(8);
+
         SELECT @CurrentPassword = MatKhau
-    FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SELECT SDT, MatKhau
+        FROM (
+            SELECT SDT, MatKhau
             FROM NHANVIEN
-        UNION
+            UNION
             SELECT SDT, MatKhau
             FROM NHASI
-        UNION
+            UNION
             SELECT SDT, MatKhau
             FROM BENHNHAN
         ) AS Users
-    WHERE SDT = @SDT;
+        WHERE SDT = @SDT;
 
         -- Thay đổi mật khẩu
         IF @CurrentPassword <> @OldPassword
         BEGIN
             THROW 50001, 'Mật khẩu cũ không khớp', 1;
         END
+
         UPDATE NHANVIEN SET MatKhau = @NewPassword WHERE SDT = @SDT;
         UPDATE NHASI SET MatKhau = @NewPassword WHERE SDT = @SDT;
         UPDATE BENHNHAN SET MatKhau = @NewPassword WHERE SDT = @SDT;
+		PRINT N'Cập nhật Mật khẩu mới thành công.';
         COMMIT TRANSACTION;
-    END
-    TRY
+    END TRY
     BEGIN CATCH
-    -- Nếu xảy ra lỗi, rollback transaction
-    ROLLBACK TRANSACTION;
+        -- Nếu xảy ra lỗi, rollback transactionf
+        ROLLBACK TRANSACTION;
 
-    -- Giữ lại thông báo lỗi gốc
-    THROW;
-    END CATCH;
+        -- Giữ lại thông báo lỗi gốc
+        THROW
+    END CATCH
 END
+
 
 GO
 -- Quên mật khẩu (gửi link qua email và truy cập bằng link)
@@ -1142,7 +1235,7 @@ BEGIN
         UPDATE NHANVIEN SET MatKhau = @NewPassword WHERE SDT = @SDT;
         UPDATE NHASI SET MatKhau = @NewPassword WHERE SDT = @SDT;
         UPDATE BENHNHAN SET MatKhau = @NewPassword WHERE SDT = @SDT;
-
+		PRINT N'Cập nhật Mật khẩu mới thành công.';
         COMMIT TRANSACTION;
     END
     TRY
@@ -1196,7 +1289,7 @@ BEGIN
         BEGIN
             ROLLBACK TRANSACTION;
             -- Nếu SDT không tồn tại
-            PRINT 'Không tìm thấy thông tin QTV cho SDT = ' + @SDT;
+            PRINT 'Không tìm thấy thông tin Quản Trị Viên cho SDT = ' + @SDT;
         END
 END;
 
@@ -1243,7 +1336,7 @@ BEGIN
         WHERE SDT = @SDT;
 
         COMMIT TRANSACTION;
-        PRINT N'Cập nhật thông tin thành công.';
+        PRINT N'Cập nhật thông tin Nha Sĩ thành công.';
     END
     ELSE
     BEGIN
@@ -1337,7 +1430,7 @@ BEGIN
         WHERE SDT = @SDT;
 
         COMMIT TRANSACTION;
-        PRINT N'Cập nhật thông tin thành công.';
+        PRINT N'Cập nhật thông tin Quản trị viên thành công.';
     END
     ELSE
     BEGIN
@@ -1379,7 +1472,7 @@ BEGIN
 
         -- Cập nhật trạng thái mới cho lịch hẹn
         UPDATE LICHHEN SET TrangThaiLichHen = @TrangThaiMoi WHERE MaLichHen = @MaLichHen;
-
+		PRINT N'Cập nhật trạng thái lịch hẹn thành công.';
         COMMIT TRANSACTION;
     END
     TRY
@@ -1420,9 +1513,10 @@ BEGIN
         BEGIN
             THROW 50001, 'Lịch hẹn không tồn tại', 1;
         END
-
+		PRINT N'Hủy lịch hẹn thành công.';
         -- Xóa lịch hẹn
         DELETE FROM LICHHEN WHERE MaLichHen = @MaLichHen;
+
 
         COMMIT TRANSACTION;
     END
@@ -1508,7 +1602,7 @@ BEGIN
         -- Kiểm tra xem tài khoản có tồn tại hay không
         IF NOT EXISTS (SELECT *
     FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SELECT SDT
+        SELECT SDT
             FROM NHANVIEN
         UNION
             SELECT SDT
@@ -1521,12 +1615,23 @@ BEGIN
         BEGIN
             THROW 50001, 'Tài khoản không tồn tại', 1;
         END
+		--Kiểm tra SDT có foreign key references trong LICHHEN
+		IF EXISTS (
+            SELECT 1
+            FROM LICHHEN
+            WHERE MaNhaSi IN (SELECT MaNhaSi FROM NHASI WHERE SDT = @SDT)
+               OR MaBenhNhan IN (SELECT MaBenhNhan FROM BENHNHAN WHERE SDT = @SDT)
+        )
+        BEGIN
+            THROW 50002, 'Tài khoản có liên kết với dữ liệu lịch hẹn, không thể xóa.', 1;
+        END
 
         -- Xóa tài khoản
         DELETE FROM NHANVIEN WHERE SDT = @SDT;
         DELETE FROM NHASI WHERE SDT = @SDT;
         DELETE FROM BENHNHAN WHERE SDT = @SDT;
 
+		PRINT N'Xóa tài khoản thành công.';
         COMMIT TRANSACTION;
     END
     TRY
@@ -1536,8 +1641,8 @@ BEGIN
 
     -- Giữ lại thông báo lỗi gốc
     THROW;
-    END CATCH;
-END;
+    END CATCH
+END
 GO
 
 -- QTV cập nhật tình trạng thái hoạt động(khóa/kích hoạt)
