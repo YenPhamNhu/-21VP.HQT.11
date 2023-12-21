@@ -54,26 +54,16 @@ const USER_TYPES = {
 };
 
 //Chỉnh cái này để chuyển router
-const CURRENT_USER_TYPE = USER_TYPES.PATIENT_USER;
+const CURRENT_USER_TYPE = USER_TYPES.PUBLIC;
 const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
 const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
 const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
 const isDentistElement = CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER;
 const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
-// function AppRoutes(){
-//   return (
-//     <div>
-//       <div>
-//         <Link to={"/"}>Main</Link>
-//       </div>
-//       <AppRoutes/>
-//     </div>
-//   )
-// }
 
 function App() {
   return (
-    <div>
+    <div className='ui container'>
       <BrowserRouter>
       {isPublicElement && <Header />}
       {isPatientElement && <SidebarPatient />}
@@ -122,6 +112,8 @@ function App() {
           <Route path="/admin/infoappo" element={<AdminElement> <InfoAppo /> </AdminElement>} />
           <Route path="/admin/storemed" element={<AdminElement> <StoreMed /> </AdminElement>} />
           
+          <Route path='*' element={<div>Page Not Found!</div>}></Route>
+
         </Routes>
         <hr id="hrduoi"></hr>
         <Footer />
@@ -131,12 +123,22 @@ function App() {
 }
 
 function PublicElement({ children }) {
-  return <>{children}</>;
+  return (
+    <>
+      <div>You are logged in as: {CURRENT_USER_TYPE}</div>
+      {children}
+    </>
+  );
 }
 
 function AdminElement({ children }) {
   if ( CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER) {
-    return <>{children}</>;
+    return (
+      <>
+        <div>You are logged in as: {CURRENT_USER_TYPE}</div>
+        {children}
+      </>
+    );
   } else {
     return <Navigate to={"/"} />
     // return <div>You do not have access to this page!</div>;
@@ -145,28 +147,43 @@ function AdminElement({ children }) {
 
 function PatientElement({ children }) {
   if ( CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER) {
-    return <>{children}</>;
+    return (
+      <>
+        <div>You are logged in as: {CURRENT_USER_TYPE}</div>
+        {children}
+      </>
+    );
   } else {
-    return <Navigate to={"/"} />
-    // return <div>You do not have access to this page!</div>;
+    // return <Navigate to={"/"} />
+    return <div>You do not have access to this page!</div>;
   }
 }
 
 function EmployeeElement({ children }) {
   if ( CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER) {
-    return <>{children}</>;
+    return (
+      <>
+        <div>You are logged in as: {CURRENT_USER_TYPE}</div>
+        {children}
+      </>
+    );
   } else {
-    return <Navigate to={"/"} />
-    // return <div>You do not have access to this page!</div>;
+    // return <Navigate to={"/"} />
+    return <div>You do not have access to this page!</div>;
   }
 }
 
 function DentistElement({ children }) {
-  if ( CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER) {
-    return <>{children}</>;
+  if (CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER) {
+    return (
+      <>
+        <div>You are logged in as: {CURRENT_USER_TYPE}</div>
+        {children}
+      </>
+    );
   } else {
-    return <Navigate to={"/"} />
-    // return <div>You do not have access to this page!</div>;
+    // return <Navigate to={"/pageNotFound"} />
+    return <div>You do not have access to this page!</div>;
   }
 }
 export default App;
