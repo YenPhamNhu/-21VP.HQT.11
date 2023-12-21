@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { Box, IconButton } from '@mui/material';
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-export const Example = () => {
+export const Search = () => {
   const columns = useMemo(
     () => [
         {
@@ -26,6 +27,14 @@ export const Example = () => {
             accessorKey: 'DiaChi',
             header: 'Địa chỉ',
           },
+          {
+            accessorKey: 'ChuyenMon',
+            header: 'Chuyên môn',
+          },
+          {
+            accessorKey: 'BangCap',
+            header: 'Bằng cấp',
+          },
     ],
     []
   );
@@ -36,13 +45,16 @@ export const Example = () => {
   const fetchService = async () => {
 
     const response = await fetch(
-      `http://localhost:5000/api/patients/getAllPatient`
+      `http://localhost:5000/api/users/getAllUser`
     ); // Fetch service data
     console.log(response);
     const serviceData = await response.json();
     if (serviceData) {
-        setDulieu(serviceData);
-        console.log(Dulieu);
+      const modifiedData = serviceData.map((item) => {
+        const formattedNgaySinh = item.NgaySinh.split('T')[0]; // Extract the date part
+        return { ...item, NgaySinh: formattedNgaySinh };
+      });
+        setDulieu(modifiedData);
     }
   };
 
@@ -60,23 +72,16 @@ export const Example = () => {
       data={Dulieu}
       renderRowActions={({ row, table }) => (
         <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-          <IconButton
-            color="primary"
-            onClick={() =>
-              window.open(
-                `mailto:kevinvandy@mailinator.com?subject=Hello ${row.original.HoTen}!`
-              )
-            }
-          >
-            {/* Add your icon component code */}
-          </IconButton>
+
+          <Link to="/">
+            View Details
+          </Link>
           <IconButton
             color="secondary"
             onClick={() => {
               table.setEditingRow(row);
             }}
           >
-            {/* Add your icon component code */}
           </IconButton>
           <IconButton
             color="error"
@@ -94,4 +99,4 @@ export const Example = () => {
   );
 };
 
-export default Example;
+export default Search;
