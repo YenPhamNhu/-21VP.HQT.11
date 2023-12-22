@@ -25,9 +25,11 @@ const { getAllEmployee } = employeeController;
 router.get("/employees/getAllEmployee", getAllEmployee);
 
 // benh nhan
-const { getAllPatient } = patientController;
+const { getAllPatient, getPatientBySDT, deletePatient } = patientController;
 
 router.get("/patients/getAllPatient", getAllPatient);
+router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
+router.delete("/patients/deletePatient/:SDT", deletePatient);
 
 // qtv
 const { getAllAdmin } = adminController;
@@ -50,7 +52,7 @@ router.get("/services/getServiceById/:MaDichVu", getServiceById);
 // service_usages
 router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
 // drug
-const { getAllDrug } = drugController;
+const { getAllDrug, updateDrug, createDrug } = drugController;
 router.get("/drugs/getAllDrug", getAllDrug);
 
 // receipt

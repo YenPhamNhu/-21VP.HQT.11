@@ -3,13 +3,18 @@ USE QLPKNK
 --//-------------------
 -- 0.1/Có quyền đăng kí tài khoản (gọi giao tác TaoTaiKhoanBenhNhan) 
 EXEC TaoTaiKhoanBenhNhan
-    @HoTen = N'Bệnh nhân mới',
-    @SDT = '0123456782',
+    @HoTen = N'NGUYEN HANG',
+    @SDT = '0123455718',
     @GioiTinh = N'Nam',
     @NgaySinh = '1990-01-01',
     @DiaChi = N'Địa chỉ BN mới',
     @MatKhau = '12345678';
 GO
+
+SELECT *
+FROM BENHNHAN
+EXEC XoaTaiKhoan
+@SDT = '0123455776'
 --//-------------------
 -- 0.2/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap)
 EXEC DangNhap @UserName = '0123456788', @Password = '12345678';
@@ -176,7 +181,7 @@ EXEC XemDonThuoc
 SELECT *
 FROM BENHNHAN
 EXEC XoaTaiKhoan
-@SDT = '0123455775'
+@SDT = '0123455776'
 
 SELECT *
 FROM DONTHUOC
