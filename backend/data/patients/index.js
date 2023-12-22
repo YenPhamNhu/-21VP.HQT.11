@@ -16,7 +16,7 @@ const getPatient = async () => {
 
 const deletePatientBySDT = async (patientSDT) => {
   try {
-    console.log("deletePatient API is called");
+    // console.log("deletePatient API is called");
     let pool = await sql.connect(config.sql);
     const sqlQueries = await utils.loadSqlQueries("Patients");
     // Modify the SQL query according to your database schema

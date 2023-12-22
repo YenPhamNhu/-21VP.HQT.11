@@ -14,15 +14,18 @@ const medHistoryController = require("../controllers/medHistoryController");
 const router = express.Router();
 
 // get user // nha si
-const { getAllUser, getUserById, createUser, deleteUserById, updateUser } =
+const { getAllUser, getUserBySDT, createUser, deleteUser, updateUser } =
   userControll;
 
 router.get("/users/getAllUser", getAllUser);
-// router.get("/users/getUserById/:MaNhaSi", getUserById);
+router.get("/users/getUserBySDT/:SDT", getUserBySDT);
+router.delete("/users/deleteUser/:SDT", deleteUser);
 
 // nhan vien
-const { getAllEmployee } = employeeController;
+const { getAllEmployee, getEmployeeBySDT, deleteEmployee } = employeeController;
 router.get("/employees/getAllEmployee", getAllEmployee);
+router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
+router.delete("/employees/deleteEmployee/:SDT", deleteEmployee);
 
 // benh nhan
 const { getAllPatient, getPatientBySDT, deletePatient } = patientController;
@@ -32,8 +35,9 @@ router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
 router.delete("/patients/deletePatient/:SDT", deletePatient);
 
 // qtv
-const { getAllAdmin } = adminController;
+const { getAllAdmin, getAdminBySDT } = adminController;
 router.get("/admins/getAllAdmin", getAllAdmin);
+router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
 
 // get service
 const {
@@ -52,8 +56,9 @@ router.get("/services/getServiceById/:MaDichVu", getServiceById);
 // service_usages
 router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
 // drug
-const { getAllDrug, updateDrug, createDrug } = drugController;
+const { getAllDrug, getDrugById, updateDrug, createDrug } = drugController;
 router.get("/drugs/getAllDrug", getAllDrug);
+router.get("/drugs/getAllDrugByID/:MaThuoc", getDrugById);
 
 // receipt
 const { getAllReceipt } = receiptController;

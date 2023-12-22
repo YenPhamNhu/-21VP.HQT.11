@@ -177,7 +177,8 @@ SELECT *
 FROM DONTHUOC
 EXEC XemDonThuoc
 @MaDonThuoc = 2
-
+select *
+from THUOC
 SELECT *
 FROM BENHNHAN
 EXEC XoaTaiKhoan
