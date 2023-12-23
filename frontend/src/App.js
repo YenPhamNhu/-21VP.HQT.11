@@ -56,7 +56,7 @@ const USER_TYPES = {
 };
 
 //Chỉnh cái này để chuyển router
-const CURRENT_USER_TYPE = USER_TYPES.PUBLIC;
+const CURRENT_USER_TYPE = USER_TYPES.DENTIST_USER;
 const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
 const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
 const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
@@ -65,7 +65,7 @@ const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
 
 function App() {
 	return (
-		<div className='ui container'>
+		
 			<BrowserRouter>
 				{isPublicElement && <Header />}
 				{isPatientElement && <SidebarPatient />}
@@ -407,7 +407,6 @@ function App() {
 				<hr id='hrduoi'></hr>
 				<Footer />
 			</BrowserRouter>
-		</div>
 	);
 }
 
