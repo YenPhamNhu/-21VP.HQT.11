@@ -18,6 +18,7 @@ CREATE PROCEDURE TaoTaiKhoanBenhNhan
     @SDT VARCHAR(10),
     @GioiTinh NVARCHAR(5),
     @NgaySinh DATETIME,
+    -- @NgaySinh VARCHAR(50),
     @DiaChi NVARCHAR(50),
     @MatKhau VARCHAR(8)
 AS
@@ -290,10 +291,10 @@ BEGIN
         -- Kiểm tra nếu có Ca trống
         IF EXISTS (
             SELECT 1
-            FROM LICHLAMVIEC
-            WHERE Ngay = @Ngay
-                AND MaNhaSi = @MaNhaSi
-                AND CaDangKy = @CaDangKy
+        FROM LICHLAMVIEC
+        WHERE Ngay = @Ngay
+            AND MaNhaSi = @MaNhaSi
+            AND CaDangKy = @CaDangKy
         )
         BEGIN
             -- Khung giờ trống -> Đặt hẹn
@@ -309,7 +310,7 @@ BEGIN
             -- Khung giờ muốn đặt đã hết
             ROLLBACK TRANSACTION;
             PRINT N'Xin vui lòng chọn khung giờ khác. ';
-            RETURN; 
+            RETURN;
         END
     END
     ELSE
@@ -343,28 +344,28 @@ CREATE PROCEDURE XemThongTinCaNhanBenhNhan
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
     WHERE SDT = @SDT)
         BEGIN
-            -- Lấy thông tin cá nhân của bệnh nhân
-            SELECT
-                HoTen,
-                NgaySinh,
-                DiaChi,
-                SDT,
-                GioiTinh
-            FROM BENHNHAN
-            WHERE SDT = @SDT;
-            
-        END
+        -- Lấy thông tin cá nhân của bệnh nhân
+        SELECT
+            HoTen,
+            NgaySinh,
+            DiaChi,
+            SDT,
+            GioiTinh
+        FROM BENHNHAN
+        WHERE SDT = @SDT;
+
+    END
     ELSE
         BEGIN
-            ROLLBACK TRANSACTION;
-            PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
-        END
+        ROLLBACK TRANSACTION;
+        PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
+    END
     COMMIT TRANSACTION;
 END;
 GO
@@ -387,33 +388,33 @@ CREATE PROCEDURE XemThongTinNhaSi
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem MaNhaSi có tồn tại không
-        IF EXISTS (
+    IF EXISTS (
             SELECT 1
-        FROM NHASI
-        WHERE MaNhaSi = @MaNhaSi
+    FROM NHASI
+    WHERE MaNhaSi = @MaNhaSi
         )
         BEGIN
-            -- Lấy thông tin của NhaSi
-            SELECT
-                HoTen AS 'Họ Tên',
-                SDT AS 'Số Điện Thoại',
-                GioiTinh AS 'Giới Tính',
-                NgaySinh AS 'Ngày Sinh',
-                DiaChi AS 'Địa Chỉ',
-                ChuyenMon AS 'Chuyên Khoa',
-                BangCap AS 'Bằng'
-            FROM NHASI
-            WHERE MaNhaSi = @MaNhaSi;
-            COMMIT TRANSACTION;
-        END
+        -- Lấy thông tin của NhaSi
+        SELECT
+            HoTen AS 'Họ Tên',
+            SDT AS 'Số Điện Thoại',
+            GioiTinh AS 'Giới Tính',
+            NgaySinh AS 'Ngày Sinh',
+            DiaChi AS 'Địa Chỉ',
+            ChuyenMon AS 'Chuyên Khoa',
+            BangCap AS 'Bằng'
+        FROM NHASI
+        WHERE MaNhaSi = @MaNhaSi;
+        COMMIT TRANSACTION;
+    END
         ELSE
         BEGIN
-            ROLLBACK TRANSACTION;
-            -- Nếu MaNhaSi không tồn tại
-            PRINT 'Không tìm thấy thông tin cho MaNhaSi = ' + CAST(@MaNhaSi AS NVARCHAR(10));
-        END
+        ROLLBACK TRANSACTION;
+        -- Nếu MaNhaSi không tồn tại
+        PRINT 'Không tìm thấy thông tin cho MaNhaSi = ' + CAST(@MaNhaSi AS NVARCHAR(10));
+    END
 END;
 GO
 
@@ -440,7 +441,7 @@ CREATE PROCEDURE CapNhatThongTin
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -485,7 +486,7 @@ CREATE PROCEDURE XemHoSoBenhAn
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -579,7 +580,7 @@ BEGIN
                 LEFT JOIN DICHVUSUDUNG DVSD ON HD.MaPhieuDVSD = DVSD.MaPhieuDVSD
                 LEFT JOIN DICHVU DV ON DVSD.MaDichVu = DV.MaDichVu
             WHERE HD.STTLichSuKB = @STTLichSuKB AND HD.MaBenhNhan = @MaBenhNhan;
-			--select * from DICHVU
+            --select * from DICHVU
             COMMIT TRANSACTION;
         END
         ELSE
@@ -676,7 +677,7 @@ CREATE PROCEDURE CapNhatLichLamViec
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem NhaSi đã đăng ký CaDangKy cho Ngay hay chưa
     IF NOT EXISTS (
         SELECT 1
@@ -758,8 +759,8 @@ BEGIN
     -- Kiểm tra nhân viên có tồn tại trong hệ thống không
     IF EXISTS (
         SELECT 1
-        FROM NHANVIEN
-        WHERE SDT = @SDT
+    FROM NHANVIEN
+    WHERE SDT = @SDT
     )
     BEGIN
         -- Lấy thông tin cá nhân của nhân viên
@@ -1023,21 +1024,21 @@ CREATE PROCEDURE QuanLyKhoThuoc
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
-        IF @ThaoTac = 'ThemMoi'
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    IF @ThaoTac = 'ThemMoi'
         BEGIN
-            -- Add a new drug to the inventory
-            INSERT INTO THUOC
-                (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
-            VALUES
-                (@MaThuoc, @NgayHetHan, @TenThuoc, @DonViTinh, @DonGia, @ChiDinh, @SoLuongTonKho);
-            PRINT 'Drug added to inventory successfully.';
-            COMMIT TRANSACTION;
-        END
+        -- Add a new drug to the inventory
+        INSERT INTO THUOC
+            (MaThuoc, NgayHetHan, TenThuoc, DonViTinh, DonGia, ChiDinh, SoLuongTonKho)
+        VALUES
+            (@MaThuoc, @NgayHetHan, @TenThuoc, @DonViTinh, @DonGia, @ChiDinh, @SoLuongTonKho);
+        PRINT 'Drug added to inventory successfully.';
+        COMMIT TRANSACTION;
+    END
         ELSE IF @ThaoTac = 'CapNhat'
         BEGIN
-            -- Update drug information in the inventory
-            UPDATE THUOC
+        -- Update drug information in the inventory
+        UPDATE THUOC
             SET
                 NgayHetHan = @NgayHetHan,
                 TenThuoc = @TenThuoc,
@@ -1046,21 +1047,21 @@ BEGIN
                 ChiDinh = @ChiDinh,
                 SoLuongTonKho = @SoLuongTonKho
             WHERE MaThuoc = @MaThuoc AND NgayHetHan = @NgayHetHan;
-            PRINT 'Drug information updated successfully.';
-            COMMIT TRANSACTION;
-        END
+        PRINT 'Drug information updated successfully.';
+        COMMIT TRANSACTION;
+    END
         ELSE IF @ThaoTac = 'XemTonKho'
         BEGIN
-            -- View current inventory status
-            SELECT *
-            FROM THUOC;
-        END
+        -- View current inventory status
+        SELECT *
+        FROM THUOC;
+    END
         ELSE
         BEGIN
-            ROLLBACK TRANSACTION;
-            -- Invalid operation
-            PRINT 'Invalid operation.';
-        END
+        ROLLBACK TRANSACTION;
+        -- Invalid operation
+        PRINT 'Invalid operation.';
+    END
 END;
 GO
 
@@ -1084,7 +1085,7 @@ AS
 BEGIN
     BEGIN TRANSACTION;
     -- Bắt đầu giao dịch
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     -- Kiểm tra xem bệnh nhân có tồn tại không
     IF EXISTS (SELECT 1
     FROM BENHNHAN
@@ -1164,7 +1165,7 @@ BEGIN
     -- Kiểm tra xem tài khoản đã tồn tại chưa
     SELECT @ExistingUserCount = COUNT(*)
     FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            SELECT SDT
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SELECT SDT
             FROM QTV
         UNION
             SELECT SDT
@@ -1252,17 +1253,17 @@ BEGIN
         DECLARE @CurrentPassword VARCHAR(8);
 
         SELECT @CurrentPassword = MatKhau
-        FROM (
-            SELECT SDT, MatKhau
+    FROM (
+                                                                                                                                    SELECT SDT, MatKhau
             FROM NHANVIEN
-            UNION
+        UNION
             SELECT SDT, MatKhau
             FROM NHASI
-            UNION
+        UNION
             SELECT SDT, MatKhau
             FROM BENHNHAN
         ) AS Users
-        WHERE SDT = @SDT;
+    WHERE SDT = @SDT;
 
         -- Thay đổi mật khẩu
         IF @CurrentPassword <> @OldPassword
@@ -1275,13 +1276,14 @@ BEGIN
         UPDATE BENHNHAN SET MatKhau = @NewPassword WHERE SDT = @SDT;
 		PRINT N'Cập nhật Mật khẩu mới thành công.';
         COMMIT TRANSACTION;
-    END TRY
+    END
+    TRY
     BEGIN CATCH
-        -- Nếu xảy ra lỗi, rollback transactionf
-        ROLLBACK TRANSACTION;
+    -- Nếu xảy ra lỗi, rollback transactionf
+    ROLLBACK TRANSACTION;
 
-        -- Giữ lại thông báo lỗi gốc
-        THROW
+    -- Giữ lại thông báo lỗi gốc
+    THROW
     END CATCH
 END
 
@@ -1311,7 +1313,7 @@ BEGIN
     BEGIN TRY
         IF NOT EXISTS(SELECT *
     FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   SELECT SDT
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           SELECT SDT
             FROM NHANVIEN
         UNION
             SELECT SDT
@@ -1360,30 +1362,30 @@ CREATE PROCEDURE XemThongTinQTV
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
-        -- Kiểm tra xem SDT có tồn tại không
-        IF EXISTS (
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    -- Kiểm tra xem SDT có tồn tại không
+    IF EXISTS (
             SELECT 1
-        FROM QTV
-        WHERE SDT = @SDT
+    FROM QTV
+    WHERE SDT = @SDT
         )
         BEGIN
-            -- Lấy thông tin của QTV
-            SELECT
-                HoTen AS 'Họ Tên',
-                SDT AS 'Số Điện Thoại',
-                EMAIL as 'Email'
-            FROM QTV
-            WHERE SDT = @SDT;
-            
-            COMMIT TRANSACTION
-        END
+        -- Lấy thông tin của QTV
+        SELECT
+            HoTen AS 'Họ Tên',
+            SDT AS 'Số Điện Thoại',
+            EMAIL as 'Email'
+        FROM QTV
+        WHERE SDT = @SDT;
+
+        COMMIT TRANSACTION
+    END
     ELSE
         BEGIN
-            ROLLBACK TRANSACTION;
-            -- Nếu SDT không tồn tại
-            PRINT 'Không tìm thấy thông tin Quản Trị Viên cho SDT = ' + @SDT;
-        END
+        ROLLBACK TRANSACTION;
+        -- Nếu SDT không tồn tại
+        PRINT 'Không tìm thấy thông tin Quản Trị Viên cho SDT = ' + @SDT;
+    END
 END;
 
 GO
@@ -1411,7 +1413,7 @@ CREATE PROCEDURE CapNhatThongTinNhaSi
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM NHASI
@@ -1461,7 +1463,7 @@ CREATE PROCEDURE CapNhatThongTinNhanVien
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem Nhân viên có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM NHANVIEN
@@ -1509,7 +1511,7 @@ CREATE PROCEDURE CapNhatThongTinQTV
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     -- Kiểm tra xem QTV có tồn tại trong hệ thống hay không
     IF EXISTS (SELECT 1
     FROM QTV
@@ -1644,7 +1646,7 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     BEGIN TRY
         -- Kiểm tra xem đơn thuốc có tồn tại hay không
         IF NOT EXISTS (SELECT *
@@ -1690,12 +1692,12 @@ CREATE PROCEDURE XoaTaiKhoan
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     BEGIN TRY
         -- Kiểm tra xem tài khoản có tồn tại hay không
         IF NOT EXISTS (SELECT *
     FROM (
-        SELECT SDT
+                                                                                                                                SELECT SDT
             FROM NHANVIEN
         UNION
             SELECT SDT
@@ -1711,21 +1713,25 @@ BEGIN
 		--Kiểm tra SDT có foreign key references trong LICHHEN
 		IF EXISTS (
             SELECT 1
-            FROM LICHHEN
-            WHERE MaNhaSi IN (SELECT MaNhaSi FROM NHASI WHERE SDT = @SDT)
-               OR MaBenhNhan IN (SELECT MaBenhNhan FROM BENHNHAN WHERE SDT = @SDT)
+    FROM LICHHEN
+    WHERE MaNhaSi IN (SELECT MaNhaSi
+        FROM NHASI
+        WHERE SDT = @SDT)
+        OR MaBenhNhan IN (SELECT MaBenhNhan
+        FROM BENHNHAN
+        WHERE SDT = @SDT)
         )
         BEGIN
             THROW 50002, 'Tài khoản có liên kết với dữ liệu lịch hẹn, không thể xóa.', 1;
         END
 
-        -- Xóa tài khoản
-        DELETE FROM NHANVIEN WHERE SDT = @SDT;
-        DELETE FROM NHASI WHERE SDT = @SDT;
-        DELETE FROM BENHNHAN WHERE SDT = @SDT;
+    -- Xóa tài khoản
+    DELETE FROM NHANVIEN WHERE SDT = @SDT;
+    DELETE FROM NHASI WHERE SDT = @SDT;
+    DELETE FROM BENHNHAN WHERE SDT = @SDT;
 
-		PRINT N'Xóa tài khoản thành công.';
-        COMMIT TRANSACTION;
+    PRINT N'Xóa tài khoản thành công.';
+    COMMIT TRANSACTION;
     END
     TRY
     BEGIN CATCH
@@ -1757,7 +1763,7 @@ CREATE PROCEDURE CapNhatTinhTrangHoatDongNhanVien
 AS
 BEGIN
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
     BEGIN TRY
         -- Kiểm tra xem nhân viên có tồn tại hay không
     IF NOT EXISTS (SELECT *
@@ -1773,7 +1779,8 @@ BEGIN
         WHERE MaNhanVien = @MaNhanVien;
 
         COMMIT TRANSACTION;
-    END TRY
+    END
+    TRY
     BEGIN CATCH
     -- Nếu xảy ra lỗi, rollback transaction
     ROLLBACK TRANSACTION;
@@ -1812,7 +1819,7 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRANSACTION;
-	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
     BEGIN TRY
         -- Kiểm tra xem bệnh nhân có tồn tại trong lịch sử khám bệnh hay không

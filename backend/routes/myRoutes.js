@@ -15,23 +15,30 @@ const router = express.Router();
 
 // get user // nha si
 const { getAllUser, getUserBySDT, createUser, deleteUser, updateUser } =
-  userControll;
+	userControll;
 
-router.get("/users/getAllUser", getAllUser);
+//http://localhost:5000/api/users/getAllUser
+router.get("/users/getAllUser", getAllUser); //DONE
 router.get("/users/getUserBySDT/:SDT", getUserBySDT);
 router.delete("/users/deleteUser/:SDT", deleteUser);
+router.post("/users/createUser", createUser);
 
-// nhan vien
+// NHAN VIEN
 const { getAllEmployee, getEmployeeBySDT, deleteEmployee } = employeeController;
+// http://localhost:5000/api/employees/getAllEmployee
 router.get("/employees/getAllEmployee", getAllEmployee);
 router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
 router.delete("/employees/deleteEmployee/:SDT", deleteEmployee);
 
-// benh nhan
+// BENH NHAN
 const { getAllPatient, getPatientBySDT, deletePatient } = patientController;
 
-router.get("/patients/getAllPatient", getAllPatient);
+// http://localhost:5000/api/patients/getAllPatient
+router.get("/patients/getAllPatient", getAllPatient); //DONE
+//http://localhost:5000/api/patients/getPatientBySDT/0123456780
 router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
+// http://localhost:5000/api/patients/deletePatient/0123456780
+//"message": "Error deleting patient"
 router.delete("/patients/deletePatient/:SDT", deletePatient);
 
 // qtv
@@ -41,17 +48,17 @@ router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
 router.post("/admins/createPatientByAdmin", createPatientByAdmin);
 // get service
 const {
-  getAllService,
-  getServiceById,
-  createService,
-  deleteService,
-  updateService,
+	getAllService,
+	getServiceById,
+	createService,
+	deleteService,
+	updateService,
 
-  getAllServiceUsage,
+	getAllServiceUsage,
 } = serviceControll;
 
-router.get("/services/getAllService", getAllService);
-router.get("/services/getServiceById/:MaDichVu", getServiceById);
+router.get("/services/getAllService", getAllService); //DONE
+router.get("/services/getServiceById/:MaDichVu", getServiceById); //DONE
 // router.delete("/services/deleteService/:MaDichVu", deleteService);
 
 // service_usages
@@ -69,8 +76,8 @@ router.get("/receipts/getAllReceipt", getAllReceipt);
 // lich hen appointmentSchedule
 const { getAllAppointmentSchedule } = appointmentScheduleController;
 router.get(
-  "/appointmentSchedule/getAllAppointmentSchedule",
-  getAllAppointmentSchedule
+	"/appointmentSchedule/getAllAppointmentSchedule",
+	getAllAppointmentSchedule
 );
 
 //lich su kham benh
@@ -78,5 +85,5 @@ const { getAllMedHistory } = medHistoryController;
 router.get("/medHistory/getAllMedHistory", getAllMedHistory);
 
 module.exports = {
-  routes: router,
+	routes: router,
 };
