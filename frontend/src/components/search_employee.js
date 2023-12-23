@@ -7,29 +7,37 @@ import { Link } from 'react-router-dom';
 export const Search = () => {
   const columns = useMemo(
     () => [
+      {
+        accessorKey: 'MaNhanVien',
+        header: 'Mã nhân viên',
+      },
         {
-            accessorKey: 'MaBenhNhan',
-            header: 'Mã bệnh nhân',
-          },
-          {
             accessorKey: 'HoTen',
-            header: 'Họ tên',
+            header: 'Họ và tên',
           },
           {
             accessorKey: 'SDT',
             header: 'Số điện thoại',
           },
           {
-            accessorKey: 'NgaySinh',
-            header: 'Ngày sinh',
+            accessorKey: 'GioiTinh',
+            header: 'Giới tính',
           },
+          // {
+          //   accessorKey: 'NgaySinh',
+          //   header: 'Ngày sinh',
+          // },
           {
             accessorKey: 'DiaChi',
             header: 'Địa chỉ',
           },
           {
-            accessorKey: 'GioiTinh',
-            header: 'Giới tính',
+            accessorKey: 'TinhTrangHoatDong',
+            header: 'Tình trạng hoạt động',
+          },
+          {
+            accessorKey: 'ViTri',
+            header: 'Vị trí',
           },
     ],
     []
@@ -39,17 +47,14 @@ export const Search = () => {
   const [Dulieu, setDulieu] = useState(null);
 
   const fetchService = async () => {
+
     const response = await fetch(
-      `http://localhost:5000/api/patients/getAllPatient`
+      `http://localhost:5000/api/employees/getAllEmployee`
     ); // Fetch service data
     console.log(response);
     const serviceData = await response.json();
     if (serviceData) {
-      const modifiedData = serviceData.map((item) => {
-        const formattedNgaySinh = item.NgaySinh.split('T')[0]; // Extract the date part
-        return { ...item, NgaySinh: formattedNgaySinh };
-      });
-        setDulieu(modifiedData);
+        setDulieu(serviceData);
     }
   };
 

@@ -87,7 +87,13 @@ export default function SwipeableTemporaryDrawer() {
   );
 
   return (
-    <div>
+    <div style={{ 
+      backgroundColor: "#84a1b4",
+      color: "#ffffff",
+      padding: "10px",
+      display: "flex",
+      alignItems: "center",
+    }}>
       {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button

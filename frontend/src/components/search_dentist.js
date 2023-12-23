@@ -8,16 +8,16 @@ export const Search = () => {
   const columns = useMemo(
     () => [
         {
-            accessorKey: 'MaBenhNhan',
-            header: 'Mã bệnh nhân',
-          },
-          {
             accessorKey: 'HoTen',
-            header: 'Họ tên',
+            header: 'Họ và tên',
           },
           {
             accessorKey: 'SDT',
             header: 'Số điện thoại',
+          },
+          {
+            accessorKey: 'GioiTinh',
+            header: 'Giới tính',
           },
           {
             accessorKey: 'NgaySinh',
@@ -28,8 +28,12 @@ export const Search = () => {
             header: 'Địa chỉ',
           },
           {
-            accessorKey: 'GioiTinh',
-            header: 'Giới tính',
+            accessorKey: 'ChuyenMon',
+            header: 'Chuyên môn',
+          },
+          {
+            accessorKey: 'BangCap',
+            header: 'Bằng cấp',
           },
     ],
     []
@@ -39,8 +43,9 @@ export const Search = () => {
   const [Dulieu, setDulieu] = useState(null);
 
   const fetchService = async () => {
+
     const response = await fetch(
-      `http://localhost:5000/api/patients/getAllPatient`
+      `http://localhost:5000/api/users/getAllUser`
     ); // Fetch service data
     console.log(response);
     const serviceData = await response.json();
