@@ -177,8 +177,10 @@ SELECT *
 FROM DONTHUOC
 EXEC XemDonThuoc
 @MaDonThuoc = 2
+
 select *
 from THUOC
+
 SELECT *
 FROM BENHNHAN
 EXEC XoaTaiKhoan
@@ -210,6 +212,9 @@ SELECT *
 FROM HOADON
 EXEC LapHoaDonThanhToan
     @STTLichSuKB = 1
+
+select *
+from DICHVU
 
 -- Execute the stored procedure to add a new drug to the inventory
 EXEC QuanLyKhoThuoc

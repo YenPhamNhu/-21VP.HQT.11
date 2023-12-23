@@ -13,6 +13,7 @@ const getEmployee = async () => {
     console.log(error.message);
   }
 };
+
 const deleteEmployeeBySDT = async (employeeSDT) => {
   try {
     // console.log("deletePatient API is called");
@@ -30,6 +31,7 @@ const deleteEmployeeBySDT = async (employeeSDT) => {
     throw new Error("Error deleting employee");
   }
 };
+
 module.exports = {
   getEmployee,
   deleteEmployeeBySDT,

@@ -44,7 +44,7 @@ const {
   getAllService,
   getServiceById,
   createService,
-  deleteServiceById,
+  deleteService,
   updateService,
 
   getAllServiceUsage,
@@ -52,9 +52,11 @@ const {
 
 router.get("/services/getAllService", getAllService);
 router.get("/services/getServiceById/:MaDichVu", getServiceById);
+// router.delete("/services/deleteService/:MaDichVu", deleteService);
 
 // service_usages
 router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
+
 // drug
 const { getAllDrug, getDrugById, updateDrug, createDrug } = drugController;
 router.get("/drugs/getAllDrug", getAllDrug);
@@ -71,7 +73,7 @@ router.get(
   getAllAppointmentSchedule
 );
 
-//l.ich su kham benh
+//lich su kham benh
 const { getAllMedHistory } = medHistoryController;
 router.get("/medHistory/getAllMedHistory", getAllMedHistory);
 

@@ -4,7 +4,7 @@ const ProfileSection = () => {
   return (
     <section
       className='vh-100'
-      style={{ backgroundColor: "#E1F2FB", padding: "0%" }}
+      style={{ backgroundColor: "#E1F2FB", padding: "0%", color: "#04364a" }}
     >
       <div className='container py-5 h-100'>
         <div className='row d-flex justify-content-center align-items-center h-100'>
@@ -25,7 +25,7 @@ const ProfileSection = () => {
                     className='img-fluid my-5'
                     style={{ width: "80px" }}
                   />
-                  <h5 className='text-dark'>patient.HoTen</h5>
+                  <h5 style={{ color: "#04364a" }}>patient.HoTen</h5>
                   <p>
                     <Link className='far fa-edit mb-5 text-dark'>
                       chỉnh sửa

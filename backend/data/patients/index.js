@@ -31,6 +31,7 @@ const deletePatientBySDT = async (patientSDT) => {
     throw new Error("Error deleting patient");
   }
 };
+
 module.exports = {
   getPatient,
   deletePatientBySDT,
