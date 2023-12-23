@@ -12,6 +12,35 @@ EXEC TaoTaiKhoanBenhNhan
 GO
 
 SELECT *
+FROM NHANVIEN
+
+EXEC TaoTaiKhoanNhanVien
+    @HoTen = N'NGUYEN VAN BAN',
+    @SDT = '0123455628',
+    @GioiTinh = N'Nam',
+    @DiaChi = N'6/1B Tran Phu P4, Q5, tpHCM',
+    @TinhTrangHoatDong = N'Còn làm',
+    @ViTri = N'Thu Ngân',
+    @MatKhau = '12345678';
+GO
+
+SELECT *
+FROM NHANVIEN
+
+SELECT *
+FROM NHASI
+EXEC TaoTaiKhoanNhaSi
+    @HoTen = N'NGUYEN THU HONG',
+    @SDT = '0123283048',
+    @GioiTinh = N'Nữ',
+    @NgaySinh = '1990-01-01',
+    @DiaChi = N'7/1B Tran Phu P4, Q5, tpHCM',
+    @ChuyenMon = N'Răng hàm mặt',
+    @BangCap = N'Tiến Sĩ',
+    @MatKhau = '12345678';
+GO
+
+SELECT *
 FROM BENHNHAN
 EXEC XoaTaiKhoan
 @SDT = '0123455776'

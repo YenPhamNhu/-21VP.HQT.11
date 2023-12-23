@@ -43,6 +43,99 @@ BEGIN
     END
 END
 GO
+
+-- tao tai khoan nhan vien
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'TaoTaiKhoanNhanVien' AND type = 'P')
+BEGIN
+    DROP PROCEDURE TaoTaiKhoanNhanVien;
+    PRINT N'Đã hủy giao tác TaoTaiKhoanNhanVien.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác TaoTaiKhoanNhanVien chưa được tạo.';
+END
+GO
+
+CREATE PROCEDURE TaoTaiKhoanNhanVien
+    @HoTen NVARCHAR(50),
+    @SDT VARCHAR(10),
+    @GioiTinh NVARCHAR(5),
+    @DiaChi NVARCHAR(50),
+    @TinhTrangHoatDong NVARCHAR(20),
+    @ViTri NVARCHAR(50),
+    @MatKhau VARCHAR(8)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    IF NOT EXISTS (SELECT 1
+    FROM NHANVIEN
+    WHERE SDT = @SDT)
+    BEGIN
+        INSERT INTO NHANVIEN
+            (HoTen, SDT, GioiTinh, DiaChi, TinhTrangHoatDong, ViTri, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @DiaChi, @TinhTrangHoatDong, @ViTri, @MatKhau);
+        PRINT N'Tạo tài khoản thành công';
+        COMMIT TRANSACTION;
+    END
+    ELSE
+    BEGIN
+        -- SDT đã tồn tại, In ra màn hình
+        ROLLBACK TRANSACTION;
+        PRINT N'Số điện thoại đã tồn tại. Tạo tài khoản không thành công';
+    END
+END
+GO
+
+-- TAO TAI KHOAN NHA SI
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'TaoTaiKhoanNhaSi' AND type = 'P')
+BEGIN
+    DROP PROCEDURE TaoTaiKhoanNhaSi;
+    PRINT N'Đã hủy giao tác TaoTaiKhoanNhaSi.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác TaoTaiKhoanNhaSi chưa được tạo.';
+END
+GO
+
+CREATE PROCEDURE TaoTaiKhoanNhaSi
+    @HoTen NVARCHAR(50),
+    @SDT VARCHAR(10),
+    @GioiTinh NVARCHAR(5),
+    @NgaySinh DATETIME,
+    @DiaChi NVARCHAR(50),
+    @ChuyenMon NVARCHAR(50),
+    @BangCap NVARCHAR(50),
+    @MatKhau VARCHAR(8)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    IF NOT EXISTS (SELECT 1
+    FROM NHASI
+    WHERE SDT = @SDT)
+    BEGIN
+        INSERT INTO NHASI
+            (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, ChuyenMon, BangCap, MatKhau)
+        VALUES
+            (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @ChuyenMon, @BangCap, @MatKhau);
+        PRINT N'Tạo tài khoản thành công';
+        COMMIT TRANSACTION;
+    END
+    ELSE
+    BEGIN
+        -- SDT đã tồn tại, In ra màn hình
+        ROLLBACK TRANSACTION;
+        PRINT N'Số điện thoại đã tồn tại. Tạo tài khoản không thành công';
+    END
+END
+GO
 --//-------------------
 -- 0.2/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap)
 IF EXISTS (SELECT *

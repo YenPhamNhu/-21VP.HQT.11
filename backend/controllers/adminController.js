@@ -1,5 +1,6 @@
 "use strict";
 const adminData = require("../data/admins");
+const patientData = require("../data/admins/index");
 const getAllAdmin = async (req, res, next) => {
   try {
     const adminlist = await adminData.getAdmin();
@@ -22,7 +23,7 @@ const getAdminBySDT = async (req, res, next) => {
     const admin = adminMap[adminSDT];
 
     if (!admin) {
-      res.status(404).send("Patient not found");
+      res.status(404).send("Admin not found");
       return;
     }
 
@@ -32,7 +33,28 @@ const getAdminBySDT = async (req, res, next) => {
   }
 };
 
+const createPatientByAdmin = async (req, res, next) => {
+  try {
+    const { HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau } = req.body;
+
+    // Call the function to create a patient in the data layer
+    await patientData.createPatient(
+      HoTen,
+      SDT,
+      GioiTinh,
+      NgaySinh,
+      DiaChi,
+      MatKhau
+    );
+
+    res.status(201).send("Patient created successfully");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
   getAllAdmin,
   getAdminBySDT,
+  createPatientByAdmin,
 };

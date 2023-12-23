@@ -35,10 +35,10 @@ router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
 router.delete("/patients/deletePatient/:SDT", deletePatient);
 
 // qtv
-const { getAllAdmin, getAdminBySDT } = adminController;
+const { getAllAdmin, getAdminBySDT, createPatientByAdmin } = adminController;
 router.get("/admins/getAllAdmin", getAllAdmin);
 router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
-
+router.post("/admins/createPatientByAdmin", createPatientByAdmin);
 // get service
 const {
   getAllService,
