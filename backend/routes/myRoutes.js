@@ -42,10 +42,12 @@ router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
 router.delete("/patients/deletePatient/:SDT", deletePatient);
 
 // qtv
-const { getAllAdmin, getAdminBySDT, createPatientByAdmin } = adminController;
+const { getAllAdmin, getAdminBySDT, createPatientByAdmin, createEmployeeByAdmin, createDentistByAdmin } = adminController;
 router.get("/admins/getAllAdmin", getAllAdmin);
 router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
 router.post("/admins/createPatientByAdmin", createPatientByAdmin);
+router.post("/admins/createEmployeeByAdmin", createEmployeeByAdmin);
+router.post("/admins/createDentistByAdmin", createDentistByAdmin);
 // get service
 const {
 	getAllService,

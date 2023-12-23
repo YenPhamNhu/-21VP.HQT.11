@@ -103,9 +103,112 @@ const createPatientByAdmin = async (req, res, next) => {
 		res.status(500).json({ success: false, error: err.message });
 	}
 };
+//admins/createEmployeeByAdmin
+const createEmployeeByAdmin = async (req, res, next) => {
+	try {
+		const requiredFields = [
+			"HoTen",
+			"SDT",
+			"GioiTinh",
+			"DiaChi",
+			"TinhTrangHoatDong",
+			"ViTri",
+			"MatKhau",
+		];
+		for (const field of requiredFields) {
+			if (!req.body[field]) {
+				return res.status(400).json({ error: `${field} is required` });
+			}
+		}
+
+		const pool = await sql.connect(config.sql);
+
+		const {
+			HoTen = "Nhân Viên mới",
+			NgaySinh = "1990-01-01",
+			...rest
+		} = req.body;
+
+		const request = new sql.Request();
+
+		const query = `
+      EXEC TaoTaiKhoanNhanVien
+        @HoTen = N'${HoTen}',
+        @SDT = '${rest.SDT}',
+        @GioiTinh = N'${rest.GioiTinh.toLowerCase() === "male" ? "Nam" : "Nữ"}',
+        @DiaChi = N'${rest.DiaChi}',
+        @TinhTrangHoatDong = N'${rest.TinhTrangHoatDong}',
+        @ViTri = N'${rest.ViTri}',
+        @MatKhau = N'${rest.MatKhau}';
+    `;
+
+		const result = await request.query(query);
+
+		console.log("Stored Procedure Result:", result);
+
+		res
+			.status(201)
+			.json({ success: true, message: "User registered successfully" });
+	} catch (err) {
+		console.error("Error executing SQL query:", err);
+		res.status(500).json({ success: false, error: err.message });
+	}
+};
+
+//admins/createDentistByAdmin
+const createDentistByAdmin = async (req, res, next) => {
+	try {
+		const requiredFields = [
+			"HoTen",
+			"SDT",
+			"GioiTinh",
+			"NgaySinh",
+			"DiaChi",
+			"ChuyenMon",
+			"BangCap",
+			"MatKhau",
+		];
+		for (const field of requiredFields) {
+			if (!req.body[field]) {
+				return res.status(400).json({ error: `${field} is required` });
+			}
+		}
+
+		const pool = await sql.connect(config.sql);
+
+		const { HoTen = "Nha Sĩ mới", NgaySinh = "1990-01-01", ...rest } = req.body;
+
+		const request = new sql.Request();
+
+		const query = `
+      EXEC TaoTaiKhoanNhaSi
+        @HoTen = N'${HoTen}',
+        @SDT = '${rest.SDT}',
+        @GioiTinh = N'${rest.GioiTinh.toLowerCase() === "male" ? "Nam" : "Nữ"}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${rest.DiaChi}',
+        @ChuyenMon = N'${rest.ChuyenMon}',
+        @BangCap = N'${rest.BangCap}',
+        @MatKhau = N'${rest.MatKhau}';
+    `;
+
+		const result = await request.query(query);
+
+		console.log("Stored Procedure Result:", result);
+
+		res
+			.status(201)
+			.json({ success: true, message: "User registered successfully" });
+	} catch (err) {
+		console.error("Error executing SQL query:", err);
+		res.status(500).json({ success: false, error: err.message });
+	}
+};
 
 module.exports = {
 	getAllAdmin,
 	getAdminBySDT,
 	createPatientByAdmin,
+	createEmployeeByAdmin,
+	createDentistByAdmin,
 };
