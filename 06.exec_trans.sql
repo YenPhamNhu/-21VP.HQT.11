@@ -197,6 +197,7 @@ FROM LICHHEN
 EXEC CapNhatTrangThaiLichHen
 @MaLichHen = 11,
     @TrangThaiMoi = N'Đã hủy'
+    
 SELECT *
 FROM LICHHEN
 EXEC XoaLichHen

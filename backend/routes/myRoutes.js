@@ -90,8 +90,9 @@ router.get(
 );
 
 //lich su kham benh
-const { getAllMedHistory } = medHistoryController;
+const { getAllMedHistory, getMedHistoryByID } = medHistoryController;
 router.get("/medHistory/getAllMedHistory", getAllMedHistory);
+router.get("/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
 
 module.exports = {
 	routes: router,

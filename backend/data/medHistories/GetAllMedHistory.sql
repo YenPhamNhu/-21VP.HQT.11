@@ -1,2 +1,3 @@
 SELECT *
 FROM [QLPKNK].[dbo].[LICHSUKHAMBENH]
+-- EXEC XemHoSoBenhAn
