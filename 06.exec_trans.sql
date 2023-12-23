@@ -257,7 +257,7 @@ EXEC QuanLyKhoThuoc
     @ThaoTac = 'ThemMoi';
 
 EXEC QuanLyKhoThuoc
-    @MaThuoc = 101,
+    @MaThuoc = 107,
     @NgayHetHan = '2023-12-10',
     @TenThuoc = 'Aspirin',
     @DonViTinh = 'Viên',
@@ -265,7 +265,6 @@ EXEC QuanLyKhoThuoc
     @ChiDinh = 'Giảm đau',
     @SoLuongTonKho = 100,
     @ThaoTac = 'ThemMoi';
-
 
 -- Execute the stored procedure to update drug information in the inventory
 EXEC QuanLyKhoThuoc

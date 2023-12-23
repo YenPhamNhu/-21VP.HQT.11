@@ -1020,7 +1020,7 @@ CREATE PROCEDURE QuanLyKhoThuoc
     @DonGia INT = NULL,
     @ChiDinh NVARCHAR(50) = NULL,
     @SoLuongTonKho INT = NULL,
-    @ThaoTac NVARCHAR(50)
+    @ThaoTac NVARCHAR(50) = 'ThemMoi'
 AS
 BEGIN
     BEGIN TRANSACTION;
@@ -1165,7 +1165,7 @@ BEGIN
     -- Kiểm tra xem tài khoản đã tồn tại chưa
     SELECT @ExistingUserCount = COUNT(*)
     FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SELECT SDT
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                SELECT SDT
             FROM QTV
         UNION
             SELECT SDT
@@ -1254,7 +1254,7 @@ BEGIN
 
         SELECT @CurrentPassword = MatKhau
     FROM (
-                                                                                                                                    SELECT SDT, MatKhau
+                                                                                                                                                        SELECT SDT, MatKhau
             FROM NHANVIEN
         UNION
             SELECT SDT, MatKhau
@@ -1313,7 +1313,7 @@ BEGIN
     BEGIN TRY
         IF NOT EXISTS(SELECT *
     FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           SELECT SDT
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               SELECT SDT
             FROM NHANVIEN
         UNION
             SELECT SDT
@@ -1697,7 +1697,7 @@ BEGIN
         -- Kiểm tra xem tài khoản có tồn tại hay không
         IF NOT EXISTS (SELECT *
     FROM (
-                                                                                                                                SELECT SDT
+                                                                                                                                                    SELECT SDT
             FROM NHANVIEN
         UNION
             SELECT SDT
