@@ -25,6 +25,8 @@ function Login() {
 		setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 	};
 
+	axios.defaults.withCredentials = true;
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const validationErrors = Validation(values);
@@ -35,7 +37,7 @@ function Login() {
 				.post("http://localhost:5000/login", values)
 				.then((res) => {
 					// Alert Log-in thanh cong
-					alert(res.data.message);
+					// alert(res.data.message);
 					// Navigate to Home page
 					navigate("/");
 				})

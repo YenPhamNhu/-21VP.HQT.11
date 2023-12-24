@@ -4,14 +4,32 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/myRoutes");
 const sql = require("mssql");
-
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const app = express();
 
-app.use(cors());
+app.use(cors({
+	origin: ["http://localhost:3000"],
+	methods:["POST","GET"],
+	credentials:true
+}));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", userRoutes.routes);
+
+app.use(cookieParser());
+app.use(
+	session({
+		secret: "secret", //secret key uased to encrypt session cookie
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: false,
+			maxAge: 1000 * 60 * 60 * 24,
+		}, //set cookie property
+	})
+);
 
 const pool = new sql.ConnectionPool(config.sql);
 const poolConnect = pool.connect();
@@ -23,6 +41,14 @@ poolConnect
 	.catch((err) => {
 		console.error("Error connecting to the database:", err);
 	});
+
+app.get("/", (req, res) => {
+	if (req.session.SDT) {
+		return res.json({ valid: true, SDT: req.session.SDT });
+	} else {
+		return res.json({ valid: false });
+	}
+});
 
 app.post("/signup", async (req, res) => {
 	try {
@@ -39,19 +65,6 @@ app.post("/signup", async (req, res) => {
 				return res.status(400).json({ error: `${field} is required` });
 			}
 		}
-
-		// const query = "INSERT INTO BENHNHAN (HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau) VALUES (@HoTen, @SDT, @GioiTinh, @NgaySinh, @DiaChi, @MatKhau)";
-		// const request = pool.request();
-		// request.input("HoTen", sql.NVarChar(50), req.body.HoTen);
-		// request.input("SDT", sql.NVarChar(20), req.body.SDT);
-		// request.input("GioiTinh", sql.NVarChar(20), req.body.GioiTinh.toLowerCase() === 'male' ? 'Nam' : 'Nữ');
-		// request.input("NgaySinh", sql.Date, req.body.NgaySinh);
-		// request.input("DiaChi", sql.NVarChar(100), req.body.DiaChi);
-		// request.input("MatKhau", sql.NVarChar(100), req.body.MatKhau);
-
-		// const result = await request.query(query);
-		// res.status(201).json({ success: true, message: "User registered successfully", data: result });
-
 		const pool = await sql.connect(config.sql);
 		// const request = pool.request();
 
@@ -102,15 +115,28 @@ app.post("/login", async (req, res) => {
 
 		// Execute stored procedure
 		const query = `
-      EXEC DangNhap
-        @UserName = '${req.body.SDT}',
-        @Password = N'${req.body.MatKhau}';
-    `;
+		EXEC DangNhap
+		  @UserName = '${req.body.SDT}',
+		  @Password = N'${req.body.MatKhau}';
+	  `;
 
 		const result = await request.query(query);
 
 		// Check the user role from the stored procedure result
-		const userRole = result.recordset[0].UserRole;
+		const userRole =
+			result.recordset && result.recordset[0]
+				? result.recordset[0].UserRole
+				: null;
+		console.log(result);
+		//   const userRole = result.recordset && result.recordset[0] ? result.recordset[0].UserRole : null;
+		console.log("SQL Query:", query);
+		console.log("Result:", result);
+		// Set the session variable
+		req.session.SDT = req.body.SDT;
+
+		// Log additional information
+		console.log("SQL Query:", query);
+		console.log("Result:", result);
 
 		// Respond based on user role
 		if (
@@ -122,6 +148,8 @@ app.post("/login", async (req, res) => {
 			res.status(200).json({
 				success: true,
 				message: `User ${req.body.SDT} logged in successfully as ${userRole}`,
+				Login: true,
+				SDT: req.session.SDT,
 			});
 		} else {
 			res.status(401).json({ success: false, error: "Invalid credentials" });
@@ -131,6 +159,56 @@ app.post("/login", async (req, res) => {
 		res.status(500).json({ success: false, error: "Internal Server Error" });
 	}
 });
+
+// app.post("/login", async (req, res) => {
+// 	try {
+// 		const requiredFields = ["SDT", "MatKhau"];
+// 		for (const field of requiredFields) {
+// 			if (!req.body[field]) {
+// 				return res.status(400).json({ error: `${field} is required` });
+// 			}
+// 		}
+
+// 		const pool = await sql.connect(config.sql);
+// 		const request = new sql.Request();
+
+// 		// Execute stored procedure
+// 		const query = `
+//       EXEC DangNhap
+//         @UserName = '${req.body.SDT}',
+//         @Password = N'${req.body.MatKhau}';
+//     `;
+
+// 		const result = await request.query(query);
+
+// 		// Check the user role from the stored procedure result
+// 		const userRole = result.recordset[0].UserRole;
+// 		 // Set the session variable
+// 		 req.session.SDT = req.body.SDT;
+// 		//  console.log(req.session.SDT);
+
+// 		// Respond based on user role
+// 		if (
+// 			userRole === "QTV" ||
+// 			userRole === "NHANVIEN" ||
+// 			userRole === "NHASI" ||
+// 			userRole === "BENHNHAN"
+// 		) {
+// 			res.status(200).json({
+
+// 				success: true,
+
+// 				message: `User ${req.body.SDT} logged in successfully as ${userRole}`,
+// 			});
+// 			return res.json({Login:true,SDT:req.session.SDT});
+// 		} else {
+// 			res.status(401).json({ success: false, error: "Invalid credentials" });
+// 		}
+// 	} catch (err) {
+// 		console.error("Error executing stored procedure:", err);
+// 		res.status(500).json({ success: false, error: "Internal Server Error" });
+// 	}
+// });
 
 app.listen(config.port, () => {
 	console.log(`Server listening on port ${config.port}`);

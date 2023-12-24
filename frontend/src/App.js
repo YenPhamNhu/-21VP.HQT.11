@@ -56,7 +56,7 @@ const USER_TYPES = {
 };
 
 //Chỉnh cái này để chuyển router
-const CURRENT_USER_TYPE = USER_TYPES.DENTIST_USER;
+const CURRENT_USER_TYPE = '';//USER_TYPES.DENTIST_USER
 const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
 const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
 const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
@@ -413,7 +413,7 @@ function App() {
 function PublicElement({ children }) {
 	return (
 		<>
-			<div>You are logged in as: {CURRENT_USER_TYPE}</div>
+			{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
 			{children}
 		</>
 	);
@@ -423,7 +423,7 @@ function AdminElement({ children }) {
 	if (CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER) {
 		return (
 			<>
-				<div>You are logged in as: {CURRENT_USER_TYPE}</div>
+				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
 				{children}
 			</>
 		);
@@ -437,7 +437,7 @@ function PatientElement({ children }) {
 	if (CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER) {
 		return (
 			<>
-				<div>You are logged in as: {CURRENT_USER_TYPE}</div>
+				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
 				{children}
 			</>
 		);
@@ -454,7 +454,7 @@ function EmployeeElement({ children }) {
 	if (CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER) {
 		return (
 			<>
-				<div>You are logged in as: {CURRENT_USER_TYPE}</div>
+				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
 				{children}
 			</>
 		);
@@ -468,7 +468,7 @@ function DentistElement({ children }) {
 	if (CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER) {
 		return (
 			<>
-				<div>You are logged in as: {CURRENT_USER_TYPE}</div>
+				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
 				{children}
 			</>
 		);
