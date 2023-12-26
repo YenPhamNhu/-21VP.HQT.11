@@ -54,6 +54,8 @@ router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
 router.post("/admins/createPatientByAdmin", createPatientByAdmin);
 router.post("/admins/createEmployeeByAdmin", createEmployeeByAdmin);
 router.post("/admins/createDentistByAdmin", createDentistByAdmin);
+
+
 // get service
 const {
 	getAllService,

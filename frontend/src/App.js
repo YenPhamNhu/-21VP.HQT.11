@@ -33,6 +33,7 @@ import SearchEmployee from "./screens/Employee/Search_employee.js";
 import SearchProfileEmployee from "./screens/Employee/SearchProfile_employee.js";
 import SetdateEmployee from "./screens/Employee/Setdate_employee.js";
 import UpdatePatientEmployee from "./screens/Employee/UpdatePatient_employee.js";
+
 import MainAdmin from "./screens/Admin/Main_admin.js";
 import DetailAdmin from "./screens/Admin/Detail_admin.js";
 import AccountManage from "./screens/Admin/AccountManagement.js";
@@ -56,7 +57,7 @@ const USER_TYPES = {
 };
 
 //Chỉnh cái này để chuyển router
-const CURRENT_USER_TYPE = '';//USER_TYPES.DENTIST_USER
+const CURRENT_USER_TYPE = USER_TYPES.ADMIN_USER; //USER_TYPES.DENTIST_USER
 const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
 const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
 const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
@@ -65,348 +66,347 @@ const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
 
 function App() {
 	return (
-		
-			<BrowserRouter>
-				{isPublicElement && <Header />}
-				{isPatientElement && <SidebarPatient />}
-				{isAdminElement && <SidebarAdmin />}
-				{isDentistElement && <SidebarDentist />}
-				{isEmployeeElement && <SidebarEmployee />}
-				<Routes>
-					<Route
-						path='/'
-						element={
-							<PublicElement>
-								{" "}
-								<Main />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/about'
-						element={
-							<PublicElement>
-								{" "}
-								<About />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/service'
-						element={
-							<PublicElement>
-								{" "}
-								<Service />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/login'
-						element={
-							<PublicElement>
-								{" "}
-								<Login />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/signup'
-						element={
-							<PublicElement>
-								{" "}
-								<Signup />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/forgetpass'
-						element={
-							<PublicElement>
-								{" "}
-								<Forgetpass />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/resetpass'
-						element={
-							<PublicElement>
-								{" "}
-								<Resetpass />{" "}
-							</PublicElement>
-						}
-					/>
-					<Route
-						path='/service/:number'
-						element={
-							<PublicElement>
-								{" "}
-								<ServiceDetails />{" "}
-							</PublicElement>
-						}
-					/>
+		<BrowserRouter>
+			{isPublicElement && <Header />}
+			{isPatientElement && <SidebarPatient />}
+			{isAdminElement && <SidebarAdmin />}
+			{isDentistElement && <SidebarDentist />}
+			{isEmployeeElement && <SidebarEmployee />}
+			<Routes>
+				<Route
+					path='/'
+					element={
+						<PublicElement>
+							{" "}
+							<Main />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/about'
+					element={
+						<PublicElement>
+							{" "}
+							<About />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/service'
+					element={
+						<PublicElement>
+							{" "}
+							<Service />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/login'
+					element={
+						<PublicElement>
+							{" "}
+							<Login />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/signup'
+					element={
+						<PublicElement>
+							{" "}
+							<Signup />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/forgetpass'
+					element={
+						<PublicElement>
+							{" "}
+							<Forgetpass />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/resetpass'
+					element={
+						<PublicElement>
+							{" "}
+							<Resetpass />{" "}
+						</PublicElement>
+					}
+				/>
+				<Route
+					path='/service/:number'
+					element={
+						<PublicElement>
+							{" "}
+							<ServiceDetails />{" "}
+						</PublicElement>
+					}
+				/>
 
-					<Route
-						path='/patient'
-						element={
-							<PatientElement>
-								{" "}
-								<MainPatient />{" "}
-							</PatientElement>
-						}
-					/>
-					<Route
-						path='/patient/detail'
-						element={
-							<PatientElement>
-								{" "}
-								<DetailPatient />{" "}
-							</PatientElement>
-						}
-					/>
-					<Route
-						path='/patient/setdate'
-						element={
-							<PatientElement>
-								{" "}
-								<SetdatePatient />{" "}
-							</PatientElement>
-						}
-					/>
-					<Route
-						path='/patient/dentist'
-						element={
-							<PatientElement>
-								{" "}
-								<DentistPatient />{" "}
-							</PatientElement>
-						}
-					/>
-					<Route
-						path='/patient/profile'
-						element={
-							<PatientElement>
-								{" "}
-								<ProfilePatient />{" "}
-							</PatientElement>
-						}
-					/>
-					<Route
-						path='/patient/payment'
-						element={
-							<PatientElement>
-								{" "}
-								<PaymentPatient />{" "}
-							</PatientElement>
-						}
-					/>
+				<Route
+					path='/patient'
+					element={
+						<PatientElement>
+							{" "}
+							<MainPatient />{" "}
+						</PatientElement>
+					}
+				/>
+				<Route
+					path='/patient/detail'
+					element={
+						<PatientElement>
+							{" "}
+							<DetailPatient />{" "}
+						</PatientElement>
+					}
+				/>
+				<Route
+					path='/patient/setdate'
+					element={
+						<PatientElement>
+							{" "}
+							<SetdatePatient />{" "}
+						</PatientElement>
+					}
+				/>
+				<Route
+					path='/patient/dentist'
+					element={
+						<PatientElement>
+							{" "}
+							<DentistPatient />{" "}
+						</PatientElement>
+					}
+				/>
+				<Route
+					path='/patient/profile'
+					element={
+						<PatientElement>
+							{" "}
+							<ProfilePatient />{" "}
+						</PatientElement>
+					}
+				/>
+				<Route
+					path='/patient/payment'
+					element={
+						<PatientElement>
+							{" "}
+							<PaymentPatient />{" "}
+						</PatientElement>
+					}
+				/>
 
-					<Route
-						path='/dentist'
-						element={
-							<DentistElement>
-								{" "}
-								<MainDentist />{" "}
-							</DentistElement>
-						}
-					/>
-					<Route
-						path='/dentist/detail'
-						element={
-							<DentistElement>
-								{" "}
-								<DetailDentist />{" "}
-							</DentistElement>
-						}
-					/>
-					<Route
-						path='/dentist/search'
-						element={
-							<DentistElement>
-								{" "}
-								<SearchDentist />{" "}
-							</DentistElement>
-						}
-					/>
-					<Route
-						path='/dentist/listdate'
-						element={
-							<DentistElement>
-								{" "}
-								<ListDate />{" "}
-							</DentistElement>
-						}
-					/>
-					<Route
-						path='/dentist/listmed'
-						element={
-							<DentistElement>
-								{" "}
-								<ListMed />{" "}
-							</DentistElement>
-						}
-					/>
-					<Route
-						path='/dentist/schedule'
-						element={
-							<DentistElement>
-								{" "}
-								<Schedule />{" "}
-							</DentistElement>
-						}
-					/>
-					<Route
-						path='/dentist/updatepatient'
-						element={
-							<DentistElement>
-								{" "}
-								<UpdatePatient />{" "}
-							</DentistElement>
-						}
-					/>
+				<Route
+					path='/dentist'
+					element={
+						<DentistElement>
+							{" "}
+							<MainDentist />{" "}
+						</DentistElement>
+					}
+				/>
+				<Route
+					path='/dentist/detail'
+					element={
+						<DentistElement>
+							{" "}
+							<DetailDentist />{" "}
+						</DentistElement>
+					}
+				/>
+				<Route
+					path='/dentist/search'
+					element={
+						<DentistElement>
+							{" "}
+							<SearchDentist />{" "}
+						</DentistElement>
+					}
+				/>
+				<Route
+					path='/dentist/listdate'
+					element={
+						<DentistElement>
+							{" "}
+							<ListDate />{" "}
+						</DentistElement>
+					}
+				/>
+				<Route
+					path='/dentist/listmed'
+					element={
+						<DentistElement>
+							{" "}
+							<ListMed />{" "}
+						</DentistElement>
+					}
+				/>
+				<Route
+					path='/dentist/schedule'
+					element={
+						<DentistElement>
+							{" "}
+							<Schedule />{" "}
+						</DentistElement>
+					}
+				/>
+				<Route
+					path='/dentist/updatepatient'
+					element={
+						<DentistElement>
+							{" "}
+							<UpdatePatient />{" "}
+						</DentistElement>
+					}
+				/>
 
-					<Route
-						path='/employee'
-						element={
-							<EmployeeElement>
-								{" "}
-								<MainEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/create'
-						element={
-							<EmployeeElement>
-								{" "}
-								<CreateProfile />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/detail'
-						element={
-							<EmployeeElement>
-								{" "}
-								<DetailEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/listmed'
-						element={
-							<EmployeeElement>
-								{" "}
-								<ListMedEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/payment'
-						element={
-							<EmployeeElement>
-								{" "}
-								<PaymentEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/search'
-						element={
-							<EmployeeElement>
-								{" "}
-								<SearchEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/searchprofile'
-						element={
-							<EmployeeElement>
-								{" "}
-								<SearchProfileEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/setdate'
-						element={
-							<EmployeeElement>
-								{" "}
-								<SetdateEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
-					<Route
-						path='/employee/updatepatient'
-						element={
-							<EmployeeElement>
-								{" "}
-								<UpdatePatientEmployee />{" "}
-							</EmployeeElement>
-						}
-					/>
+				<Route
+					path='/employee'
+					element={
+						<EmployeeElement>
+							{" "}
+							<MainEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/create'
+					element={
+						<EmployeeElement>
+							{" "}
+							<CreateProfile />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/detail'
+					element={
+						<EmployeeElement>
+							{" "}
+							<DetailEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/listmed'
+					element={
+						<EmployeeElement>
+							{" "}
+							<ListMedEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/payment'
+					element={
+						<EmployeeElement>
+							{" "}
+							<PaymentEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/search'
+					element={
+						<EmployeeElement>
+							{" "}
+							<SearchEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/searchprofile'
+					element={
+						<EmployeeElement>
+							{" "}
+							<SearchProfileEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/setdate'
+					element={
+						<EmployeeElement>
+							{" "}
+							<SetdateEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
+				<Route
+					path='/employee/updatepatient'
+					element={
+						<EmployeeElement>
+							{" "}
+							<UpdatePatientEmployee />{" "}
+						</EmployeeElement>
+					}
+				/>
 
-					<Route
-						path='/admin'
-						element={
-							<AdminElement>
-								{" "}
-								<MainAdmin />{" "}
-							</AdminElement>
-						}
-					/>
-					<Route
-						path='/admin/detail'
-						element={
-							<AdminElement>
-								{" "}
-								<DetailAdmin />{" "}
-							</AdminElement>
-						}
-					/>
-					<Route
-						path='/admin/account'
-						element={
-							<AdminElement>
-								{" "}
-								<AccountManage />{" "}
-							</AdminElement>
-						}
-					/>
-					<Route
-						path='/admin/dashboard'
-						element={
-							<AdminElement>
-								{" "}
-								<Dashboard />{" "}
-							</AdminElement>
-						}
-					/>
-					<Route
-						path='/admin/infoappo'
-						element={
-							<AdminElement>
-								{" "}
-								<InfoAppo />{" "}
-							</AdminElement>
-						}
-					/>
-					<Route
-						path='/admin/storemed'
-						element={
-							<AdminElement>
-								{" "}
-								<StoreMed />{" "}
-							</AdminElement>
-						}
-					/>
+				<Route
+					path='/admin'
+					element={
+						<AdminElement>
+							{" "}
+							<MainAdmin />{" "}
+						</AdminElement>
+					}
+				/>
+				<Route
+					path='/admin/detail'
+					element={
+						<AdminElement>
+							{" "}
+							<DetailAdmin />{" "}
+						</AdminElement>
+					}
+				/>
+				<Route
+					path='/admin/account'
+					element={
+						<AdminElement>
+							{" "}
+							<AccountManage />{" "}
+						</AdminElement>
+					}
+				/>
+				<Route
+					path='/admin/dashboard'
+					element={
+						<AdminElement>
+							{" "}
+							<Dashboard />{" "}
+						</AdminElement>
+					}
+				/>
+				<Route
+					path='/admin/infoappo'
+					element={
+						<AdminElement>
+							{" "}
+							<InfoAppo />{" "}
+						</AdminElement>
+					}
+				/>
+				<Route
+					path='/admin/storemed'
+					element={
+						<AdminElement>
+							{" "}
+							<StoreMed />{" "}
+						</AdminElement>
+					}
+				/>
 
-					<Route path='*' element={<div>Page Not Found!</div>}></Route>
-				</Routes>
-				<hr id='hrduoi'></hr>
-				<Footer />
-			</BrowserRouter>
+				<Route path='*' element={<div>Page Not Found!</div>}></Route>
+			</Routes>
+			<hr id='hrduoi'></hr>
+			<Footer />
+		</BrowserRouter>
 	);
 }
 

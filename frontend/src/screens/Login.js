@@ -39,13 +39,36 @@ function Login() {
 					// Alert Log-in thanh cong
 					// alert(res.data.message);
 					// Navigate to Home page
+					// Assign value to a key
+					sessionStorage.setItem("item_key", res.data.role);
+					console.log(sessionStorage.getItem("item_key"));
 					navigate("/");
+					const userRole = sessionStorage.getItem("item_key");
+					switch (userRole) {
+						case "QTV":
+							navigate("/admin/dashboard");
+							// alert("You're in Admin Page");
+							break;
+						case "NHANVIEN":
+							navigate("/employee/detail");
+							// alert("You're in Admin Page");
+							break;
+						case "NHASI":
+							navigate("/dentist/detail");
+							break;
+						case "BENHNHAN":
+							navigate("/patient/detail");
+							break;
+						default:
+							navigate("/");
+					}
 				})
 				.catch((err) => {
 					// Display error message
 					alert(err.response.data.error);
 				});
 		}
+
 		// if (Object.keys(validationErrors).length === 0) {
 		// 	axios
 		// 		.post("http://localhost:5000/login", values)

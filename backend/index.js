@@ -8,11 +8,13 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const app = express();
 
-app.use(cors({
-	origin: ["http://localhost:3000"],
-	methods:["POST","GET"],
-	credentials:true
-}));
+app.use(
+	cors({
+		origin: ["http://localhost:3000"],
+		methods: ["POST", "GET"],
+		credentials: true,
+	})
+);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,6 +30,7 @@ app.use(
 			secure: false,
 			maxAge: 1000 * 60 * 60 * 24,
 		}, //set cookie property
+		test: "test",
 	})
 );
 
@@ -150,6 +153,7 @@ app.post("/login", async (req, res) => {
 				message: `User ${req.body.SDT} logged in successfully as ${userRole}`,
 				Login: true,
 				SDT: req.session.SDT,
+				role: userRole,
 			});
 		} else {
 			res.status(401).json({ success: false, error: "Invalid credentials" });
