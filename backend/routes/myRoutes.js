@@ -14,24 +14,21 @@ const medHistoryController = require("../controllers/medHistoryController");
 const router = express.Router();
 
 // get user // nha si
-const { getAllUser, getUserBySDT, createUser, deleteUser, updateUser } =
-	userControll;
+const { getAllUser, getUserBySDT, createUser, updateUser } = userControll;
 
 //http://localhost:5000/api/users/getAllUser
 router.get("/users/getAllUser", getAllUser); //DONE
 router.get("/users/getUserBySDT/:SDT", getUserBySDT);
-router.delete("/users/deleteUser/:SDT", deleteUser);
 router.post("/users/createUser", createUser);
 
 // NHAN VIEN
-const { getAllEmployee, getEmployeeBySDT, deleteEmployee } = employeeController;
+const { getAllEmployee, getEmployeeBySDT } = employeeController;
 // http://localhost:5000/api/employees/getAllEmployee
 router.get("/employees/getAllEmployee", getAllEmployee);
 router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
-router.delete("/employees/deleteEmployee/:SDT", deleteEmployee);
 
 // BENH NHAN
-const { getAllPatient, getPatientBySDT, deletePatient } = patientController;
+const { getAllPatient, getPatientBySDT } = patientController;
 
 // http://localhost:5000/api/patients/getAllPatient
 router.get("/patients/getAllPatient", getAllPatient); //DONE
@@ -39,32 +36,35 @@ router.get("/patients/getAllPatient", getAllPatient); //DONE
 router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
 // http://localhost:5000/api/patients/deletePatient/0123456780
 //"message": "Error deleting patient"
-router.delete("/patients/deletePatient/:SDT", deletePatient);
 
 // qtv
 const {
-	getAllAdmin,
-	getAdminBySDT,
-	createPatientByAdmin,
-	createEmployeeByAdmin,
-	createDentistByAdmin,
+  getAllAdmin,
+  getAdminBySDT,
+  createPatientByAdmin,
+  createEmployeeByAdmin,
+  createDentistByAdmin,
+  deletePatientByAdmin,
+  deleteEmployeeByAdmin,
+  deleteDentistByAdmin,
 } = adminController;
 router.get("/admins/getAllAdmin", getAllAdmin);
 router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
 router.post("/admins/createPatientByAdmin", createPatientByAdmin);
 router.post("/admins/createEmployeeByAdmin", createEmployeeByAdmin);
 router.post("/admins/createDentistByAdmin", createDentistByAdmin);
-
-
+router.delete("/admins/deletePatient/:SDT", deletePatientByAdmin);
+router.delete("/admins/deleteEmployee/:SDT", deleteEmployeeByAdmin);
+router.delete("/admins/deleteDentist/:SDT", deleteDentistByAdmin);
 // get service
 const {
-	getAllService,
-	getServiceById,
-	createService,
-	deleteService,
-	updateService,
+  getAllService,
+  getServiceById,
+  createService,
+  deleteService,
+  updateService,
 
-	getAllServiceUsage,
+  getAllServiceUsage,
 } = serviceControll;
 
 router.get("/services/getAllService", getAllService); //DONE
@@ -87,8 +87,8 @@ router.get("/receipts/getAllReceipt", getAllReceipt);
 // lich hen appointmentSchedule
 const { getAllAppointmentSchedule } = appointmentScheduleController;
 router.get(
-	"/appointmentSchedule/getAllAppointmentSchedule",
-	getAllAppointmentSchedule
+  "/appointmentSchedule/getAllAppointmentSchedule",
+  getAllAppointmentSchedule
 );
 
 //lich su kham benh
@@ -97,5 +97,5 @@ router.get("/medHistory/getAllMedHistory", getAllMedHistory);
 router.get("/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
 
 module.exports = {
-	routes: router,
+  routes: router,
 };

@@ -33,23 +33,7 @@ const getEmployeeBySDT = async (req, res, next) => {
   }
 };
 
-const deleteEmployee = async (req, res, next) => {
-  try {
-    // console.log("deleteEmployee API is called");
-    const employeeSDT = req.params.SDT; // Assuming employeeSDT is part of the URL parameters
-    // Perform validation or additional checks if needed
-    // console.log("Deleting employee with ID:", employeeSDT);
-    const deletedEm = await employeeData.deleteEmployeeBySDT(employeeSDT);
-    console.log(deletedEm);
-
-    res.send({ message: "Employee deleted successfully", deletedEm });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
-
 module.exports = {
   getAllEmployee,
   getEmployeeBySDT,
-  deleteEmployee,
 };

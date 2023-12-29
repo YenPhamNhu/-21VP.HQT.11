@@ -33,23 +33,7 @@ const getPatientBySDT = async (req, res, next) => {
   }
 };
 
-const deletePatient = async (req, res, next) => {
-  try {
-    // console.log("deletePatient API is called");
-    const patientSDT = req.params.SDT; // Assuming patientSDT is part of the URL parameters
-    // Perform validation or additional checks if needed
-    // console.log("Deleting patient with ID:", patientSDT);
-    const deletedP = await patientData.deletePatientBySDT(patientSDT);
-    console.log(deletedP);
-
-    res.send({ message: "Patient deleted successfully", deletedP });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
-
 module.exports = {
   getAllPatient,
   getPatientBySDT,
-  deletePatient,
 };

@@ -4,14 +4,14 @@ const config = require("../../config");
 const sql = require("mssql");
 
 const getAdmin = async () => {
-	try {
-		let pool = await sql.connect(config.sql);
-		const sqlQueries = await utils.loadSqlQueries("Admins");
-		const adminList = await pool.request().query(sqlQueries.GetAllAdmin);
-		return adminList.recordset;
-	} catch (error) {
-		console.log(error.message);
-	}
+  try {
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Admins");
+    const adminList = await pool.request().query(sqlQueries.GetAllAdmin);
+    return adminList.recordset;
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 // const createPatient = async (
@@ -47,8 +47,62 @@ const getAdmin = async () => {
 // 	}
 // };
 
-module.exports = {
-	getAdmin,
-	// createPatient,
+const deletePatientBySDT = async (patientSDT) => {
+  try {
+    // console.log("deletePatient API is called");
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Patients");
+    // Modify the SQL query according to your database schema
+    const result = await pool
+      .request()
+      .input("patientSDT", sql.VarChar, patientSDT)
+      .query`EXEC XoaTaiKhoan @SDT = ${patientSDT};`;
+    console.log("SQL Query Result:", result);
+    return result.rowsAffected > 0; // Check if any rows were affected
+  } catch (error) {
+    console.log(error.message);
+    throw new Error("Error deleting patient");
+  }
 };
 
+const deleteEmployeeBySDT = async (employeeSDT) => {
+  try {
+    // console.log("deletePatient API is called");
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Employees");
+    // Modify the SQL query according to your database schema
+    const result = await pool
+      .request()
+      .input("employeeSDT", sql.VarChar, employeeSDT)
+      .query`EXEC XoaTaiKhoan @SDT = ${employeeSDT};`;
+    console.log("SQL Query Result:", result);
+    return result.rowsAffected > 0; // Check if any rows were affected
+  } catch (error) {
+    console.log(error.message);
+    throw new Error("Error deleting employee");
+  }
+};
+
+const deleteDentistBySDT = async (userSDT) => {
+  try {
+    // console.log("deletePatient API is called");
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Users");
+    // Modify the SQL query according to your database schema
+    const result = await pool.request().input("userSDT", sql.VarChar, userSDT)
+      .query`EXEC XoaTaiKhoan @SDT = ${userSDT};`;
+    console.log("SQL Query Result:", result);
+    return result.rowsAffected > 0; // Check if any rows were affected
+  } catch (error) {
+    console.log(error.message);
+    throw new Error("Error deleting user");
+  }
+};
+
+module.exports = {
+  getAdmin,
+  deletePatientBySDT,
+  deleteEmployeeBySDT,
+  deleteDentistBySDT,
+  // createPatient,
+};
