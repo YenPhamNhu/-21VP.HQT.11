@@ -5,6 +5,7 @@ const userControll = require("../controllers/userController");
 const serviceControll = require("../controllers/serviceController");
 const employeeController = require("../controllers/employeeController");
 const patientController = require("../controllers/patientController");
+const dentistController = require("../controllers/dentistController");
 const drugController = require("../controllers/drugController");
 const adminController = require("../controllers/adminController");
 const receiptController = require("../controllers/receiptController");
@@ -13,7 +14,7 @@ const medHistoryController = require("../controllers/medHistoryController");
 
 const router = express.Router();
 
-// get user // nha si
+// get user
 const { getAllUser, getUserBySDT, createUser, updateUser } = userControll;
 
 //http://localhost:5000/api/users/getAllUser
@@ -27,9 +28,13 @@ const { getAllEmployee, getEmployeeBySDT } = employeeController;
 router.get("/employees/getAllEmployee", getAllEmployee);
 router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
 
+// NHA SI
+const { getAllDentist, getDentistBySDT } = dentistController;
+router.get("/dentists/getAllDentist", getAllDentist);
+router.get("/dentists/getDentistBySDT/:SDT", getDentistBySDT);
+
 // BENH NHAN
 const { getAllPatient, getPatientBySDT } = patientController;
-
 // http://localhost:5000/api/patients/getAllPatient
 router.get("/patients/getAllPatient", getAllPatient); //DONE
 //http://localhost:5000/api/patients/getPatientBySDT/0123456780
@@ -53,6 +58,7 @@ router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
 router.post("/admins/createPatientByAdmin", createPatientByAdmin);
 router.post("/admins/createEmployeeByAdmin", createEmployeeByAdmin);
 router.post("/admins/createDentistByAdmin", createDentistByAdmin);
+
 router.delete("/admins/deletePatient/:SDT", deletePatientByAdmin);
 router.delete("/admins/deleteEmployee/:SDT", deleteEmployeeByAdmin);
 router.delete("/admins/deleteDentist/:SDT", deleteDentistByAdmin);
@@ -77,7 +83,7 @@ router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
 // drug
 const { getAllDrug, getDrugById, updateDrug, createDrug } = drugController;
 router.get("/drugs/getAllDrug", getAllDrug);
-router.get("/drugs/getAllDrugByID/:MaThuoc", getDrugById);
+router.get("/drugs/getDrugByID/:MaThuoc", getDrugById);
 router.post("/drugs/createDrug", createDrug);
 
 // receipt
