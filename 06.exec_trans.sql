@@ -23,10 +23,11 @@ EXEC TaoTaiKhoanNhanVien
     @ViTri = N'Thu Ngân',
     @MatKhau = '12345678';
 GO
-
+EXEC CapNhatTinhTrangHoatDongNhanVien @MaNhanVien = 12, @TinhTrangHoatDong ='Nghỉ Làm';
 SELECT *
 FROM NHANVIEN
-
+SELECT * 
+From QTV
 SELECT *
 FROM NHASI
 EXEC TaoTaiKhoanNhaSi
@@ -39,6 +40,8 @@ EXEC TaoTaiKhoanNhaSi
     @BangCap = N'Tiến Sĩ',
     @MatKhau = '12345678';
 GO
+
+EXEC QuenMatKhau @SDT = "0123456778", @NewPassword = "11223344";
 
 SELECT *
 FROM BENHNHAN
@@ -139,8 +142,11 @@ EXEC ThayDoiTrangThaiThanhToan
     @STTLichSuKB = 1
 SELECT *
 FROM HOADON
+SELECT *
+FROM BENHNHAN
 GO
-
+SELECT *
+FROM LICHSUKHAMBENH
 EXEC QuanLyTaiKhoan
 @HoTen = N'Benh nhan 3', 
 @SDT  = '0123455775', 

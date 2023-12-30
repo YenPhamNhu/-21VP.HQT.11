@@ -1,6 +1,7 @@
 // https://www.youtube.com/watch?v=ErK3Qt52a1M&ab_channel=EducationwithAnkur
 "use strict";
 const userData = require("../data/users");
+
 const config = require("../config");
 const sql = require("mssql");
 
@@ -84,10 +85,91 @@ const createUser = async (req, res, next) => {
   }
 };
 
+const changPWByAllUser = async (req, res, next) => {
+  try {
+    const { SDT, OldPassword, NewPassword } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to change the patient's password
+    const query = `
+          EXEC DoiMatKhau
+              @SDT = '${SDT}',
+              @OldPassword = '${OldPassword}',
+              @NewPassword = '${NewPassword}';
+      `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Password changed successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "User not found or password could not be changed",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { SDT, NewPassword } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to reset the password
+    const query = `
+          EXEC QuenMatKhau
+              @SDT = '${SDT}',
+              @NewPassword = '${NewPassword}';
+      `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (
+      result.rowsAffected[0] > 0 ||
+      result.rowsAffected[1] > 0 ||
+      result.rowsAffected[2] > 0
+    ) {
+      console.log("Password reset successfully");
+      res.status(200).json({
+        success: true,
+        message: "Password reset successfully",
+      });
+    } else {
+      console.error("User not found or password could not be reset");
+      console.error("Stored Procedure Result:", result);
+
+      res.status(404).json({
+        success: false,
+        error: "User not found or password could not be reset",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 // const deleteAllUser = async (req, res, next) => {};
 module.exports = {
   getAllUser,
   getUserBySDT,
   createUser,
+  changPWByAllUser,
+  forgotPassword,
   // deleteAllUser,
 };

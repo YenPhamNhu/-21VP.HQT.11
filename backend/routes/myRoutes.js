@@ -15,12 +15,27 @@ const medHistoryController = require("../controllers/medHistoryController");
 const router = express.Router();
 
 // get user
-const { getAllUser, getUserBySDT, createUser, updateUser } = userControll;
+const {
+  getAllUser,
+  getUserBySDT,
+  createUser,
+  updateUser,
+  changPWByAllUser,
+  forgotPassword,
+} = userControll;
 
 //http://localhost:5000/api/users/getAllUser
 router.get("/users/getAllUser", getAllUser); //DONE
 router.get("/users/getUserBySDT/:SDT", getUserBySDT);
 router.post("/users/createUser", createUser);
+
+router.put("/employees/changePassword", changPWByAllUser);
+router.put("/dentists/changePassword", changPWByAllUser);
+router.put("/patients/changePassword", changPWByAllUser);
+
+router.put("/employees/forgotPassword", forgotPassword);
+router.put("/dentists/forgotPassword", forgotPassword);
+router.put("/patients/forgotPassword", forgotPassword);
 
 // NHAN VIEN
 const {
@@ -29,6 +44,7 @@ const {
   updateInfPatientByEmployee,
   updateInfEmployee,
   updateInfDentistByEmployee,
+  changePaymentStatus,
 } = employeeController;
 // http://localhost:5000/api/employees/getAllEmployee
 router.get("/employees/getAllEmployee", getAllEmployee);
@@ -42,7 +58,7 @@ router.put(
   "/employees/updateInfDentistByEmployee/:SDT",
   updateInfDentistByEmployee
 );
-
+router.put("/employees/changePaymentStatus", changePaymentStatus);
 // NHA SI
 const { getAllDentist, getDentistBySDT, updateInfDentist } = dentistController;
 router.get("/dentists/getAllDentist", getAllDentist);
@@ -79,6 +95,7 @@ const {
   updateInfEmployeeByAdmin,
   updateInfDentistByAdmin,
   updateInfAdmin,
+  updateEmployeeStatusByAdmin,
 } = adminController;
 
 router.get("/admins/getAllAdmin", getAllAdmin);
@@ -104,6 +121,7 @@ router.put("/admins/updateInfEmployee/:SDT", updateInfEmployeeByAdmin);
 router.put("/admins/updateInfDentist/:SDT", updateInfDentistByAdmin);
 router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
 
+router.put("/admins/updatEmployeeStatus", updateEmployeeStatusByAdmin);
 // get service
 const {
   getAllService,
@@ -150,10 +168,10 @@ router.get(
   getAllAppointmentSchedule
 );
 
-//lich su kham benh
+//lich su kham benh - ho so benh an
 const { getAllMedHistory, getMedHistoryByID } = medHistoryController;
-router.get("/medHistory/getAllMedHistory", getAllMedHistory);
-router.get("/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
+router.get("/employees/medHistory/getAllMedHistory", getAllMedHistory);
+router.get("/employees/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
 
 module.exports = {
   routes: router,
