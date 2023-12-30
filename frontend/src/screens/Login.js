@@ -41,7 +41,7 @@ function Login() {
 		}
 	};
 	const dispatch = useDispatch();
-	const currentUser = useSelector((state) => state.user);
+	// const currentUser = useSelector((state) => state.user);
 
 	axios.defaults.withCredentials = true;
 
@@ -66,19 +66,16 @@ function Login() {
 					dispatch(login(user));
 					switch (userRole) {
 						case "QTV":
-							navigate("/admin/dashboard");
-							// CURRENT_USER_TYPE.current = "ADMIN";
-							// alert("You're in Admin Page");
+							navigate("/admin");
 							break;
 						case "NHANVIEN":
 							navigate("/employee/detail");
-							// alert("You're in Admin Page");
 							break;
 						case "NHASI":
 							navigate("/dentist/detail");
 							break;
 						case "BENHNHAN":
-							navigate("/patient/detail");
+							navigate("/patient/payment");
 							break;
 						default:
 							navigate("/");
@@ -89,42 +86,6 @@ function Login() {
 					alert(err.response.data.error);
 				});
 		}
-
-		// if (Object.keys(validationErrors).length === 0) {
-		// 	axios
-		// 		.post("http://localhost:5000/login", values)
-		// 		.then((res) => {
-		// 			const { userRole } = res.data;
-
-		// 			// Assign userRole to USER_TYPE
-		// 		switch (userRole) {
-		//     case "QTV":
-		//       CURRENT_USER_TYPE.current = "ADMIN";
-		//       break;
-		//     case "NHANVIEN":
-		//       CURRENT_USER_TYPE.current = "EMPLOYEE";
-		//       break;
-		//     case "NHASI":
-		//       CURRENT_USER_TYPE.current = "DENTIST";
-		//       break;
-		//     case "BENHNHAN":
-		//       CURRENT_USER_TYPE.current = "PATIENT";
-		//       break;
-		//     default:
-		//       CURRENT_USER_TYPE.current = "PUBLIC";
-		//   }
-
-		// 			// Display success message on the screen
-		// 			alert(res.data.message);
-
-		// 			// Navigate to the desired page
-		// 			navigate("/");
-		// 		})
-		// 		.catch((err) => {
-		// 			// Display error message on the screen
-		// 			alert(err.response.data.error);
-		// 		});
-		// }
 	};
 
 	const Validation = (values) => {
@@ -141,51 +102,6 @@ function Login() {
 		return errors;
 	};
 
-	//   return (
-	//     <MDBContainer fluid style={{ margin: "40px 10px", padding: "5px 50px" }}>
-	//       <MDBRow className='d-flex justify-content-center align-items-center h-100'>
-	//         <MDBCol>
-	//           <MDBCard className='my-4'>
-	//             <MDBRow className='g-0'>
-	//               <MDBCol md='6' className='d-none d-md-block' marginTop='5%'>
-	//                 <MDBCardImage
-	//                   width='50%'
-	//                   height='50%'
-	//                   src='/signup.png'
-	//                   alt='Welcome to Chigsa Clinic'
-	//                   className='d-flex align-items-center mx-auto'
-	//                   fluid
-	//                 />
-	//               </MDBCol>
-	//               <MDBCol md='6'>
-	//                 <div className="bg-white p-3 rounded">
-	//                   <form onSubmit={handleSubmit}>
-	//                     <div className="mb-3">
-	//                       <label htmlFor="SDT"><strong>Số điện thoại</strong></label>
-	//                       <input type="text" placeholder="Số điện thoại" name='SDT'
-	//                         onChange={handleInput}
-	//                         className="form-control rounded-0" />
-	//                       {errors.SDT && <span className="text-danger">{errors.SDT}</span>}
-	//                     </div>
-	//                     <div className="mb-3">
-	//                       <label htmlFor="MatKhau"><strong>Mật khẩu</strong></label>
-	//                       <input type="password" placeholder="Mật khẩu" name='MatKhau'
-	//                         onChange={handleInput}
-	//                         className="form-control rounded-0" />
-	//                       {errors.MatKhau && <span className="text-danger">{errors.MatKhau}</span>}
-	//                     </div>
-	//                     <button type="submit" className="btn btn-success w-100 rounded-0">Đăng nhập</button>
-	//                     <Link to='/signup' className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Chưa có tài khoản? Đăng ký</Link>
-	//                   </form>
-	//                 </div>
-	//               </MDBCol>
-	//             </MDBRow>
-	//           </MDBCard>
-	//         </MDBCol>
-	//       </MDBRow>
-	//     </MDBContainer>
-	//   );
-	// }
 	return (
 		<MDBContainer fluid style={{ margin: "40px 10px" }}>
 			<MDBRow
@@ -277,3 +193,49 @@ function Login() {
 }
 
 export default Login;
+
+//   return (
+//     <MDBContainer fluid style={{ margin: "40px 10px", padding: "5px 50px" }}>
+//       <MDBRow className='d-flex justify-content-center align-items-center h-100'>
+//         <MDBCol>
+//           <MDBCard className='my-4'>
+//             <MDBRow className='g-0'>
+//               <MDBCol md='6' className='d-none d-md-block' marginTop='5%'>
+//                 <MDBCardImage
+//                   width='50%'
+//                   height='50%'
+//                   src='/signup.png'
+//                   alt='Welcome to Chigsa Clinic'
+//                   className='d-flex align-items-center mx-auto'
+//                   fluid
+//                 />
+//               </MDBCol>
+//               <MDBCol md='6'>
+//                 <div className="bg-white p-3 rounded">
+//                   <form onSubmit={handleSubmit}>
+//                     <div className="mb-3">
+//                       <label htmlFor="SDT"><strong>Số điện thoại</strong></label>
+//                       <input type="text" placeholder="Số điện thoại" name='SDT'
+//                         onChange={handleInput}
+//                         className="form-control rounded-0" />
+//                       {errors.SDT && <span className="text-danger">{errors.SDT}</span>}
+//                     </div>
+//                     <div className="mb-3">
+//                       <label htmlFor="MatKhau"><strong>Mật khẩu</strong></label>
+//                       <input type="password" placeholder="Mật khẩu" name='MatKhau'
+//                         onChange={handleInput}
+//                         className="form-control rounded-0" />
+//                       {errors.MatKhau && <span className="text-danger">{errors.MatKhau}</span>}
+//                     </div>
+//                     <button type="submit" className="btn btn-success w-100 rounded-0">Đăng nhập</button>
+//                     <Link to='/signup' className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Chưa có tài khoản? Đăng ký</Link>
+//                   </form>
+//                 </div>
+//               </MDBCol>
+//             </MDBRow>
+//           </MDBCard>
+//         </MDBCol>
+//       </MDBRow>
+//     </MDBContainer>
+//   );
+// }

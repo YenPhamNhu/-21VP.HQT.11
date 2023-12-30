@@ -164,55 +164,26 @@ app.post("/login", async (req, res) => {
 	}
 });
 
-// app.post("/login", async (req, res) => {
-// 	try {
-// 		const requiredFields = ["SDT", "MatKhau"];
-// 		for (const field of requiredFields) {
-// 			if (!req.body[field]) {
-// 				return res.status(400).json({ error: `${field} is required` });
-// 			}
-// 		}
-
-// 		const pool = await sql.connect(config.sql);
-// 		const request = new sql.Request();
-
-// 		// Execute stored procedure
-// 		const query = `
-//       EXEC DangNhap
-//         @UserName = '${req.body.SDT}',
-//         @Password = N'${req.body.MatKhau}';
-//     `;
-
-// 		const result = await request.query(query);
-
-// 		// Check the user role from the stored procedure result
-// 		const userRole = result.recordset[0].UserRole;
-// 		 // Set the session variable
-// 		 req.session.SDT = req.body.SDT;
-// 		//  console.log(req.session.SDT);
-
-// 		// Respond based on user role
-// 		if (
-// 			userRole === "QTV" ||
-// 			userRole === "NHANVIEN" ||
-// 			userRole === "NHASI" ||
-// 			userRole === "BENHNHAN"
-// 		) {
-// 			res.status(200).json({
-
-// 				success: true,
-
-// 				message: `User ${req.body.SDT} logged in successfully as ${userRole}`,
-// 			});
-// 			return res.json({Login:true,SDT:req.session.SDT});
-// 		} else {
-// 			res.status(401).json({ success: false, error: "Invalid credentials" });
-// 		}
-// 	} catch (err) {
-// 		console.error("Error executing stored procedure:", err);
-// 		res.status(500).json({ success: false, error: "Internal Server Error" });
-// 	}
-// });
+app.post("/logout", (req, res) => {
+	try {
+		// Destroy the session
+		req.session.destroy((err) => {
+			if (err) {
+				console.error("Error destroying session:", err);
+				res
+					.status(500)
+					.json({ success: false, error: "Internal Server Error" });
+			} else {
+				res
+					.status(200)
+					.json({ success: true, message: "User logged out successfully" });
+			}
+		});
+	} catch (err) {
+		console.error("Error during logout:", err);
+		res.status(500).json({ success: false, error: "Internal Server Error" });
+	}
+});
 
 app.listen(config.port, () => {
 	console.log(`Server listening on port ${config.port}`);

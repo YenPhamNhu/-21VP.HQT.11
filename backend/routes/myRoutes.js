@@ -16,12 +16,12 @@ const router = express.Router();
 
 // get user
 const {
-  getAllUser,
-  getUserBySDT,
-  createUser,
-  updateUser,
-  changPWByAllUser,
-  forgotPassword,
+	getAllUser,
+	getUserBySDT,
+	createUser,
+	updateUser,
+	changPWByAllUser,
+	forgotPassword,
 } = userControll;
 
 //http://localhost:5000/api/users/getAllUser
@@ -39,24 +39,24 @@ router.put("/patients/forgotPassword", forgotPassword);
 
 // NHAN VIEN
 const {
-  getAllEmployee,
-  getEmployeeBySDT,
-  updateInfPatientByEmployee,
-  updateInfEmployee,
-  updateInfDentistByEmployee,
-  changePaymentStatus,
+	getAllEmployee,
+	getEmployeeBySDT,
+	updateInfPatientByEmployee,
+	updateInfEmployee,
+	updateInfDentistByEmployee,
+	changePaymentStatus,
 } = employeeController;
 // http://localhost:5000/api/employees/getAllEmployee
 router.get("/employees/getAllEmployee", getAllEmployee);
 router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
 router.put("/employees/updateInf/:SDT", updateInfEmployee);
 router.put(
-  "/employees/updateInfPatientByEmployee/:SDT",
-  updateInfPatientByEmployee
+	"/employees/updateInfPatientByEmployee/:SDT",
+	updateInfPatientByEmployee
 );
 router.put(
-  "/employees/updateInfDentistByEmployee/:SDT",
-  updateInfDentistByEmployee
+	"/employees/updateInfDentistByEmployee/:SDT",
+	updateInfDentistByEmployee
 );
 router.put("/employees/changePaymentStatus", changePaymentStatus);
 // NHA SI
@@ -77,25 +77,25 @@ router.put("/patients/updateInf/:SDT", updateInfPatient);
 
 // qtv
 const {
-  getAdminBySDT,
-  getDentistBySDTByAdmin,
-  getEmployeeBySDTByAdmin,
-  getPatientBySDTByAdmin,
-  createPatientByAdmin,
-  createEmployeeByAdmin,
-  createDentistByAdmin,
-  deletePatientByAdmin,
-  deleteEmployeeByAdmin,
-  deleteDentistByAdmin,
-  getAllAdmin,
-  getAllDentistByAdmin,
-  getAllEmployeeByAdmin,
-  getAllPatientByAdmin,
-  updateInfPatientByAdmin,
-  updateInfEmployeeByAdmin,
-  updateInfDentistByAdmin,
-  updateInfAdmin,
-  updateEmployeeStatusByAdmin,
+	getAdminBySDT,
+	getDentistBySDTByAdmin,
+	getEmployeeBySDTByAdmin,
+	getPatientBySDTByAdmin,
+	createPatientByAdmin,
+	createEmployeeByAdmin,
+	createDentistByAdmin,
+	deletePatientByAdmin,
+	deleteEmployeeByAdmin,
+	deleteDentistByAdmin,
+	getAllAdmin,
+	getAllDentistByAdmin,
+	getAllEmployeeByAdmin,
+	getAllPatientByAdmin,
+	updateInfPatientByAdmin,
+	updateInfEmployeeByAdmin,
+	updateInfDentistByAdmin,
+	updateInfAdmin,
+	updateEmployeeStatusByAdmin,
 } = adminController;
 
 router.get("/admins/getAllAdmin", getAllAdmin);
@@ -124,13 +124,13 @@ router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
 router.put("/admins/updatEmployeeStatus", updateEmployeeStatusByAdmin);
 // get service
 const {
-  getAllService,
-  getServiceById,
-  createService,
-  deleteService,
-  updateService,
+	getAllService,
+	getServiceById,
+	createService,
+	deleteService,
+	updateService,
 
-  getAllServiceUsage,
+	getAllServiceUsage,
 } = serviceControll;
 
 router.get("/services/getAllService", getAllService); //DONE
@@ -142,7 +142,7 @@ router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
 
 // drug
 const { getAllDrug, getDrugById, updateDrug, createDrug, deleteDrug } =
-  drugController;
+	drugController;
 router.get("/admins/drugs/getAllDrug", getAllDrug);
 router.get("/employees/drugs/getAllDrug", getAllDrug);
 router.get("/dentists/drugs/getAllDrug", getAllDrug);
@@ -154,18 +154,18 @@ router.get("/dentists/drugs/getDrugByID/:MaThuoc", getDrugById);
 router.post("/admins/drugs/createDrug", createDrug);
 
 router.put("/admins/drugs/updateDrug/:MaThuoc", updateDrug);
-
+// Define a route for deleting a drug
 router.delete("/admins/drugs/deleteDrug/:MaThuoc/:NgayHetHan", deleteDrug);
 
 // receipt
-const { getAllReceipt } = receiptController;
-router.get("/employees/receipts/getAllReceipt", getAllReceipt);
+const { getReceipt } = receiptController;
+router.get("/receipts/getReceipt", getReceipt);
 
 // lich hen appointmentSchedule
 const { getAllAppointmentSchedule } = appointmentScheduleController;
 router.get(
-  "/appointmentSchedule/getAllAppointmentSchedule",
-  getAllAppointmentSchedule
+	"/appointmentSchedule/getAllAppointmentSchedule",
+	getAllAppointmentSchedule
 );
 
 //lich su kham benh - ho so benh an
@@ -174,5 +174,5 @@ router.get("/employees/medHistory/getAllMedHistory", getAllMedHistory);
 router.get("/employees/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
 
 module.exports = {
-  routes: router,
+	routes: router,
 };

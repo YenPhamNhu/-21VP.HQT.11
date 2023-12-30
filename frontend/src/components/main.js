@@ -5,7 +5,7 @@ import "../screen.css/Main.css";
 import axios from "axios";
 
 const Main = () => {
-	const [name, setName] = useState('');
+	const [name, setName] = useState("");
 	// const navigate = userNavigate();
 	useEffect(() => {
 		axios
@@ -21,9 +21,6 @@ const Main = () => {
 	return (
 		<main className='container-img' id='main'>
 			<div className='buttons-container'>
-				<Link to='/' className='btn btn-primary'>
-					Home Page
-				</Link>
 				<Link to='/login' className='btn btn-primary'>
 					Đăng Nhập
 				</Link>
