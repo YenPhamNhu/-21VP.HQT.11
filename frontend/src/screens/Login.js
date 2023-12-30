@@ -12,6 +12,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../store/currentUser";
 
 function Login() {
 	const [values, setValues] = useState({
@@ -24,6 +26,22 @@ function Login() {
 	const handleInput = (event) => {
 		setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 	};
+	const getUserType = (userRole) => {
+		switch (userRole) {
+			case "QTV":
+				return "Admin User";
+			case "NHANVIEN":
+				return "Employee User";
+			case "NHASI":
+				return "Dentist User";
+			case "BENHNHAN":
+				return "Patient User";
+			default:
+				return "Admin User";
+		}
+	};
+	const dispatch = useDispatch();
+	const currentUser = useSelector((state) => state.user);
 
 	axios.defaults.withCredentials = true;
 
@@ -36,17 +54,20 @@ function Login() {
 			axios
 				.post("http://localhost:5000/login", values)
 				.then((res) => {
-					// Alert Log-in thanh cong
-					// alert(res.data.message);
-					// Navigate to Home page
-					// Assign value to a key
 					sessionStorage.setItem("item_key", res.data.role);
 					console.log(sessionStorage.getItem("item_key"));
 					navigate("/");
 					const userRole = sessionStorage.getItem("item_key");
+					const user = {
+						SDT: res.data.SDT,
+						userRole: res.data.role,
+						userType: getUserType(res.data.role),
+					};
+					dispatch(login(user));
 					switch (userRole) {
 						case "QTV":
 							navigate("/admin/dashboard");
+							// CURRENT_USER_TYPE.current = "ADMIN";
 							// alert("You're in Admin Page");
 							break;
 						case "NHANVIEN":
@@ -76,22 +97,22 @@ function Login() {
 		// 			const { userRole } = res.data;
 
 		// 			// Assign userRole to USER_TYPE
-		// 			switch (userRole) {
-		//         case "QTV":
-		//           CURRENT_USER_TYPE.current = "ADMIN";
-		//           break;
-		//         case "NHANVIEN":
-		//           CURRENT_USER_TYPE.current = "EMPLOYEE";
-		//           break;
-		//         case "NHASI":
-		//           CURRENT_USER_TYPE.current = "DENTIST";
-		//           break;
-		//         case "BENHNHAN":
-		//           CURRENT_USER_TYPE.current = "PATIENT";
-		//           break;
-		//         default:
-		//           CURRENT_USER_TYPE.current = "PUBLIC";
-		//       }
+		// 		switch (userRole) {
+		//     case "QTV":
+		//       CURRENT_USER_TYPE.current = "ADMIN";
+		//       break;
+		//     case "NHANVIEN":
+		//       CURRENT_USER_TYPE.current = "EMPLOYEE";
+		//       break;
+		//     case "NHASI":
+		//       CURRENT_USER_TYPE.current = "DENTIST";
+		//       break;
+		//     case "BENHNHAN":
+		//       CURRENT_USER_TYPE.current = "PATIENT";
+		//       break;
+		//     default:
+		//       CURRENT_USER_TYPE.current = "PUBLIC";
+		//   }
 
 		// 			// Display success message on the screen
 		// 			alert(res.data.message);

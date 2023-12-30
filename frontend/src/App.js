@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import About from "./screens/About.js";
@@ -46,6 +46,7 @@ import SidebarDentist from "./components/sidebar_dentist.js";
 import SidebarAdmin from "./components/sidebar_admin.js";
 import { useContext } from "react";
 import { Store } from "./Store.js";
+import { useSelector } from "react-redux";
 // import { Link } from 'react-router-dom';
 
 const USER_TYPES = {
@@ -57,14 +58,36 @@ const USER_TYPES = {
 };
 
 //Chỉnh cái này để chuyển router
-const CURRENT_USER_TYPE = USER_TYPES.ADMIN_USER; //USER_TYPES.DENTIST_USER
-const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
-const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
-const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
-const isDentistElement = CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER;
-const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
+// const CURRENT_USER_TYPE = USER_TYPES.DENTIST_USER; //USER_TYPES.DENTIST_USER
+// const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
+// const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
+// const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
+// const isDentistElement = CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER;
+// const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
+const isPublicElement = USER_TYPES.PUBLIC;
+const isAdminElement = USER_TYPES.ADMIN_USER;
+const isPatientElement = USER_TYPES.PATIENT_USER;
+const isDentistElement = USER_TYPES.DENTIST_USER;
+const isEmployeeElement = USER_TYPES.EMPLOYEE_USER;
 
 function App() {
+	const { user } = useSelector((state) => state.user);
+	const [isPublicElement, setIsPublicElement] = useState(false);
+	const [isAdminElement, setIsAdminElement] = useState(false);
+	const [isPatientElement, setIsPatientElement] = useState(false);
+	const [isDentistElement, setIsDentistElement] = useState(false);
+	const [isEmployeeElement, setIsEmployeeElement] = useState(false);
+	
+	useEffect(() => {
+		if (user) {
+			setIsPublicElement(user.userType === USER_TYPES.PUBLIC);
+			setIsAdminElement(user.userType === USER_TYPES.ADMIN_USER);
+			setIsPatientElement(user.userType === USER_TYPES.PATIENT_USER);
+			setIsDentistElement(user.userType === USER_TYPES.DENTIST_USER);
+			setIsEmployeeElement(user.userType === USER_TYPES.EMPLOYEE_USER);
+		}
+	}, [user]);
+
 	return (
 		<BrowserRouter>
 			{isPublicElement && <Header />}
@@ -411,69 +434,41 @@ function App() {
 }
 
 function PublicElement({ children }) {
-	return (
-		<>
-			{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
-			{children}
-		</>
-	);
+	if (isPublicElement) {
+		return <>{children}</>;
+	} else {
+		return <Navigate to={"/"} />;
+	}
 }
 
 function AdminElement({ children }) {
-	if (CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER) {
-		return (
-			<>
-				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
-				{children}
-			</>
-		);
+	if (isAdminElement) {
+		return <>{children}</>;
 	} else {
 		return <Navigate to={"/"} />;
-		// return <div>You do not have access to this page!</div>;
 	}
 }
 
 function PatientElement({ children }) {
-	if (CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER) {
-		return (
-			<>
-				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
-				{children}
-			</>
-		);
+	if (isPatientElement) {
+		return <>{children}</>;
 	} else {
-		// return <Navigate to={"/"} />
 		return <div>You do not have access to this page!</div>;
 	}
 }
 
 function EmployeeElement({ children }) {
-	// const { state } = useContext(Store);
-	// const { userInfo } = state;
-	// return userInfo && userInfo.isEmployee ? children : <Navigate to='/signin' />;
-	if (CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER) {
-		return (
-			<>
-				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
-				{children}
-			</>
-		);
+	if (isEmployeeElement) {
+		return <>{children}</>;
 	} else {
-		// return <Navigate to={"/"} />
 		return <div>You do not have access to this page!</div>;
 	}
 }
 
 function DentistElement({ children }) {
-	if (CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER) {
-		return (
-			<>
-				{/* <div>You are logged in as: {CURRENT_USER_TYPE}</div> */}
-				{children}
-			</>
-		);
+	if (isDentistElement) {
+		return <>{children}</>;
 	} else {
-		// return <Navigate to={"/pageNotFound"} />
 		return <div>You do not have access to this page!</div>;
 	}
 }
