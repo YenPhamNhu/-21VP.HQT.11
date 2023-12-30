@@ -23,38 +23,74 @@ router.get("/users/getUserBySDT/:SDT", getUserBySDT);
 router.post("/users/createUser", createUser);
 
 // NHAN VIEN
-const { getAllEmployee, getEmployeeBySDT } = employeeController;
+const {
+  getAllEmployee,
+  getEmployeeBySDT,
+  updateInfPatientByEmployee,
+  updateInfEmployee,
+  updateInfDentistByEmployee,
+} = employeeController;
 // http://localhost:5000/api/employees/getAllEmployee
 router.get("/employees/getAllEmployee", getAllEmployee);
 router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
+router.put("/employees/updateInf/:SDT", updateInfEmployee);
+router.put(
+  "/employees/updateInfPatientByEmployee/:SDT",
+  updateInfPatientByEmployee
+);
+router.put(
+  "/employees/updateInfDentistByEmployee/:SDT",
+  updateInfDentistByEmployee
+);
 
 // NHA SI
-const { getAllDentist, getDentistBySDT } = dentistController;
+const { getAllDentist, getDentistBySDT, updateInfDentist } = dentistController;
 router.get("/dentists/getAllDentist", getAllDentist);
 router.get("/dentists/getDentistBySDT/:SDT", getDentistBySDT);
+router.put("/dentists/updateInf/:SDT", updateInfDentist);
 
 // BENH NHAN
-const { getAllPatient, getPatientBySDT } = patientController;
+const { getAllPatient, getPatientBySDT, updateInfPatient } = patientController;
 // http://localhost:5000/api/patients/getAllPatient
 router.get("/patients/getAllPatient", getAllPatient); //DONE
 //http://localhost:5000/api/patients/getPatientBySDT/0123456780
 router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
 // http://localhost:5000/api/patients/deletePatient/0123456780
 //"message": "Error deleting patient"
+router.put("/patients/updateInf/:SDT", updateInfPatient);
 
 // qtv
 const {
-  getAllAdmin,
   getAdminBySDT,
+  getDentistBySDTByAdmin,
+  getEmployeeBySDTByAdmin,
+  getPatientBySDTByAdmin,
   createPatientByAdmin,
   createEmployeeByAdmin,
   createDentistByAdmin,
   deletePatientByAdmin,
   deleteEmployeeByAdmin,
   deleteDentistByAdmin,
+  getAllAdmin,
+  getAllDentistByAdmin,
+  getAllEmployeeByAdmin,
+  getAllPatientByAdmin,
+  updateInfPatientByAdmin,
+  updateInfEmployeeByAdmin,
+  updateInfDentistByAdmin,
+  updateInfAdmin,
 } = adminController;
+
 router.get("/admins/getAllAdmin", getAllAdmin);
+router.get("/admins/getAllDentistByAdmin", getAllDentistByAdmin);
+router.get("/admins/getAllEmployeeByAdmin", getAllEmployeeByAdmin);
+router.get("/admins/getAllPatientByAdmin", getAllPatientByAdmin);
+
 router.get("/admins/getAdminBySDT/:SDT", getAdminBySDT);
+router.get("/admins/getEmployeeBySDT/:SDT", getEmployeeBySDTByAdmin);
+router.get("/admins/getDentistBySDT/:SDT", getDentistBySDTByAdmin);
+router.get("/admins/getPatientBySDT/:SDT", getPatientBySDTByAdmin);
+
 router.post("/admins/createPatientByAdmin", createPatientByAdmin);
 router.post("/admins/createEmployeeByAdmin", createEmployeeByAdmin);
 router.post("/admins/createDentistByAdmin", createDentistByAdmin);
@@ -62,6 +98,12 @@ router.post("/admins/createDentistByAdmin", createDentistByAdmin);
 router.delete("/admins/deletePatient/:SDT", deletePatientByAdmin);
 router.delete("/admins/deleteEmployee/:SDT", deleteEmployeeByAdmin);
 router.delete("/admins/deleteDentist/:SDT", deleteDentistByAdmin);
+
+router.put("/admins/updateInfPatient/:SDT", updateInfPatientByAdmin);
+router.put("/admins/updateInfEmployee/:SDT", updateInfEmployeeByAdmin);
+router.put("/admins/updateInfDentist/:SDT", updateInfDentistByAdmin);
+router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
+
 // get service
 const {
   getAllService,
@@ -81,14 +123,25 @@ router.get("/services/getServiceById/:MaDichVu", getServiceById); //DONE
 router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
 
 // drug
-const { getAllDrug, getDrugById, updateDrug, createDrug } = drugController;
-router.get("/drugs/getAllDrug", getAllDrug);
-router.get("/drugs/getDrugByID/:MaThuoc", getDrugById);
-router.post("/drugs/createDrug", createDrug);
+const { getAllDrug, getDrugById, updateDrug, createDrug, deleteDrug } =
+  drugController;
+router.get("/admins/drugs/getAllDrug", getAllDrug);
+router.get("/employees/drugs/getAllDrug", getAllDrug);
+router.get("/dentists/drugs/getAllDrug", getAllDrug);
+
+router.get("/admins/drugs/getDrugByID/:MaThuoc", getDrugById);
+router.get("/employees/drugs/getDrugByID/:MaThuoc", getDrugById);
+router.get("/dentists/drugs/getDrugByID/:MaThuoc", getDrugById);
+
+router.post("/admins/drugs/createDrug", createDrug);
+
+router.put("/admins/drugs/updateDrug/:MaThuoc", updateDrug);
+
+router.delete("/admins/drugs/deleteDrug/:MaThuoc/:NgayHetHan", deleteDrug);
 
 // receipt
 const { getAllReceipt } = receiptController;
-router.get("/receipts/getAllReceipt", getAllReceipt);
+router.get("/employees/receipts/getAllReceipt", getAllReceipt);
 
 // lich hen appointmentSchedule
 const { getAllAppointmentSchedule } = appointmentScheduleController;

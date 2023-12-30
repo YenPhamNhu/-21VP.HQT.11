@@ -278,6 +278,9 @@ EXEC QuanLyKhoThuoc
     @SoLuongTonKho = 150,
     @ThaoTac = 'CapNhat';
 
+EXEC XoaThuoc
+    @MaThuoc = 6,
+    @NgayHetHan = '2026-01-01';
 -- Execute the stored procedure to view current inventory status
 EXEC QuanLyKhoThuoc @ThaoTac = 'XemTonKho';
 

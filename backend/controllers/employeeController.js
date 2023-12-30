@@ -1,4 +1,7 @@
 "use strict";
+const config = require("../config");
+const sql = require("mssql");
+
 // nhan vien
 const employeeData = require("../data/employees");
 const getAllEmployee = async (req, res, next) => {
@@ -33,7 +36,129 @@ const getEmployeeBySDT = async (req, res, next) => {
   }
 };
 
+const updateInfEmployee = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, DiaChi, ViTri } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update employee information
+    const query = `
+      EXEC CapNhatThongTinNhanVien
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @DiaChi = N'${DiaChi}',
+        @ViTri = N'${ViTri}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Employee information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Employee not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const updateInfPatientByEmployee = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, NgaySinh, DiaChi } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update patient information
+    const query = `
+      EXEC CapNhatThongTin
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${DiaChi}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Patient information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Patient not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const updateInfDentistByEmployee = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, NgaySinh, DiaChi, ChuyenMon, BangCap } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update employee information
+    const query = `
+      EXEC CapNhatThongTinNhaSi
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${DiaChi}',
+        @ChuyenMon = N'${ChuyenMon}',
+        @BangCap = '${BangCap}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Employee information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Employee not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllEmployee,
   getEmployeeBySDT,
+  updateInfEmployee,
+  updateInfPatientByEmployee,
+  updateInfDentistByEmployee,
 };

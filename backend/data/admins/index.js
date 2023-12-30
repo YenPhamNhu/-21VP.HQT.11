@@ -14,6 +14,39 @@ const getAdmin = async () => {
   }
 };
 
+const getDentist = async () => {
+  try {
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Dentists");
+    const dentistList = await pool.request().query(sqlQueries.GetAllDentist);
+    return dentistList.recordset;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getEmployee = async () => {
+  try {
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Employees");
+    const userList = await pool.request().query(sqlQueries.GetAllEmployee);
+    return userList.recordset;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getPatient = async () => {
+  try {
+    let pool = await sql.connect(config.sql);
+    const sqlQueries = await utils.loadSqlQueries("Patients");
+    const userList = await pool.request().query(sqlQueries.GetAllPatient);
+    return userList.recordset;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 // const createPatient = async (
 // 	HoTen,
 // 	SDT,
@@ -101,6 +134,9 @@ const deleteDentistBySDT = async (userSDT) => {
 
 module.exports = {
   getAdmin,
+  getDentist,
+  getEmployee,
+  getPatient,
   deletePatientBySDT,
   deleteEmployeeBySDT,
   deleteDentistBySDT,

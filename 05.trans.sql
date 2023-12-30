@@ -1065,6 +1065,44 @@ BEGIN
 END;
 GO
 
+IF EXISTS (SELECT *
+FROM sys.procedures
+WHERE name = N'XoaThuoc' AND type = 'P')
+BEGIN
+    DROP PROCEDURE XoaThuoc;
+    PRINT N'Đã hủy giao tác XoaThuoc.';
+END
+ELSE
+BEGIN
+    PRINT N'Giao tác XoaThuoc chưa được tạo.';
+END
+GO
+CREATE PROCEDURE XoaThuoc
+    @MaThuoc INT,
+    @NgayHetHan DATETIME
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+    -- Check if the drug exists before attempting to delete
+    IF EXISTS (SELECT 1 FROM THUOC WHERE MaThuoc = @MaThuoc AND NgayHetHan = @NgayHetHan)
+    BEGIN
+        -- Delete the drug from the inventory
+        DELETE FROM THUOC
+        WHERE MaThuoc = @MaThuoc AND NgayHetHan = @NgayHetHan;
+        
+        PRINT 'Drug deleted from inventory successfully.';
+        COMMIT TRANSACTION;
+    END
+    ELSE
+    BEGIN
+        ROLLBACK TRANSACTION;
+        PRINT 'Drug not found in the inventory.';
+    END
+END;
+GO
+
 -- Có quyền thanh đổi trạng thái thanh toán của hóa đơn (gọi giao tác ThayDoiTrangThaiThanhToan).
 IF EXISTS (SELECT *
 FROM sys.procedures

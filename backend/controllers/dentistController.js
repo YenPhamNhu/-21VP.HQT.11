@@ -1,5 +1,7 @@
 "use strict";
-// benh nhan
+const config = require("../config");
+const sql = require("mssql");
+// nha si
 const dentistData = require("../data/dentists");
 const getAllDentist = async (req, res, next) => {
   try {
@@ -33,7 +35,49 @@ const getDentistBySDT = async (req, res, next) => {
   }
 };
 
+const updateInfDentist = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, NgaySinh, DiaChi, ChuyenMon, BangCap } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update employee information
+    const query = `
+      EXEC CapNhatThongTinNhaSi
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${DiaChi}',
+        @ChuyenMon = N'${ChuyenMon}',
+        @BangCap = '${BangCap}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Employee information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Employee not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllDentist,
   getDentistBySDT,
+  updateInfDentist,
 };

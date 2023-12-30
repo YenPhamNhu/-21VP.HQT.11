@@ -2,6 +2,7 @@
 const adminData = require("../data/admins");
 const patientData = require("../data/admins/index");
 const employeeData = require("../data/admins/index");
+const dentistData = require("../data/admins/index");
 const userData = require("../data/admins/index");
 
 const config = require("../config");
@@ -17,6 +18,9 @@ const getAllAdmin = async (req, res, next) => {
 };
 
 const adminMap = {};
+const employeeMap = {};
+const dentistMap = {};
+const patientMap = {};
 
 const getAdminBySDT = async (req, res, next) => {
   try {
@@ -34,6 +38,69 @@ const getAdminBySDT = async (req, res, next) => {
     }
 
     res.send(admin);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const getDentistBySDTByAdmin = async (req, res, next) => {
+  try {
+    const dentisList = await dentistData.getDentist();
+    for (const dentist of dentisList) {
+      dentistMap[dentist.SDT] = dentist;
+    }
+    const dentistSDT = req.params.SDT;
+    console.log("SDT:", dentistMap[dentistSDT]);
+    const dentist = dentistMap[dentistSDT];
+
+    if (!dentist) {
+      res.status(404).send("Dentist not found");
+      return;
+    }
+
+    res.send(dentist);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const getEmployeeBySDTByAdmin = async (req, res, next) => {
+  try {
+    const employeelist = await employeeData.getEmployee();
+    for (const employee of employeelist) {
+      employeeMap[employee.SDT] = employee;
+    }
+    const employeeSDT = req.params.SDT;
+    console.log("SDT:", employeeMap[employeeSDT]);
+    const employee = employeeMap[employeeSDT];
+
+    if (!employee) {
+      res.status(404).send("Employee not found");
+      return;
+    }
+
+    res.send(employee);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const getPatientBySDTByAdmin = async (req, res, next) => {
+  try {
+    const patientlist = await patientData.getPatient();
+    for (const patient of patientlist) {
+      patientMap[patient.SDT] = patient;
+    }
+    const patientSDT = req.params.SDT;
+    console.log("SDT:", patientMap[patientSDT]);
+    const patient = patientMap[patientSDT];
+
+    if (!patient) {
+      res.status(404).send("Patient not found");
+      return;
+    }
+
+    res.send(patient);
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -255,13 +322,210 @@ const deleteDentistByAdmin = async (req, res, next) => {
   }
 };
 
+const getAllDentistByAdmin = async (req, res, next) => {
+  try {
+    const dentisList = await dentistData.getDentist();
+    res.send(dentisList);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const getAllEmployeeByAdmin = async (req, res, next) => {
+  try {
+    const employeelist = await employeeData.getEmployee();
+    res.send(employeelist);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const getAllPatientByAdmin = async (req, res, next) => {
+  try {
+    const patientlist = await patientData.getPatient();
+    res.send(patientlist);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const updateInfPatientByAdmin = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, NgaySinh, DiaChi } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update patient information
+    const query = `
+      EXEC CapNhatThongTin
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${DiaChi}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Patient information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Patient not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const updateInfEmployeeByAdmin = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, DiaChi, ViTri } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update employee information
+    const query = `
+      EXEC CapNhatThongTinNhanVien
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @DiaChi = N'${DiaChi}',
+        @ViTri = N'${ViTri}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Employee information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Employee not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const updateInfDentistByAdmin = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, GioiTinh, NgaySinh, DiaChi, ChuyenMon, BangCap } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update employee information
+    const query = `
+      EXEC CapNhatThongTinNhaSi
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${GioiTinh}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${DiaChi}',
+        @ChuyenMon = N'${ChuyenMon}',
+        @BangCap = '${BangCap}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Employee information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Employee not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const updateInfAdmin = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { HoTen, Email } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update admin information
+    const query = `
+      EXEC CapNhatThongTinQTV
+        @SDT = '${SDT}',
+        @HoTen = N'${HoTen}',
+        @Email = N'${Email}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Admin information updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Admin not found or information could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllAdmin,
+  getAllDentistByAdmin,
+  getAllEmployeeByAdmin,
+  getAllPatientByAdmin,
+
   getAdminBySDT,
+  getDentistBySDTByAdmin,
+  getEmployeeBySDTByAdmin,
+  getPatientBySDTByAdmin,
+
   createPatientByAdmin,
   createEmployeeByAdmin,
   createDentistByAdmin,
+
   deletePatientByAdmin,
   deleteEmployeeByAdmin,
   deleteDentistByAdmin,
+
+  updateInfPatientByAdmin,
+  updateInfEmployeeByAdmin,
+  updateInfDentistByAdmin,
+  updateInfAdmin,
 };
