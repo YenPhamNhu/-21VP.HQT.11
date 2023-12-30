@@ -505,6 +505,44 @@ const updateInfAdmin = async (req, res, next) => {
   }
 };
 
+const updateEmployeeStatusByAdmin = async (req, res, next) => {
+  try {
+    const { MaNhanVien, TinhTrangHoatDong } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    const query = `
+            EXEC CapNhatTinhTrangHoatDongNhanVien
+                @MaNhanVien = ${MaNhanVien},
+                @TinhTrangHoatDong = N'${TinhTrangHoatDong}';
+        `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      console.log("Work status updated successfully");
+      res.status(200).json({
+        success: true,
+        message: "Work status updated successfully",
+      });
+    } else {
+      console.error("Employee not found or work status could not be updated");
+      console.error("Stored Procedure Result:", result);
+
+      res.status(404).json({
+        success: false,
+        error: "Employee not found or work status could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllAdmin,
   getAllDentistByAdmin,
@@ -528,4 +566,6 @@ module.exports = {
   updateInfEmployeeByAdmin,
   updateInfDentistByAdmin,
   updateInfAdmin,
+
+  updateEmployeeStatusByAdmin,
 };

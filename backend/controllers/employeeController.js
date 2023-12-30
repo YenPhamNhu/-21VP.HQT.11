@@ -155,10 +155,53 @@ const updateInfDentistByEmployee = async (req, res, next) => {
   }
 };
 
+const changePaymentStatus = async (req, res, next) => {
+  try {
+    const { SDT, STTLichSuKB } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to change the payment status
+    const query = `
+          EXEC ThayDoiTrangThaiThanhToan
+              @SDT = '${SDT}',
+              @STTLichSuKB = ${STTLichSuKB};
+      `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      console.log("Payment status changed successfully");
+      res.status(200).json({
+        success: true,
+        message: "Payment status changed successfully",
+      });
+    } else {
+      console.error(
+        "Patient not found, medical history not found, or payment status could not be changed"
+      );
+      console.error("Stored Procedure Result:", result);
+
+      res.status(404).json({
+        success: false,
+        error:
+          "Patient not found, medical history not found, or payment status could not be changed",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllEmployee,
   getEmployeeBySDT,
   updateInfEmployee,
   updateInfPatientByEmployee,
   updateInfDentistByEmployee,
+  changePaymentStatus,
 };

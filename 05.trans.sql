@@ -940,8 +940,8 @@ BEGIN
 
         -- Your SELECT statement to search for medical examination records
         SELECT *
-    FROM LICHSUKHAMBENH
-    WHERE MaBenhNhan = @MaBenhNhan;
+        FROM LICHSUKHAMBENH
+        WHERE MaBenhNhan = @MaBenhNhan;
 
         -- Your additional logic can go here
 
@@ -1349,17 +1349,16 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        IF NOT EXISTS(SELECT *
-    FROM (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               SELECT SDT
-            FROM NHANVIEN
-        UNION
-            SELECT SDT
-            FROM NHASI
-        UNION
-            SELECT SDT
-            FROM BENHNHAN
-                           ) AS Users
+        IF NOT EXISTS(
+        SELECT *
+            FROM (SELECT SDT
+                    FROM NHANVIEN
+                UNION
+                    SELECT SDT
+                    FROM NHASI
+                UNION
+                    SELECT SDT
+                    FROM BENHNHAN) AS Users
     WHERE SDT = @SDT)
         BEGIN
             THROW 50001, 'TAI KHOAN KHONG TON TAI', 1;
