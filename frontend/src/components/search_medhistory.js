@@ -8,32 +8,24 @@ export const Search = () => {
   const columns = useMemo(
     () => [
         {
-            accessorKey: 'HoTen',
-            header: 'Họ và tên',
+            accessorKey: 'STT',
+            header: 'Số thứ tự',
           },
           {
-            accessorKey: 'SDT',
-            header: 'Số điện thoại',
+            accessorKey: 'MaBenhNhan',
+            header: 'Mã bệnh nhân',
           },
           {
-            accessorKey: 'GioiTinh',
-            header: 'Giới tính',
+            accessorKey: 'MaNhaSiKham',
+            header: 'Mã nha sĩ',
           },
           {
-            accessorKey: 'NgaySinh',
-            header: 'Ngày sinh',
+            accessorKey: 'NgayKham',
+            header: 'Ngày khám',
           },
           {
-            accessorKey: 'DiaChi',
-            header: 'Địa chỉ',
-          },
-          {
-            accessorKey: 'ChuyenMon',
-            header: 'Chuyên môn',
-          },
-          {
-            accessorKey: 'BangCap',
-            header: 'Bằng cấp',
+            accessorKey: 'GhiChu',
+            header: 'Ghi chú',
           },
     ],
     []
@@ -45,14 +37,14 @@ export const Search = () => {
   const fetchService = async () => {
 
     const response = await fetch(
-      `http://localhost:5000/api/dentists/getAllDentist`
+      `http://localhost:5000/api/medHistory/getAllMedHistory`
     ); // Fetch service data
     console.log(response);
     const serviceData = await response.json();
     if (serviceData) {
       const modifiedData = serviceData.map((item) => {
-        const formattedNgaySinh = item.NgaySinh.split('T')[0]; // Extract the date part
-        return { ...item, NgaySinh: formattedNgaySinh };
+        const formattedNgayKham = item.NgayKham.split('T')[0]; // Extract the date part
+        return { ...item, NgayKham: formattedNgayKham };
       });
         setDulieu(modifiedData);
     }

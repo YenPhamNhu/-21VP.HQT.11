@@ -19,7 +19,8 @@
     "express-session": "^1.17.3",
     "fs-extra": "^11.1.1",
     "mssql": "^10.0.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "react-redux": "^9.0.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

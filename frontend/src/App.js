@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate,Router } from "react-router-dom";
 import "./App.css";
 import About from "./screens/About.js";
 import Service from "./screens/Service.js";
@@ -47,6 +47,7 @@ import SidebarAdmin from "./components/sidebar_admin.js";
 import { useContext } from "react";
 import { Store } from "./Store.js";
 import { useSelector } from "react-redux";
+import LogoutPage from './components/Logout.js'
 // import { Link } from 'react-router-dom';
 
 const USER_TYPES = {
@@ -426,7 +427,8 @@ function App() {
 				/>
 
 				<Route path='*' element={<div>Page Not Found!</div>}></Route>
-			</Routes>
+				<Route path='/logout' element={<LogoutPage />}></Route>
+			    </Routes>
 			<hr id='hrduoi'></hr>
 			<Footer />
 		</BrowserRouter>

@@ -75,7 +75,7 @@ function Login() {
 							navigate("/dentist/detail");
 							break;
 						case "BENHNHAN":
-							navigate("/patient/payment");
+							navigate("/patient");
 							break;
 						default:
 							navigate("/");

@@ -47,6 +47,7 @@ export default function SwipeableTemporaryDrawer() {
     { text: "Nha sĩ", icon: <LocalHospitalIcon />, to: "/patient/dentist" },
     { text: "Hồ sơ bệnh án", icon: <BookIcon />, to: "/patient/profile" },
     { text: "Thanh toán", icon: <PaymentIcon />, to: "/patient/payment" },
+    { text: "Đăng xuất", icon: <PaymentIcon />, to: "/logout" },
   ];
 
   const list = (anchor) => (
