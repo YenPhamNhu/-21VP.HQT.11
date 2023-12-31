@@ -13,6 +13,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PaymentIcon from "@mui/icons-material/Payment";
 import BookIcon from "@mui/icons-material/Book";
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -47,7 +48,7 @@ export default function SwipeableTemporaryDrawer() {
     { text: "Nha sĩ", icon: <LocalHospitalIcon />, to: "/patient/dentist" },
     { text: "Hồ sơ bệnh án", icon: <BookIcon />, to: "/patient/profile" },
     { text: "Thanh toán", icon: <PaymentIcon />, to: "/patient/payment" },
-    { text: "Đăng xuất", icon: <PaymentIcon />, to: "/logout" },
+    { text: "Đăng xuất", icon: <LogoutIcon />, to: "/logout" },
   ];
 
   const list = (anchor) => (

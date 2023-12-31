@@ -59,9 +59,6 @@ function Payment() {
 
   return (
     <div className='container mt-5'>
-      <h1 className='mb-4'>Patient Home Page</h1>
-      
-
       <MaterialReactTable
         columns={columns}
         data={Dulieu}
