@@ -402,7 +402,7 @@ BEGIN
     FROM NHASI
     WHERE MaNhaSi = @MaNhaSi
         )
-        BEGIN
+    BEGIN
         -- Lấy thông tin của NhaSi
         SELECT
             HoTen AS 'Họ Tên',
@@ -416,8 +416,8 @@ BEGIN
         WHERE MaNhaSi = @MaNhaSi;
         COMMIT TRANSACTION;
     END
-        ELSE
-        BEGIN
+    ELSE
+    BEGIN
         ROLLBACK TRANSACTION;
         -- Nếu MaNhaSi không tồn tại
         PRINT 'Không tìm thấy thông tin cho MaNhaSi = ' + CAST(@MaNhaSi AS NVARCHAR(10));
@@ -1189,9 +1189,9 @@ BEGIN
     FROM BENHNHAN
     WHERE SDT = @SDT)
     BEGIN
-        -- Kiểm tra xem lịch sử khám bệnh có tồn tại không
+        -- Kiểm tra xem HÓA ĐƠN có tồn tại không
         IF EXISTS (SELECT 1
-        FROM LICHSUKHAMBENH
+        FROM HOADON
         WHERE STT = @STTLichSuKB AND MaBenhNhan = (SELECT MaBenhNhan
             FROM BENHNHAN
             WHERE SDT = @SDT))
@@ -1788,7 +1788,7 @@ CREATE PROCEDURE XoaTaiKhoan
 AS
 BEGIN
     BEGIN TRANSACTION;
-    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    --SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
     BEGIN TRY
         -- Kiểm tra xem tài khoản có tồn tại hay không
         IF NOT EXISTS (SELECT *
@@ -1915,7 +1915,7 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRANSACTION;
-    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    --SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
     BEGIN TRY
         -- Kiểm tra xem bệnh nhân có tồn tại trong lịch sử khám bệnh hay không
