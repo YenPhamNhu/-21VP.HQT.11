@@ -3,8 +3,8 @@ import {
 	BrowserRouter,
 	Routes,
 	Route,
-	Navigate,
-	Router,
+	// Navigate,
+	// Router,
 } from "react-router-dom";
 import "./App.css";
 import About from "./screens/About.js";
@@ -138,7 +138,7 @@ function App({ item_Type }) {
 			{userType === USER_TYPES.ADMIN_USER && <AdminElement />}
 			{userType === USER_TYPES.DENTIST_USER && <DentistElement />}
 			{userType === USER_TYPES.EMPLOYEE_USER && <EmployeeElement />}
-			{userType === USER_TYPES.PUBLIC && <Header />}
+			{/* {userType === USER_TYPES.PUBLIC && <Header />} */}
 
 			<Routes>
 				{/* Define your routes based on the user type */}
