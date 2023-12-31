@@ -69,13 +69,13 @@ function Login() {
 							navigate("/admin");
 							break;
 						case "NHANVIEN":
-							navigate("/employee/detail");
+							navigate("/employee");
 							break;
 						case "NHASI":
-							navigate("/dentist/detail");
+							navigate("/dentist");
 							break;
 						case "BENHNHAN":
-							navigate("/patient/payment");
+							navigate("/patient");
 							break;
 						default:
 							navigate("/");

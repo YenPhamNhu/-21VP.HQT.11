@@ -15,6 +15,7 @@ import VaccinesIcon from "@mui/icons-material/Vaccines";
 import MenuIcon from "@mui/icons-material/Menu";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
@@ -47,6 +48,7 @@ export default function SwipeableTemporaryDrawer() {
     },
     { text: "Danh mục thuốc", icon: <VaccinesIcon />, to: "/admin/storemed" },
     { text: "Thông tin khám", icon: <InfoIcon />, to: "/admin/infoappo" },
+    { text: "Đăng xuất", icon: <LogoutIcon />, to: "/logout" },
   ];
 
   const list = (anchor) => (

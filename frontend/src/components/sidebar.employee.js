@@ -18,6 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
@@ -69,6 +70,7 @@ export default function SwipeableTemporaryDrawer() {
       icon: <VaccinesIcon />,
       to: "/employee/listmed",
     },
+    { text: "Đăng xuất", icon: <LogoutIcon />, to: "/logout" },
   ];
 
   const list = (anchor) => (
