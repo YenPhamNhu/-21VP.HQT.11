@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate,Router } from "react-router-dom";
+import {
+	BrowserRouter,
+	Routes,
+	Route,
+	Navigate,
+	Router,
+} from "react-router-dom";
 import "./App.css";
 import About from "./screens/About.js";
 import Service from "./screens/Service.js";
 import Login from "./screens/Login.js";
+import Logout from "./screens/Logout.js";
 import Signup from "./screens/Signup.js";
 import Footer from "./components/footer.js";
 import Main from "./components/main.js";
 import Header from "./components/header.js";
+import HeaderUser from "./components/header_user.js";
 import Forgetpass from "./screens/Forgetpass.js";
 import ServiceDetails from "./screens/Service_detail.js";
 import Resetpass from "./screens/Resetpass.js";
@@ -44,10 +52,11 @@ import SidebarPatient from "./components/sidebar_patient.js";
 import SidebarEmployee from "./components/sidebar.employee.js";
 import SidebarDentist from "./components/sidebar_dentist.js";
 import SidebarAdmin from "./components/sidebar_admin.js";
-import { useContext } from "react";
-import { Store } from "./Store.js";
+// import { useContext } from "react";
+// import { Store } from "./Store.js";
 import { useSelector } from "react-redux";
-import LogoutPage from './components/Logout.js'
+// import LogoutPage from "./components/Logout.js";
+import "./App.css";
 // import { Link } from 'react-router-dom';
 
 const USER_TYPES = {
@@ -58,45 +67,81 @@ const USER_TYPES = {
 	DENTIST_USER: "Dentist User",
 };
 
-//Chỉnh cái này để chuyển router
-// const CURRENT_USER_TYPE = USER_TYPES.DENTIST_USER; //USER_TYPES.DENTIST_USER
-// const isPublicElement = CURRENT_USER_TYPE === USER_TYPES.PUBLIC;
-// const isAdminElement = CURRENT_USER_TYPE === USER_TYPES.ADMIN_USER;
-// const isPatientElement = CURRENT_USER_TYPE === USER_TYPES.PATIENT_USER;
-// const isDentistElement = CURRENT_USER_TYPE === USER_TYPES.DENTIST_USER;
-// const isEmployeeElement = CURRENT_USER_TYPE === USER_TYPES.EMPLOYEE_USER;
-const isPublicElement = USER_TYPES.PUBLIC;
-const isAdminElement = USER_TYPES.ADMIN_USER;
-const isPatientElement = USER_TYPES.PATIENT_USER;
-const isDentistElement = USER_TYPES.DENTIST_USER;
-const isEmployeeElement = USER_TYPES.EMPLOYEE_USER;
+function App({ item_Type }) {
+	const [userType, setUserType] = useState(USER_TYPES.PUBLIC);
 
-function App() {
-	const { user } = useSelector((state) => state.user);
-	const [isPublicElement, setIsPublicElement] = useState(false);
-	const [isAdminElement, setIsAdminElement] = useState(false);
-	const [isPatientElement, setIsPatientElement] = useState(false);
-	const [isDentistElement, setIsDentistElement] = useState(false);
-	const [isEmployeeElement, setIsEmployeeElement] = useState(false);
-	
 	useEffect(() => {
-		if (user) {
-			setIsPublicElement(user.userType === USER_TYPES.PUBLIC);
-			setIsAdminElement(user.userType === USER_TYPES.ADMIN_USER);
-			setIsPatientElement(user.userType === USER_TYPES.PATIENT_USER);
-			setIsDentistElement(user.userType === USER_TYPES.DENTIST_USER);
-			setIsEmployeeElement(user.userType === USER_TYPES.EMPLOYEE_USER);
+		if (item_Type) {
+			// Set the user type based on the item_Type from the login session
+			switch (item_Type) {
+				case "Admin User":
+					setUserType(USER_TYPES.ADMIN_USER);
+					break;
+				case "Patient User":
+					setUserType(USER_TYPES.PATIENT_USER);
+					break;
+				case "Employee User":
+					setUserType(USER_TYPES.EMPLOYEE_USER);
+					break;
+				case "Dentist User":
+					setUserType(USER_TYPES.DENTIST_USER);
+					break;
+				default:
+					setUserType(USER_TYPES.PUBLIC);
+			}
 		}
-	}, [user]);
+	}, [item_Type]);
+	const PublicElement = ({ children }) => (
+		<>
+			{children}
+			<Footer />
+		</>
+	);
+
+	const AdminElement = ({ children }) => (
+		<>
+			<SidebarAdmin />
+			<HeaderUser />
+			{children}
+		</>
+	);
+
+	const PatientElement = ({ children }) => (
+		<>
+			<SidebarPatient />
+			<HeaderUser />
+			{children}
+		</>
+	);
+
+	const DentistElement = ({ children }) => (
+		<>
+			<SidebarDentist />
+			<HeaderUser />
+			{children}
+		</>
+	);
+
+	const EmployeeElement = ({ children }) => (
+		<>
+			<SidebarEmployee />
+			<HeaderUser />
+			{children}
+		</>
+	);
 
 	return (
 		<BrowserRouter>
-			{isPublicElement && <Header />}
-			{isPatientElement && <SidebarPatient />}
-			{isAdminElement && <SidebarAdmin />}
-			{isDentistElement && <SidebarDentist />}
-			{isEmployeeElement && <SidebarEmployee />}
+			{/* Render your components based on the user type */}
+
+			{userType === USER_TYPES.PATIENT_USER && <PatientElement />}
+			{userType === USER_TYPES.ADMIN_USER && <AdminElement />}
+			{userType === USER_TYPES.DENTIST_USER && <DentistElement />}
+			{userType === USER_TYPES.EMPLOYEE_USER && <EmployeeElement />}
+			{userType === USER_TYPES.PUBLIC && <Header />}
+
 			<Routes>
+				{/* Define your routes based on the user type */}
 				<Route
 					path='/'
 					element={
@@ -106,6 +151,7 @@ function App() {
 						</PublicElement>
 					}
 				/>
+				{/* Other routes based on the user type */}
 				<Route
 					path='/about'
 					element={
@@ -427,51 +473,12 @@ function App() {
 				/>
 
 				<Route path='*' element={<div>Page Not Found!</div>}></Route>
-				<Route path='/logout' element={<LogoutPage />}></Route>
-			    </Routes>
+				<Route path='/logout' element={<Logout />}></Route>
+			</Routes>
 			<hr id='hrduoi'></hr>
 			<Footer />
 		</BrowserRouter>
 	);
 }
 
-function PublicElement({ children }) {
-	if (isPublicElement) {
-		return <>{children}</>;
-	} else {
-		return <Navigate to={"/"} />;
-	}
-}
-
-function AdminElement({ children }) {
-	if (isAdminElement) {
-		return <>{children}</>;
-	} else {
-		return <Navigate to={"/"} />;
-	}
-}
-
-function PatientElement({ children }) {
-	if (isPatientElement) {
-		return <>{children}</>;
-	} else {
-		return <div>You do not have access to this page!</div>;
-	}
-}
-
-function EmployeeElement({ children }) {
-	if (isEmployeeElement) {
-		return <>{children}</>;
-	} else {
-		return <div>You do not have access to this page!</div>;
-	}
-}
-
-function DentistElement({ children }) {
-	if (isDentistElement) {
-		return <>{children}</>;
-	} else {
-		return <div>You do not have access to this page!</div>;
-	}
-}
 export default App;

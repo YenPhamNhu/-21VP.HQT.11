@@ -36,6 +36,11 @@ export default function SwipeableTemporaryDrawer() {
 
   const links = [
     {
+      text: "Home Page",
+      icon: <InfoIcon />,
+      to: "/admin",
+    },
+    {
       text: "Thông tin cá nhân",
       icon: <AccountCircleIcon />,
       to: "/admin/detail",

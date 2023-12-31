@@ -37,9 +37,10 @@ function Login() {
 			case "BENHNHAN":
 				return "Patient User";
 			default:
-				return "Admin User";
+				return "Public User";
 		}
 	};
+	
 	const dispatch = useDispatch();
 	// const currentUser = useSelector((state) => state.user);
 
@@ -55,7 +56,10 @@ function Login() {
 				.post("http://localhost:5000/login", values)
 				.then((res) => {
 					sessionStorage.setItem("item_key", res.data.role);
+					sessionStorage.setItem("item_Type", res.data.userType);
+					localStorage.setItem("item_key", res.data.SDT);
 					console.log(sessionStorage.getItem("item_key"));
+					console.log(localStorage.getItem("item_key"));
 					navigate("/");
 					const userRole = sessionStorage.getItem("item_key");
 					const user = {
@@ -63,6 +67,7 @@ function Login() {
 						userRole: res.data.role,
 						userType: getUserType(res.data.role),
 					};
+					
 					dispatch(login(user));
 					switch (userRole) {
 						case "QTV":
@@ -79,7 +84,7 @@ function Login() {
 							break;
 						default:
 							navigate("/");
-					}
+					};
 				})
 				.catch((err) => {
 					// Display error message

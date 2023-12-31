@@ -1,43 +1,56 @@
+// export default Logout;
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/currentUser";
 import axios from "axios";
 
 function Logout() {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		const handleLogout = async () => {
-			try {
-				// Make a request to the server to logout
-				await axios.post("http://localhost:5000/logout");
-
-				// Dispatch logout action
-				dispatch(logout());
-
-				// Clear session storage
-				sessionStorage.clear();
-
-				// Redirect to the home page or display a message
-				navigate("/login");
-			} catch (err) {
-				// Handle errors or display an error message
-				console.error("Logout error:", err);
-			}
-		};
-
-		// Call the handleLogout function when the component mounts
-		handleLogout();
-	}, [dispatch, navigate]);
+	// const dispatch = useDispatch();
+	const auth = localStorage.getItem("item_key");
+	const handleLogout = () => {
+		localStorage.clear();
+		sessionStorage.clear();
+		// navigate("/login");
+	};
 
 	return (
-		<div>
+		<div className='buttons-container' style={styles.container}>
+			<li>
+				{auth ? (
+					<Link onClick={handleLogout} to='/login' style={styles.link}>
+						Đăng Xuất
+					</Link>
+				) : (
+					<Link to='/login' style={styles.link}>
+						Đăng Xuất
+					</Link>
+				)}
+			</li>
 			{/* You can add a logout message or UI here if needed */}
-			Logging out...
+			<span style={styles.logoutMessage}>Logging out...</span>
 		</div>
 	);
 }
 
 export default Logout;
+
+const styles = {
+	container: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		flexDirection: "column",
+	},
+	link: {
+		color: "blue",
+		textDecoration: "underline",
+		// cursor: "pointer",
+		margin: "10px",
+	},
+	logoutMessage: {
+		fontStyle: "italic",
+		color: "gray",
+	},
+};
