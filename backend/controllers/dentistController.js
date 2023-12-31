@@ -111,9 +111,48 @@ const updateScheduleByDentist = async (req, res, next) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+
+const recordMedical = async (req, res, next) => {
+  try {
+    const { SDT } = req.params;
+    const { NgayGioKham, HoTenNhaSi } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+
+    // Call the stored procedure to update medical records
+    const query = `
+      EXEC GhiNhanHoSoBenhAn
+        @SDT = '${SDT}',
+        @NgayGioKham = '${NgayGioKham}',
+        @HoTenNhaSi = N'${HoTenNhaSi}';
+    `;
+
+    const result = await request.query(query);
+
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Medical record updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Patient not found or medical record could not be updated",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllDentist,
   getDentistBySDT,
   updateInfDentist,
   updateScheduleByDentist,
+  recordMedical,
 };

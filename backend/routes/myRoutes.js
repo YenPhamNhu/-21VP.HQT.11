@@ -66,12 +66,14 @@ const {
   getDentistBySDT,
   updateInfDentist,
   updateScheduleByDentist,
+  recordMedical,
 } = dentistController;
+
 router.get("/dentists/getAllDentist", getAllDentist);
 router.get("/dentists/getDentistBySDT/:SDT", getDentistBySDT);
 router.put("/dentists/updateInf/:SDT", updateInfDentist);
 router.post("/dentists/updateSchedule", updateScheduleByDentist);
-
+router.post("/dentists/recordMedical/:SDT", recordMedical);
 // BENH NHAN
 const {
   getAllPatient,
@@ -80,6 +82,7 @@ const {
   scheduleAppointment,
   viewPaymentStatusByPatient,
 } = patientController;
+
 // http://localhost:5000/api/patients/getAllPatient
 router.get("/patients/getAllPatient", getAllPatient); //DONE
 //http://localhost:5000/api/patients/getPatientBySDT/0123456780
@@ -92,6 +95,11 @@ router.get(
   "/patients/viewPaymentStatus/:SDT/:STTLichSuKB",
   viewPaymentStatusByPatient
 );
+router.get(
+  "/employees/viewPaymentStatus/:SDT/:STTLichSuKB",
+  viewPaymentStatusByPatient
+);
+
 // qtv
 const {
   getAdminBySDT,
@@ -142,6 +150,7 @@ router.put("/admins/updateInfDentist/:SDT", updateInfDentistByAdmin);
 router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
 
 router.put("/admins/updatEmployeeStatus", updateEmployeeStatusByAdmin);
+
 // get service
 const {
   getAllService,
@@ -178,8 +187,11 @@ router.put("/admins/drugs/updateDrug/:MaThuoc", updateDrug);
 router.delete("/admins/drugs/deleteDrug/:MaThuoc/:NgayHetHan", deleteDrug);
 
 // receipt
-const { getAllReceipt } = receiptController;
-router.get("/receipts/getAllReceipt", getAllReceipt);
+const { getAllReceipt, getReceiptByID } = receiptController;
+router.get("/employees/receipts/getAllReceipt", getAllReceipt);
+
+router.get("/employees/receipts/getReceiptByID/:MaHoaDon", getReceiptByID);
+router.get("/patients/receipts/getReceiptByID/:MaHoaDon", getReceiptByID);
 
 // lich hen appointmentSchedule
 const { getAllAppointmentSchedule, updateAppointmentStatus } =
