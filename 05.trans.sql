@@ -291,10 +291,17 @@ BEGIN
         -- Kiểm tra nếu có Ca trống
         IF EXISTS (
             SELECT 1
-        FROM LICHLAMVIEC
-        WHERE Ngay = @Ngay
-            AND MaNhaSi = @MaNhaSi
-            AND CaDangKy = @CaDangKy
+            FROM LICHLAMVIEC LV
+            WHERE LV.Ngay = @Ngay
+                AND LV.MaNhaSi = @MaNhaSi
+                AND LV.CaDangKy = @CaDangKy
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM LICHHEN LH
+                    WHERE LH.NgayGioKham = @Ngay
+                        AND LH.MaNhaSi = @MaNhaSi
+                        AND (LH.MaBenhNhan = @MaBenhNhan OR LH.TrangThaiLichHen = N'Đã đặt')
+                )
         )
         BEGIN
             -- Khung giờ trống -> Đặt hẹn
@@ -610,6 +617,51 @@ BEGIN
     PRINT N'Giao tác XemTrangThaiThanhToan chưa được tạo.';
 END
 GO
+--CREATE PROCEDURE XemTrangThaiThanhToan
+--    @SDT VARCHAR(10),
+--    @STTLichSuKB INT
+--AS
+--BEGIN
+--    BEGIN TRANSACTION;
+
+--    DECLARE @MaBenhNhan INT;
+--    DECLARE @TinhTrangThanhToan NVARCHAR(50);
+
+--    -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
+--    SELECT @MaBenhNhan = MaBenhNhan
+--    FROM BENHNHAN
+--    WHERE SDT = @SDT;
+
+--    IF @MaBenhNhan IS NOT NULL
+--    BEGIN
+--        -- Kiểm tra xem hóa đơn có tồn tại không
+--        SELECT @TinhTrangThanhToan = TinhTrangThanhToan
+--        FROM HOADON
+--        WHERE MaBenhNhan = @MaBenhNhan AND STTLichSuKB = @STTLichSuKB;
+
+--        IF @TinhTrangThanhToan IS NOT NULL
+--        BEGIN
+--            -- In thông tin trạng thái thanh toán
+--            PRINT N'Trạng thái thanh toán: ' + @TinhTrangThanhToan;
+--        END
+--        ELSE
+--        BEGIN
+--            -- Nếu hóa đơn không tồn tại
+--            ROLLBACK TRANSACTION;
+--            SET @TinhTrangThanhToan = N'Không tìm thấy hóa đơn cho bệnh nhân và lịch sử khám bệnh đã nhập.';
+--        END
+--    END
+--    ELSE
+--    BEGIN
+--        -- Nếu bệnh nhân không tồn tại
+--        ROLLBACK TRANSACTION;
+--        SET @TinhTrangThanhToan = N'Bệnh nhân không tồn tại trong hệ thống.';
+--    END
+
+--    COMMIT TRANSACTION;
+--END;
+--GO
+
 CREATE PROCEDURE XemTrangThaiThanhToan
     @SDT VARCHAR(10),
     @STTLichSuKB INT
@@ -619,6 +671,7 @@ BEGIN
 
     DECLARE @MaBenhNhan INT;
     DECLARE @TinhTrangThanhToan NVARCHAR(50);
+    DECLARE @MessageLog TABLE (Message NVARCHAR(MAX));
 
     -- Kiểm tra xem bệnh nhân có tồn tại trong hệ thống hay không
     SELECT @MaBenhNhan = MaBenhNhan
@@ -635,25 +688,32 @@ BEGIN
         IF @TinhTrangThanhToan IS NOT NULL
         BEGIN
             -- In thông tin trạng thái thanh toán
-            PRINT N'Trạng thái thanh toán: ' + @TinhTrangThanhToan;
+            INSERT INTO @MessageLog (Message) VALUES (N'Trạng thái thanh toán: ' + @TinhTrangThanhToan);
         END
         ELSE
         BEGIN
             -- Nếu hóa đơn không tồn tại
             ROLLBACK TRANSACTION;
-            PRINT N'Không tìm thấy hóa đơn cho bệnh nhân và lịch sử khám bệnh đã nhập.';
+            SET @TinhTrangThanhToan = N'Không tìm thấy hóa đơn cho bệnh nhân và lịch sử khám bệnh đã nhập.';
+            INSERT INTO @MessageLog (Message) VALUES (@TinhTrangThanhToan);
         END
     END
     ELSE
     BEGIN
         -- Nếu bệnh nhân không tồn tại
         ROLLBACK TRANSACTION;
-        PRINT N'Bệnh nhân không tồn tại trong hệ thống.';
+        SET @TinhTrangThanhToan = N'Bệnh nhân không tồn tại trong hệ thống.';
+        INSERT INTO @MessageLog (Message) VALUES (@TinhTrangThanhToan);
     END
 
     COMMIT TRANSACTION;
+
+    -- Trả về thông báo dưới dạng JSON
+    SELECT Message FROM @MessageLog FOR JSON AUTO;
 END;
 GO
+
+
 -- //2.Nha sĩ (đã có tài khoản) 
 
 -- Có quyền cập nhật lịch làm việc của mình (gọi giao tác CapNhatLichLamViec) 
@@ -1617,7 +1677,6 @@ BEGIN
     END CATCH
 END
 GO
-
 -- QTV có thể xóa lịch hẹn
 IF EXISTS (SELECT *
 FROM sys.procedures

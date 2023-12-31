@@ -11,17 +11,17 @@ const adminController = require("../controllers/adminController");
 const receiptController = require("../controllers/receiptController");
 const appointmentScheduleController = require("../controllers/appointmentScheduleController");
 const medHistoryController = require("../controllers/medHistoryController");
-
+const workCalendarController = require("../controllers/workCalendarController");
 const router = express.Router();
 
 // get user
 const {
-	getAllUser,
-	getUserBySDT,
-	createUser,
-	updateUser,
-	changPWByAllUser,
-	forgotPassword,
+  getAllUser,
+  getUserBySDT,
+  createUser,
+  updateUser,
+  changPWByAllUser,
+  forgotPassword,
 } = userControll;
 
 //http://localhost:5000/api/users/getAllUser
@@ -39,34 +39,47 @@ router.put("/patients/forgotPassword", forgotPassword);
 
 // NHAN VIEN
 const {
-	getAllEmployee,
-	getEmployeeBySDT,
-	updateInfPatientByEmployee,
-	updateInfEmployee,
-	updateInfDentistByEmployee,
-	changePaymentStatus,
+  getAllEmployee,
+  getEmployeeBySDT,
+  updateInfPatientByEmployee,
+  updateInfEmployee,
+  updateInfDentistByEmployee,
+  changePaymentStatus,
 } = employeeController;
 // http://localhost:5000/api/employees/getAllEmployee
 router.get("/employees/getAllEmployee", getAllEmployee);
 router.get("/employees/getEmployeeBySDT/:SDT", getEmployeeBySDT);
 router.put("/employees/updateInf/:SDT", updateInfEmployee);
 router.put(
-	"/employees/updateInfPatientByEmployee/:SDT",
-	updateInfPatientByEmployee
+  "/employees/updateInfPatientByEmployee/:SDT",
+  updateInfPatientByEmployee
 );
 router.put(
-	"/employees/updateInfDentistByEmployee/:SDT",
-	updateInfDentistByEmployee
+  "/employees/updateInfDentistByEmployee/:SDT",
+  updateInfDentistByEmployee
 );
 router.put("/employees/changePaymentStatus", changePaymentStatus);
+
 // NHA SI
-const { getAllDentist, getDentistBySDT, updateInfDentist } = dentistController;
+const {
+  getAllDentist,
+  getDentistBySDT,
+  updateInfDentist,
+  updateScheduleByDentist,
+} = dentistController;
 router.get("/dentists/getAllDentist", getAllDentist);
 router.get("/dentists/getDentistBySDT/:SDT", getDentistBySDT);
 router.put("/dentists/updateInf/:SDT", updateInfDentist);
+router.post("/dentists/updateSchedule", updateScheduleByDentist);
 
 // BENH NHAN
-const { getAllPatient, getPatientBySDT, updateInfPatient } = patientController;
+const {
+  getAllPatient,
+  getPatientBySDT,
+  updateInfPatient,
+  scheduleAppointment,
+  viewPaymentStatusByPatient,
+} = patientController;
 // http://localhost:5000/api/patients/getAllPatient
 router.get("/patients/getAllPatient", getAllPatient); //DONE
 //http://localhost:5000/api/patients/getPatientBySDT/0123456780
@@ -74,28 +87,33 @@ router.get("/patients/getPatientBySDT/:SDT", getPatientBySDT);
 // http://localhost:5000/api/patients/deletePatient/0123456780
 //"message": "Error deleting patient"
 router.put("/patients/updateInf/:SDT", updateInfPatient);
-
+router.post("/patients/scheduleAppointment", scheduleAppointment);
+router.get(
+  "/patients/viewPaymentStatus/:SDT/:STTLichSuKB",
+  viewPaymentStatusByPatient
+);
 // qtv
 const {
-	getAdminBySDT,
-	getDentistBySDTByAdmin,
-	getEmployeeBySDTByAdmin,
-	getPatientBySDTByAdmin,
-	createPatientByAdmin,
-	createEmployeeByAdmin,
-	createDentistByAdmin,
-	deletePatientByAdmin,
-	deleteEmployeeByAdmin,
-	deleteDentistByAdmin,
-	getAllAdmin,
-	getAllDentistByAdmin,
-	getAllEmployeeByAdmin,
-	getAllPatientByAdmin,
-	updateInfPatientByAdmin,
-	updateInfEmployeeByAdmin,
-	updateInfDentistByAdmin,
-	updateInfAdmin,
-	updateEmployeeStatusByAdmin,
+  getAdminBySDT,
+  getDentistBySDTByAdmin,
+  getEmployeeBySDTByAdmin,
+  getPatientBySDTByAdmin,
+  createPatientByAdmin,
+  createEmployeeByAdmin,
+  createDentistByAdmin,
+  deletePatientByAdmin,
+  deleteEmployeeByAdmin,
+  deleteDentistByAdmin,
+  getAllAdmin,
+  getAllDentistByAdmin,
+  getAllEmployeeByAdmin,
+  getAllPatientByAdmin,
+  updateInfPatientByAdmin,
+  updateInfEmployeeByAdmin,
+  updateInfDentistByAdmin,
+  updateInfAdmin,
+  updateEmployeeStatusByAdmin,
+  deleteAppointment,
 } = adminController;
 
 router.get("/admins/getAllAdmin", getAllAdmin);
@@ -116,6 +134,8 @@ router.delete("/admins/deletePatient/:SDT", deletePatientByAdmin);
 router.delete("/admins/deleteEmployee/:SDT", deleteEmployeeByAdmin);
 router.delete("/admins/deleteDentist/:SDT", deleteDentistByAdmin);
 
+router.delete("/admins/deleteAppointment/:MaLichHen", deleteAppointment);
+
 router.put("/admins/updateInfPatient/:SDT", updateInfPatientByAdmin);
 router.put("/admins/updateInfEmployee/:SDT", updateInfEmployeeByAdmin);
 router.put("/admins/updateInfDentist/:SDT", updateInfDentistByAdmin);
@@ -124,13 +144,13 @@ router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
 router.put("/admins/updatEmployeeStatus", updateEmployeeStatusByAdmin);
 // get service
 const {
-	getAllService,
-	getServiceById,
-	createService,
-	deleteService,
-	updateService,
+  getAllService,
+  getServiceById,
+  createService,
+  deleteService,
+  updateService,
 
-	getAllServiceUsage,
+  getAllServiceUsage,
 } = serviceControll;
 
 router.get("/services/getAllService", getAllService); //DONE
@@ -142,7 +162,7 @@ router.get("/services_usages/getAllServiceUsage", getAllServiceUsage);
 
 // drug
 const { getAllDrug, getDrugById, updateDrug, createDrug, deleteDrug } =
-	drugController;
+  drugController;
 router.get("/admins/drugs/getAllDrug", getAllDrug);
 router.get("/employees/drugs/getAllDrug", getAllDrug);
 router.get("/dentists/drugs/getAllDrug", getAllDrug);
@@ -158,21 +178,26 @@ router.put("/admins/drugs/updateDrug/:MaThuoc", updateDrug);
 router.delete("/admins/drugs/deleteDrug/:MaThuoc/:NgayHetHan", deleteDrug);
 
 // receipt
-const { getReceipt } = receiptController;
-router.get("/receipts/getReceipt", getReceipt);
+const { getAllReceipt } = receiptController;
+router.get("/receipts/getAllReceipt", getAllReceipt);
 
 // lich hen appointmentSchedule
-const { getAllAppointmentSchedule } = appointmentScheduleController;
+const { getAllAppointmentSchedule, updateAppointmentStatus } =
+  appointmentScheduleController;
 router.get(
-	"/appointmentSchedule/getAllAppointmentSchedule",
-	getAllAppointmentSchedule
+  "/appointmentSchedule/getAllAppointmentSchedule",
+  getAllAppointmentSchedule
 );
+router.put("/employees/updateAppointmentStatus", updateAppointmentStatus);
 
 //lich su kham benh - ho so benh an
 const { getAllMedHistory, getMedHistoryByID } = medHistoryController;
 router.get("/employees/medHistory/getAllMedHistory", getAllMedHistory);
 router.get("/employees/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
 
+const { getAllWorkCalendar } = workCalendarController;
+router.get("/employee/getAllWorkCalendar", getAllWorkCalendar);
+
 module.exports = {
-	routes: router,
+  routes: router,
 };

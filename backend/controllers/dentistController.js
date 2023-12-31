@@ -76,8 +76,44 @@ const updateInfDentist = async (req, res, next) => {
   }
 };
 
+// dang ky ca lam viec
+const updateScheduleByDentist = async (req, res, next) => {
+  try {
+    const { MaNhaSi, Ngay, CaDangKy } = req.body;
+
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config.sql);
+    const request = new sql.Request();
+    console.log("Received request:", req.body);
+    // Execute the stored procedure
+    const query = `
+      EXEC CapNhatLichLamViec
+        @MaNhaSi = ${MaNhaSi},
+        @Ngay = '${Ngay}',
+        @CaDangKy = N'${CaDangKy}';
+      `;
+    const result = await request.query(query);
+    console.log("SQL Query result:", result);
+    // Check the result of the stored procedure
+    if (result.rowsAffected[0] > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Schedule updated successfully",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        error: "Failed to update schedule. Please check the input parameters.",
+      });
+    }
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
 module.exports = {
   getAllDentist,
   getDentistBySDT,
   updateInfDentist,
+  updateScheduleByDentist,
 };
