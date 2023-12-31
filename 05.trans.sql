@@ -1192,7 +1192,7 @@ BEGIN
         -- Kiểm tra xem HÓA ĐƠN có tồn tại không
         IF EXISTS (SELECT 1
         FROM HOADON
-        WHERE STT = @STTLichSuKB AND MaBenhNhan = (SELECT MaBenhNhan
+        WHERE STTLichSuKB = @STTLichSuKB AND MaBenhNhan = (SELECT MaBenhNhan
             FROM BENHNHAN
             WHERE SDT = @SDT))
         BEGIN
