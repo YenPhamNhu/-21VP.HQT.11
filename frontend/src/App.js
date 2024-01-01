@@ -45,9 +45,11 @@ import SidebarPatient from "./components/sidebar_patient.js";
 import SidebarEmployee from "./components/sidebar.employee.js";
 import SidebarDentist from "./components/sidebar_dentist.js";
 import SidebarAdmin from "./components/sidebar_admin.js";
+
+import LichLamViec from "./screens/Admin/Lich_lam_viec.js"
 // import { useContext } from "react";
 // import { Store } from "./Store.js";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 // import LogoutPage from "./components/Logout.js";
 import "./App.css";
 
@@ -191,6 +193,7 @@ function App({ item_Type }) {
 			<Route path="/admin/dashboard" element={<AdminElement><Dashboard /></AdminElement>} />
 			<Route path="/admin/infoappo" element={<AdminElement><InfoAppo /></AdminElement>} />
 			<Route path="/admin/storemed" element={<AdminElement><StoreMed /></AdminElement>} />
+			<Route path="/admin/lichlamviec" element={<AdminElement><LichLamViec /></AdminElement>} />
 			<Route path="*" element={<div>Page Not Found!</div>} />
 			<Route path="/logout" element={<Logout/>} />
 		  </Routes>
