@@ -17,7 +17,7 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from '@mui/icons-material/Logout';
-
+import InfoIcon from "@mui/icons-material/Info";
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
     left: false,
@@ -61,6 +61,11 @@ export default function SwipeableTemporaryDrawer() {
       text: "Xem danh mục thuốc",
       icon: <VaccinesIcon />,
       to: "/dentist/listmed",
+    },
+    {
+      text: "Lịch làm việc",
+      icon: <InfoIcon />,
+      to: "/dentist/lichlamviec",
     },
     { text: "Đăng xuất", icon: <LogoutIcon />, to: "/logout" },
   ];

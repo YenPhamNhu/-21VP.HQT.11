@@ -47,6 +47,7 @@ import SidebarDentist from "./components/sidebar_dentist.js";
 import SidebarAdmin from "./components/sidebar_admin.js";
 
 import LichLamViec from "./screens/Admin/Lich_lam_viec.js"
+import LichLamViecDentist from "./screens/Dentist/Lich_lam_viec.js"
 // import { useContext } from "react";
 // import { Store } from "./Store.js";
 // import { useSelector } from "react-redux";
@@ -178,6 +179,7 @@ function App({ item_Type }) {
 			<Route path="/dentist/listmed" element={<DentistElement><ListMed /></DentistElement>} />
 			<Route path="/dentist/schedule" element={<DentistElement><Schedule /></DentistElement>} />
 			<Route path="/dentist/updatepatient" element={<DentistElement><UpdatePatient /></DentistElement>} />
+			<Route path="/dentist/lichlamviec" element={<DentistElement><LichLamViecDentist /></DentistElement>} />
 			<Route path="/employee" element={<EmployeeElement><MainEmployee /></EmployeeElement>} />
 			<Route path="/employee/create" element={<EmployeeElement><CreateProfile /></EmployeeElement>} />
 			<Route path="/employee/detail" element={<EmployeeElement><DetailEmployee /></EmployeeElement>} />

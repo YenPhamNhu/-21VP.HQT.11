@@ -1,10 +1,10 @@
-import React from 'react';
-
+import React from "react";
+import UpdateSchedule from "../../components/update_schedule";
 
 export default function Home() {
-  return (
-    <div>
-     Test
-    </div>
-  );
+	return (
+		<div>
+			<UpdateSchedule />
+		</div>
+	);
 }

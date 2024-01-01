@@ -23,6 +23,11 @@ export default function Home() {
 				header: "Ca Đăng Ký",
 				required: false,
 			},
+			{
+				accessorKey: "SDT",
+				header: "Số điện thoại",
+				required: false,
+			},
 		],
 		[]
 	);
@@ -34,7 +39,7 @@ export default function Home() {
 			`http://localhost:5000/api/employee/getAllWorkCalendar`
 		);
 		const serviceData = await response.json();
-		// setDulieu(serviceData);
+		setDulieu(serviceData);
 		if (serviceData) {
 			const modifiedData = serviceData.map((item) => {
 				const formattedNgay = item.Ngay.split("T")[0];
