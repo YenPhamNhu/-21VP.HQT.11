@@ -576,6 +576,64 @@ const deleteAppointment = async (req, res, next) => {
   }
 };
 
+const getDailyAppointments = async () => {
+  const pool = await sql.connect(config.sql);
+  const result = await pool
+    .request()
+    .query(
+      "SELECT COUNT(*) AS TotalAppointments FROM LichHen WHERE CONVERT(DATE, NgayGioKham) = CONVERT(DATE, GETDATE())"
+    );
+  return result.recordset[0].TotalAppointments;
+};
+
+// dashboard
+const getTotalPatients = async () => {
+  const pool = await sql.connect(config.sql);
+  const result = await pool
+    .request()
+    .query("SELECT COUNT(*) AS TotalPatients FROM BENHNHAN");
+  return result.recordset[0].TotalPatients;
+};
+
+const getTotalAppointments = async () => {
+  const pool = await sql.connect(config.sql);
+  const result = await pool
+    .request()
+    .query("SELECT COUNT(*) AS TotalAppointments FROM LichHen");
+  return result.recordset[0].TotalAppointments;
+};
+
+const getTotalRevenue = async () => {
+  const pool = await sql.connect(config.sql);
+  const result = await pool
+    .request()
+    .query("SELECT SUM(TongTien) AS TotalRevenue FROM HOADON");
+  return result.recordset[0].TotalRevenue || 0;
+};
+
+const getDashboardStats = async (req, res) => {
+  try {
+    const dailyAppointments = await getDailyAppointments();
+    const totalPatients = await getTotalPatients();
+    const totalAppointments = await getTotalAppointments();
+    const totalRenvenue = await getTotalRevenue();
+    res.status(200).json({
+      success: true,
+      data: {
+        dailyAppointments,
+        totalPatients,
+        totalAppointments,
+        totalRenvenue,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllAdmin,
   getAllDentistByAdmin,
@@ -603,4 +661,6 @@ module.exports = {
   updateEmployeeStatusByAdmin,
 
   deleteAppointment,
+
+  getDashboardStats,
 };

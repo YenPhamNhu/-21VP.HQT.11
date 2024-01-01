@@ -123,6 +123,7 @@ const {
   updateInfAdmin,
   updateEmployeeStatusByAdmin,
   deleteAppointment,
+  getDashboardStats,
 } = adminController;
 
 router.get("/admins/getAllAdmin", getAllAdmin);
@@ -151,6 +152,8 @@ router.put("/admins/updateInfDentist/:SDT", updateInfDentistByAdmin);
 router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
 
 router.put("/admins/updatEmployeeStatus", updateEmployeeStatusByAdmin);
+
+router.get("/admins/getDashboardStats", getDashboardStats);
 
 // get service
 const {
