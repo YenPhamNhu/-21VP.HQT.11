@@ -92,8 +92,9 @@ function App({ item_Type }) {
 	}, [item_Type]);
 	const PublicElement = ({ children }) => (
 		<>
+		<Header/>
 			{children}
-			<Header/>
+			
 		</>
 	);
 
