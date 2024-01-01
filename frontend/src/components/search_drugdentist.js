@@ -44,7 +44,7 @@ export default function Home() {
     const fetchService = async () => {
   
       const response = await fetch(
-        `http://localhost:5000/api//drugs/getAllDrug`
+        `http://localhost:5000/api/dentists/drugs/getAllDrug`
       ); // Fetch service data
       console.log(response);
       const serviceData = await response.json();

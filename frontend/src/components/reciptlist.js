@@ -38,7 +38,7 @@ function Payment() {
   const [Dulieu, setDulieu] = useState(null);
 
   const fetchService = async () => {
-    const response = await fetch(`http://localhost:5000/api/receipts/getReceipt`);
+    const response = await fetch(`http://localhost:5000/api/employees/receipts/getAllReceipt`);
     const serviceData = await response.json();
     if (serviceData) {
       const modifiedData = serviceData.map((item) => {

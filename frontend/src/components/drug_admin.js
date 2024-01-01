@@ -4,6 +4,7 @@ import { MaterialReactTable } from 'material-react-table';
 import { Box, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import axios from 'axios';
 export default function Home() {
   const columns = useMemo(
     () => [
@@ -29,7 +30,7 @@ export default function Home() {
       },
       {
         accessorKey: 'DonGia',
-        header: 'TĐơn giá',
+        header: 'Đơn giá',
         required: true,
       },
       {
@@ -83,9 +84,21 @@ export default function Home() {
           </IconButton>
           <IconButton
             color="error"
-            onClick={() => {
-                Dulieu.splice(row.index, 1); 
-                setDulieu([...Dulieu]);
+            onClick={async () => {
+              try {
+                const response = await fetch(`http://localhost:5000/api/admins/drugs/deleteDrug/${row._valuesCache.MaThuoc}/${row._valuesCache.NgayHetHan}`);
+                if (response.data.success) {
+                  // Drug deleted successfully, update the local state or refetch data
+                  const updatedData = Dulieu.filter(drug => drug.MaThuoc !== row.MaThuoc);
+                  setDulieu(updatedData);
+                } else {
+                  // Show error message if drug not found or could not be deleted
+                  console.error(response.data.error);
+                }
+              } catch (error) {
+                // Handle any API request errors
+                console.error('Error deleting drug:', error);
+              }
             }}
           >
             <DeleteIcon />

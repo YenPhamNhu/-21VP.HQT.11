@@ -21,7 +21,7 @@ const Main = () => {
 	}, []);
 	return (
 		<main class='container-img' id='main'>
-			<Header />
+			
 			{/* <SwipeableTemporaryDrawer/> */}
 			<div className='welcome-section'>
 				<h2>Welcome {name} to Chigsa!</h2>

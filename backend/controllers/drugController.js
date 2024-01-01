@@ -132,6 +132,51 @@ const updateDrug = async (req, res, next) => {
 };
 
 //delete drug
+// const deleteDrug = async (req, res, next) => {
+// 	try {
+// 		// Extract drug ID from request parameters
+// 		const drugId = req.params.MaThuoc;
+// 		const exp = req.params.NgayHetHan;
+
+// 		// Connect to the SQL Server database
+// 		const pool = await sql.connect(config.sql);
+// 		const request = new sql.Request();
+
+// 		// Use parameterized query to avoid SQL injection
+// 		const query = `
+//       EXEC XoaThuoc
+//       @MaThuoc = @drugId,
+//       @NgayHetHan = @exp;  
+//   `;
+
+// 		request.input("drugId", sql.Int, parseInt(drugId));
+// 		const parsedExp = new Date(exp);
+
+// 		if (isNaN(parsedExp.getTime())) {
+// 			throw new Error("Invalid date format");
+// 		}
+
+// 		request.input("exp", sql.DateTime, parsedExp);
+
+// 		const result = await request.query(query);
+
+// 		// Check the result of the stored procedure
+// 		if (result.rowsAffected[0] > 0) {
+// 			res
+// 				.status(200)
+// 				.json({ success: true, message: "Drug deleted successfully" });
+// 		} else {
+// 			res.status(404).json({
+// 				success: false,
+// 				error: "Drug not found or could not be deleted",
+// 			});
+// 		}
+// 	} catch (err) {
+// 		console.error("Error executing SQL query:", err);
+// 		res.status(500).json({ success: false, error: err.message });
+// 	}
+// };
+
 const deleteDrug = async (req, res, next) => {
   try {
     // Extract drug ID from request parameters
@@ -149,14 +194,9 @@ const deleteDrug = async (req, res, next) => {
       @NgayHetHan = @exp;
   `;
 
+    // Add parameters to the request
     request.input("drugId", sql.Int, parseInt(drugId));
-    const parsedExp = new Date(exp);
-
-    if (isNaN(parsedExp.getTime())) {
-      throw new Error("Invalid date format");
-    }
-
-    request.input("exp", sql.DateTime, parsedExp);
+    request.input("exp", sql.DateTime, parseInt(exp));
 
     const result = await request.query(query);
 
@@ -176,46 +216,6 @@ const deleteDrug = async (req, res, next) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
-
-// const deleteDrug = async (req, res, next) => {
-//   try {
-//     // Extract drug ID from request parameters
-//     const drugId = req.params.MaThuoc;
-//     const exp = req.params.NgayHetHan;
-
-//     // Connect to the SQL Server database
-//     const pool = await sql.connect(config.sql);
-//     const request = new sql.Request();
-
-//     // Use parameterized query to avoid SQL injection
-//     const query = `
-//       EXEC XoaThuoc
-//       @MaThuoc = @drugId,
-//       @NgayHetHan = @exp;
-//   `;
-
-//     // Add parameters to the request
-//     request.input("drugId", sql.Int, parseInt(drugId));
-//     request.input("exp", sql.DateTime, parseInt(exp));
-
-//     const result = await request.query(query);
-
-//     // Check the result of the stored procedure
-//     if (result.rowsAffected[0] > 0) {
-//       res
-//         .status(200)
-//         .json({ success: true, message: "Drug deleted successfully" });
-//     } else {
-//       res.status(404).json({
-//         success: false,
-//         error: "Drug not found or could not be deleted",
-//       });
-//     }
-//   } catch (err) {
-//     console.error("Error executing SQL query:", err);
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
 
 module.exports = {
   getAllDrug,

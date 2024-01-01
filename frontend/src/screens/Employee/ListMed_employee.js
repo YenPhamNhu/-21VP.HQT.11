@@ -1,5 +1,5 @@
 import React from 'react';
-import Drug from '../../components/search_drug'
+import Drug from '../../components/search_drugemployee'
 
 export default function Home() {
   return (

@@ -5,7 +5,7 @@ import Header from "../components/header.js";
 const About = () => {
 	return (
 		<main>
-			<Header />
+		
 			<Banner />
 			<Container className='mx-auto p-1'>
 				<h2 className='text-dark uppercase'>Giới thiệu</h2>

@@ -15,7 +15,7 @@ import Signup from "./screens/Signup.js";
 import Footer from "./components/footer.js";
 import Main from "./components/main.js";
 import Header from "./components/header.js";
-import HeaderUser from "./components/header_user.js";
+// import HeaderUser from "./components/header_user.js";
 import Forgetpass from "./screens/Forgetpass.js";
 import ServiceDetails from "./screens/Service_detail.js";
 import Resetpass from "./screens/Resetpass.js";
@@ -69,7 +69,6 @@ const USER_TYPES = {
 
 function App({ item_Type }) {
 	const [userType, setUserType] = useState(USER_TYPES.PUBLIC);
-
 	useEffect(() => {
 		if (item_Type) {
 			// Set the user type based on the item_Type from the login session
@@ -94,14 +93,13 @@ function App({ item_Type }) {
 	const PublicElement = ({ children }) => (
 		<>
 			{children}
-			<Footer />
+			<Header/>
 		</>
 	);
 
 	const AdminElement = ({ children }) => (
 		<>
 			<SidebarAdmin />
-			<HeaderUser />
 			{children}
 		</>
 	);
@@ -109,7 +107,7 @@ function App({ item_Type }) {
 	const PatientElement = ({ children }) => (
 		<>
 			<SidebarPatient />
-			<HeaderUser />
+		
 			{children}
 		</>
 	);
@@ -117,7 +115,7 @@ function App({ item_Type }) {
 	const DentistElement = ({ children }) => (
 		<>
 			<SidebarDentist />
-			<HeaderUser />
+			
 			{children}
 		</>
 	);
@@ -125,7 +123,7 @@ function App({ item_Type }) {
 	const EmployeeElement = ({ children }) => (
 		<>
 			<SidebarEmployee />
-			<HeaderUser />
+		
 			{children}
 		</>
 	);
@@ -138,7 +136,8 @@ function App({ item_Type }) {
 			{userType === USER_TYPES.ADMIN_USER && <AdminElement />}
 			{userType === USER_TYPES.DENTIST_USER && <DentistElement />}
 			{userType === USER_TYPES.EMPLOYEE_USER && <EmployeeElement />}
-			{/* {userType === USER_TYPES.PUBLIC && <Header />} */}
+			
+			
 
 			<Routes>
 				{/* Define your routes based on the user type */}
@@ -476,7 +475,7 @@ function App({ item_Type }) {
 				<Route path='/logout' element={<Logout />}></Route>
 			</Routes>
 			<hr id='hrduoi'></hr>
-			<Footer />
+		<Footer/>
 		</BrowserRouter>
 	);
 }
