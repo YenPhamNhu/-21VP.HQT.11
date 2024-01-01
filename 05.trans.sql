@@ -2046,3 +2046,42 @@ GO
         WHERE MaHoaDon = @MaHoaDon;
     END
 
+-- XemThongKeLichHenTheoThang
+
+--IF EXISTS (SELECT *
+--    FROM sys.procedures
+--    WHERE name = N'XemThongKeLichHenTheoThang' AND type = 'P')
+--BEGIN
+--        DROP PROCEDURE XemThongKeLichHenTheoThang;
+--        PRINT N'Đã hủy giao tác XemThongKeLichHenTheoThang.';
+--    END
+--ELSE
+--BEGIN
+--        PRINT N'Giao tác XemThongKeLichHenTheoThang chưa được tạo.';
+--    END
+--GO
+
+--CREATE PROCEDURE XemThongKeLichHenTheoThang
+--AS
+--BEGIN
+
+--   BEGIN TRY
+--    BEGIN TRANSACTION;
+
+--    SELECT
+--      DATENAME(MONTH, lh.NgayGioKham) AS MonthName,
+--      COUNT(*) AS AppointmentCount
+--    FROM
+--      LICHHEN lh
+--    GROUP BY
+--      DATENAME(MONTH, lh.NgayGioKham);
+
+--    COMMIT;
+--  END TRY
+--  BEGIN CATCH
+--    ROLLBACK;
+--	PRINT ERROR_MESSAGE();
+--  END CATCH;
+--END;
+--GO
+

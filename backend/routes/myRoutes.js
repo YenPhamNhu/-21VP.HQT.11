@@ -130,6 +130,7 @@ const {
   deleteAppointment,
   getDashboardStats,
   QuanLyTaiKhoan,
+  getMonthlyAppointments,
 } = adminController;
 
 router.get("/admins/getAllAdmin", getAllAdmin);
@@ -160,7 +161,7 @@ router.put("/admins/updateInfAdmin/:SDT", updateInfAdmin);
 router.put("/admins/updatEmployeeStatus", updateEmployeeStatusByAdmin);
 
 router.get("/admins/getDashboardStats", getDashboardStats);
-
+router.get("/admins/getMonthlyAppointments", getMonthlyAppointments);
 // get service
 const {
   getAllService,
@@ -212,6 +213,7 @@ router.get("/employees/drugs/XemDonThuoc/:drugInvoiceId", XemDonThuoc);
 // lich hen appointmentSchedule
 const {
   getAllAppointmentSchedule,
+  getUpcomingAppointments,
   updateAppointmentStatus,
   getAppointmentScheduleByMaBenhNhan,
   getAppointmentScheduleByMaNhaSi,
@@ -219,6 +221,10 @@ const {
 router.get(
   "/admins/appointmentSchedule/getAllAppointmentSchedule",
   getAllAppointmentSchedule
+);
+router.get(
+  "/admins/appointmentSchedule/getUpcomingAppointments",
+  getUpcomingAppointments
 );
 router.get(
   "/employees/appointmentSchedule/getAllAppointmentSchedule",
@@ -245,6 +251,7 @@ router.get(
 );
 router.get("/employees/medHistory/getMedHistoryByID/:ID", getMedHistoryByNhaSi);
 router.get("/patients/medHistory/getMedHistoryByID/:ID", getMedHistoryByID);
+
 const { getAllWorkCalendar } = workCalendarController;
 router.get("/employee/getAllWorkCalendar", getAllWorkCalendar);
 
