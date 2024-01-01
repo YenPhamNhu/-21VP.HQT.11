@@ -106,26 +106,6 @@ const getPatientBySDTByAdmin = async (req, res, next) => {
   }
 };
 
-// const createPatientByAdmin = async (req, res, next) => {
-//   try {
-//     const { HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau } = req.body;
-
-//     // Call the function to create a patient in the data layer
-//     await patientData.createPatient(
-//       HoTen,
-//       SDT,
-//       GioiTinh,
-//       NgaySinh,
-//       DiaChi,
-//       MatKhau
-//     );
-
-//     res.status(201).send("Patient created successfully");
-//   } catch (error) {
-//     res.status(400).send(error.message);
-//   }
-// };
-
 const createPatientByAdmin = async (req, res, next) => {
   try {
     const requiredFields = [
@@ -576,14 +556,65 @@ const deleteAppointment = async (req, res, next) => {
   }
 };
 
-const getDailyAppointments = async () => {
-  const pool = await sql.connect(config.sql);
-  const result = await pool
-    .request()
-    .query(
-      "SELECT COUNT(*) AS TotalAppointments FROM LichHen WHERE CONVERT(DATE, NgayGioKham) = CONVERT(DATE, GETDATE())"
-    );
-  return result.recordset[0].TotalAppointments;
+const QuanLyTaiKhoan = async (req, res, next) => {
+  try {
+    const requiredFields = [
+      "SDT",
+      "HoTen",
+      "GioiTinh",
+      "NgaySinh",
+      "DiaChi",
+      "MatKhau",
+      "TinhTrangHoatDong",
+      "ViTri",
+      "ChuyenMon",
+      "BangCap",
+      "Email",
+      "TinhTrangThanhToan",
+    ];
+    for (const field of requiredFields) {
+      if (!req.body[field]) {
+        return res.status(400).json({ error: `${field} is required` });
+      }
+    }
+
+    const pool = await sql.connect(config.sql);
+
+    const {
+      HoTen = "Bệnh nhân mới",
+      NgaySinh = "1990-01-01",
+      ...rest
+    } = req.body;
+
+    const request = new sql.Request();
+
+    const query = `
+      EXEC QuanLyTaiKhoan
+        @SDT = '${rest.SDT}',
+        @HoTen = N'${HoTen}',
+        @GioiTinh = N'${rest.GioiTinh.toLowerCase() === "male" ? "Nam" : "Nữ"}',
+        @NgaySinh = '${NgaySinh}',
+        @DiaChi = N'${rest.DiaChi}',
+        @MatKhau = N'${rest.MatKhau}',
+        @TinhTrangHoatDong = N'${rest.TinhTrangHoatDong}',
+        @ViTri = N'${rest.ViTri}',
+        @ChuyenMon = N'${rest.ChuyenMon}',
+        @BangCap = N'${rest.BangCap}',
+        @Email = N'${rest.Email}',
+        @TinhTrangThanhToan = N'${rest.TinhTrangThanhToan}';
+    `;
+
+    const result = await request.query(query);
+
+    console.log("Stored Procedure Result:", result);
+
+    res
+      .status(201)
+      .json({ success: true, message: "User registered successfully" });
+  } catch (err) {
+    console.error("Error executing SQL query:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
 };
 
 // dashboard
@@ -663,4 +694,26 @@ module.exports = {
   deleteAppointment,
 
   getDashboardStats,
+
+  QuanLyTaiKhoan,
 };
+
+// const createPatientByAdmin = async (req, res, next) => {
+//   try {
+//     const { HoTen, SDT, GioiTinh, NgaySinh, DiaChi, MatKhau } = req.body;
+
+//     // Call the function to create a patient in the data layer
+//     await patientData.createPatient(
+//       HoTen,
+//       SDT,
+//       GioiTinh,
+//       NgaySinh,
+//       DiaChi,
+//       MatKhau
+//     );
+
+//     res.status(201).send("Patient created successfully");
+//   } catch (error) {
+//     res.status(400).send(error.message);
+//   }
+// };

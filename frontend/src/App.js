@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-	BrowserRouter,
-	Routes,
-	Route,
-	// Navigate,
-	// Router,
-} from "react-router-dom";
+import React, { useEffect, useState,Navigate } from "react";
+import {BrowserRouter,Routes,Route,} from "react-router-dom";
 import "./App.css";
 import About from "./screens/About.js";
 import Service from "./screens/Service.js";
@@ -15,7 +9,6 @@ import Signup from "./screens/Signup.js";
 import Footer from "./components/footer.js";
 import Main from "./components/main.js";
 import Header from "./components/header.js";
-// import HeaderUser from "./components/header_user.js";
 import Forgetpass from "./screens/Forgetpass.js";
 import ServiceDetails from "./screens/Service_detail.js";
 import Resetpass from "./screens/Resetpass.js";
@@ -57,6 +50,7 @@ import SidebarAdmin from "./components/sidebar_admin.js";
 import { useSelector } from "react-redux";
 // import LogoutPage from "./components/Logout.js";
 import "./App.css";
+
 // import { Link } from 'react-router-dom';
 
 const USER_TYPES = {
@@ -67,418 +61,143 @@ const USER_TYPES = {
 	DENTIST_USER: "Dentist User",
 };
 
-function App({ item_Type }) {
+function App({ item_Type }) {	
 	const [userType, setUserType] = useState(USER_TYPES.PUBLIC);
 	useEffect(() => {
-		if (item_Type) {
+		const handleLoginSuccess = () => {
+		  if (sessionStorage.item_Type) {
 			// Set the user type based on the item_Type from the login session
-			switch (item_Type) {
-				case "Admin User":
-					setUserType(USER_TYPES.ADMIN_USER);
-					break;
-				case "Patient User":
-					setUserType(USER_TYPES.PATIENT_USER);
-					break;
-				case "Employee User":
-					setUserType(USER_TYPES.EMPLOYEE_USER);
-					break;
-				case "Dentist User":
-					setUserType(USER_TYPES.DENTIST_USER);
-					break;
-				default:
-					setUserType(USER_TYPES.PUBLIC);
+			switch (sessionStorage.item_Type) {
+			  case "Admin User":
+				setUserType(USER_TYPES.ADMIN_USER);
+				break;
+			  case "Patient User":
+				setUserType(USER_TYPES.PATIENT_USER);
+				break;
+			  case "Employee User":
+				setUserType(USER_TYPES.EMPLOYEE_USER);
+				break;
+			  case "Dentist User":
+				setUserType(USER_TYPES.DENTIST_USER);
+				break;
+			  default:
+				setUserType(USER_TYPES.PUBLIC);
 			}
+		  }
+		};
+		const handleLogout = () => {
+			// Clear the user type or perform any necessary cleanup
+			setUserType(USER_TYPES.PUBLIC);
+		  };
+
+	
+		// Add event listener for the custom event
+		window.addEventListener("logout", handleLogout);
+		window.addEventListener("loginSuccess", handleLoginSuccess);
+		  
+		if (sessionStorage.item_Type) {
+			handleLoginSuccess();
+		  }
+		// Clean up the event listener
+		return () => {
+			window.removeEventListener("logout", handleLogout);
+			window.removeEventListener("loginSuccess", handleLoginSuccess);
+		  };
+	  }, []);
+	
+
+	
+	function PublicElement({ children }) {
+		if (userType === USER_TYPES.PUBLIC) {
+			return <>{children}</>;
+		} else {
+			return <div>You do not have access to this page!</div>;
 		}
-	}, [item_Type]);
-	const PublicElement = ({ children }) => (
-		<>
-		<Header/>
-			{children}
-			
-		</>
-	);
-
-	const AdminElement = ({ children }) => (
-		<>
-			<SidebarAdmin />
-			{children}
-		</>
-	);
-
-	const PatientElement = ({ children }) => (
-		<>
-			<SidebarPatient />
+	}
+	
+	function AdminElement({ children }) {
+		if (userType === USER_TYPES.ADMIN_USER) {
+			return <>{children}</>;
+		} else {
+			return <div>You do not have access to this page!</div>;
+		}
+	}
+	
+	function PatientElement({ children }) {
+		if (userType === USER_TYPES.PATIENT_USER) {
+			return <>{children}</>;
+		} else {
+			return <div>You do not have access to this page!</div>;
+		}
+	}
+	
+	function EmployeeElement({ children }) {
+		if (userType === USER_TYPES.EMPLOYEE_USER) {
+			return <>{children}</>;
+		} else {
+			return <div>You do not have access to this page!</div>;
+		}
+	}
+	
+	function DentistElement({ children }) {
+		if (userType === USER_TYPES.DENTIST_USER) {
+			return <>{children}</>;
+		} else {
+			return <div>You do not have access to this page!</div>;
+		}
+	}
 		
-			{children}
-		</>
-	);
-
-	const DentistElement = ({ children }) => (
-		<>
-			<SidebarDentist />
-			
-			{children}
-		</>
-	);
-
-	const EmployeeElement = ({ children }) => (
-		<>
-			<SidebarEmployee />
-		
-			{children}
-		</>
-	);
-
 	return (
 		<BrowserRouter>
-			{/* Render your components based on the user type */}
-
-			{userType === USER_TYPES.PATIENT_USER && <PatientElement />}
-			{userType === USER_TYPES.ADMIN_USER && <AdminElement />}
-			{userType === USER_TYPES.DENTIST_USER && <DentistElement />}
-			{userType === USER_TYPES.EMPLOYEE_USER && <EmployeeElement />}
-			
-			
-
-			<Routes>
-				{/* Define your routes based on the user type */}
-				<Route
-					path='/'
-					element={
-						<PublicElement>
-							{" "}
-							<Main />{" "}
-						</PublicElement>
-					}
-				/>
-				{/* Other routes based on the user type */}
-				<Route
-					path='/about'
-					element={
-						<PublicElement>
-							{" "}
-							<About />{" "}
-						</PublicElement>
-					}
-				/>
-				<Route
-					path='/service'
-					element={
-						<PublicElement>
-							{" "}
-							<Service />{" "}
-						</PublicElement>
-					}
-				/>
-				<Route
-					path='/login'
-					element={
-						<PublicElement>
-							{" "}
-							<Login />{" "}
-						</PublicElement>
-					}
-				/>
-				<Route
-					path='/signup'
-					element={
-						<PublicElement>
-							{" "}
-							<Signup />{" "}
-						</PublicElement>
-					}
-				/>
-				<Route
-					path='/forgetpass'
-					element={
-						<PublicElement>
-							{" "}
-							<Forgetpass />{" "}
-						</PublicElement>
-					}
-				/>
-				<Route
-					path='/resetpass'
-					element={
-						<PublicElement>
-							{" "}
-							<Resetpass />{" "}
-						</PublicElement>
-					}
-				/>
-				<Route
-					path='/service/:number'
-					element={
-						<PublicElement>
-							{" "}
-							<ServiceDetails />{" "}
-						</PublicElement>
-					}
-				/>
-
-				<Route
-					path='/patient'
-					element={
-						<PatientElement>
-							{" "}
-							<MainPatient />{" "}
-						</PatientElement>
-					}
-				/>
-				<Route
-					path='/patient/detail'
-					element={
-						<PatientElement>
-							{" "}
-							<DetailPatient />{" "}
-						</PatientElement>
-					}
-				/>
-				<Route
-					path='/patient/setdate'
-					element={
-						<PatientElement>
-							{" "}
-							<SetdatePatient />{" "}
-						</PatientElement>
-					}
-				/>
-				<Route
-					path='/patient/dentist'
-					element={
-						<PatientElement>
-							{" "}
-							<DentistPatient />{" "}
-						</PatientElement>
-					}
-				/>
-				<Route
-					path='/patient/profile'
-					element={
-						<PatientElement>
-							{" "}
-							<ProfilePatient />{" "}
-						</PatientElement>
-					}
-				/>
-				<Route
-					path='/patient/payment'
-					element={
-						<PatientElement>
-							{" "}
-							<PaymentPatient />{" "}
-						</PatientElement>
-					}
-				/>
-
-				<Route
-					path='/dentist'
-					element={
-						<DentistElement>
-							{" "}
-							<MainDentist />{" "}
-						</DentistElement>
-					}
-				/>
-				<Route
-					path='/dentist/detail'
-					element={
-						<DentistElement>
-							{" "}
-							<DetailDentist />{" "}
-						</DentistElement>
-					}
-				/>
-				<Route
-					path='/dentist/search'
-					element={
-						<DentistElement>
-							{" "}
-							<SearchDentist />{" "}
-						</DentistElement>
-					}
-				/>
-				<Route
-					path='/dentist/listdate'
-					element={
-						<DentistElement>
-							{" "}
-							<ListDate />{" "}
-						</DentistElement>
-					}
-				/>
-				<Route
-					path='/dentist/listmed'
-					element={
-						<DentistElement>
-							{" "}
-							<ListMed />{" "}
-						</DentistElement>
-					}
-				/>
-				<Route
-					path='/dentist/schedule'
-					element={
-						<DentistElement>
-							{" "}
-							<Schedule />{" "}
-						</DentistElement>
-					}
-				/>
-				<Route
-					path='/dentist/updatepatient'
-					element={
-						<DentistElement>
-							{" "}
-							<UpdatePatient />{" "}
-						</DentistElement>
-					}
-				/>
-
-				<Route
-					path='/employee'
-					element={
-						<EmployeeElement>
-							{" "}
-							<MainEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/create'
-					element={
-						<EmployeeElement>
-							{" "}
-							<CreateProfile />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/detail'
-					element={
-						<EmployeeElement>
-							{" "}
-							<DetailEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/listmed'
-					element={
-						<EmployeeElement>
-							{" "}
-							<ListMedEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/payment'
-					element={
-						<EmployeeElement>
-							{" "}
-							<PaymentEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/search'
-					element={
-						<EmployeeElement>
-							{" "}
-							<SearchEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/searchprofile'
-					element={
-						<EmployeeElement>
-							{" "}
-							<SearchProfileEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/setdate'
-					element={
-						<EmployeeElement>
-							{" "}
-							<SetdateEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-				<Route
-					path='/employee/updatepatient'
-					element={
-						<EmployeeElement>
-							{" "}
-							<UpdatePatientEmployee />{" "}
-						</EmployeeElement>
-					}
-				/>
-
-				<Route
-					path='/admin'
-					element={
-						<AdminElement>
-							{" "}
-							<MainAdmin />{" "}
-						</AdminElement>
-					}
-				/>
-				<Route
-					path='/admin/detail'
-					element={
-						<AdminElement>
-							{" "}
-							<DetailAdmin />{" "}
-						</AdminElement>
-					}
-				/>
-				<Route
-					path='/admin/account'
-					element={
-						<AdminElement>
-							{" "}
-							<AccountManage />{" "}
-						</AdminElement>
-					}
-				/>
-				<Route
-					path='/admin/dashboard'
-					element={
-						<AdminElement>
-							{" "}
-							<Dashboard />{" "}
-						</AdminElement>
-					}
-				/>
-				<Route
-					path='/admin/infoappo'
-					element={
-						<AdminElement>
-							{" "}
-							<InfoAppo />{" "}
-						</AdminElement>
-					}
-				/>
-				<Route
-					path='/admin/storemed'
-					element={
-						<AdminElement>
-							{" "}
-							<StoreMed />{" "}
-						</AdminElement>
-					}
-				/>
-
-				<Route path='*' element={<div>Page Not Found!</div>}></Route>
-				<Route path='/logout' element={<Logout />}></Route>
-			</Routes>
-			<hr id='hrduoi'></hr>
-		<Footer/>
+		    {userType === USER_TYPES.PUBLIC && <Header />}
+			{userType === USER_TYPES.PATIENT_USER && <SidebarPatient />}
+			{userType === USER_TYPES.ADMIN_USER && <SidebarAdmin />}
+			{userType === USER_TYPES.DENTIST_USER && <SidebarDentist />}
+			{userType === USER_TYPES.EMPLOYEE_USER && <SidebarEmployee />}
+		  <Routes>
+			<Route path="/" element={<PublicElement><Main /></PublicElement>} />
+			<Route path="/about" element={<About />} />
+			<Route path="/service" element={<Service/>}/>
+			<Route path="/login" element={<PublicElement><Login /></PublicElement>} />
+			<Route path="/signup" element={<PublicElement><Signup /></PublicElement>} />
+			<Route path="/forgetpass" element={<PublicElement><Forgetpass /></PublicElement>} />
+			<Route path="/resetpass" element={<PublicElement><Resetpass /></PublicElement>} />
+			<Route path="/service/:number" element={<PublicElement><ServiceDetails /></PublicElement>} />
+			<Route path="/patient" element={<PatientElement><MainPatient /></PatientElement>} />
+			<Route path="/patient/detail" element={<PatientElement><DetailPatient /></PatientElement>} />
+			<Route path="/patient/setdate" element={<PatientElement><SetdatePatient /></PatientElement>} />
+			<Route path="/patient/dentist" element={<PatientElement><DentistPatient /></PatientElement>} />
+			<Route path="/patient/profile" element={<PatientElement><ProfilePatient /></PatientElement>} />
+			<Route path="/patient/payment" element={<PatientElement><PaymentPatient /></PatientElement>} />
+			<Route path="/dentist" element={<DentistElement><MainDentist /></DentistElement>} />
+			<Route path="/dentist/detail" element={<DentistElement><DetailDentist /></DentistElement>} />
+			<Route path="/dentist/search" element={<DentistElement><SearchDentist /></DentistElement>} />
+			<Route path="/dentist/listdate" element={<DentistElement><ListDate /></DentistElement>} />
+			<Route path="/dentist/listmed" element={<DentistElement><ListMed /></DentistElement>} />
+			<Route path="/dentist/schedule" element={<DentistElement><Schedule /></DentistElement>} />
+			<Route path="/dentist/updatepatient" element={<DentistElement><UpdatePatient /></DentistElement>} />
+			<Route path="/employee" element={<EmployeeElement><MainEmployee /></EmployeeElement>} />
+			<Route path="/employee/create" element={<EmployeeElement><CreateProfile /></EmployeeElement>} />
+			<Route path="/employee/detail" element={<EmployeeElement><DetailEmployee /></EmployeeElement>} />
+			<Route path="/employee/listmed" element={<EmployeeElement><ListMedEmployee /></EmployeeElement>} />
+			<Route path="/employee/payment" element={<EmployeeElement><PaymentEmployee /></EmployeeElement>} />
+			<Route path="/employee/search" element={<EmployeeElement><SearchEmployee /></EmployeeElement>} />
+			<Route path="/employee/searchprofile" element={<EmployeeElement><SearchProfileEmployee /></EmployeeElement>} />
+			<Route path="/employee/setdate" element={<EmployeeElement><SetdateEmployee /></EmployeeElement>} />
+			<Route path="/employee/updatepatient" element={<EmployeeElement><UpdatePatientEmployee /></EmployeeElement>} />
+			<Route path="/admin" element={<AdminElement><MainAdmin /></AdminElement>} />
+			<Route path="/admin/detail" element={<AdminElement><DetailAdmin /></AdminElement>} />
+			<Route path="/admin/account" element={<AdminElement><AccountManage /></AdminElement>} />
+			<Route path="/admin/dashboard" element={<AdminElement><Dashboard /></AdminElement>} />
+			<Route path="/admin/infoappo" element={<AdminElement><InfoAppo /></AdminElement>} />
+			<Route path="/admin/storemed" element={<AdminElement><StoreMed /></AdminElement>} />
+			<Route path="*" element={<div>Page Not Found!</div>} />
+			<Route path="/logout" element={<Logout/>} />
+		  </Routes>
+		  <hr id="hrduoi" />
+		  <Footer />
 		</BrowserRouter>
-	);
-}
+	  );}
 
+	  
 export default App;

@@ -28,13 +28,35 @@ const getAllMedHistory = async (req, res, next) => {
 
 const getMedHistoryByID = async (req, res, next) => {
 	try {
-		const medHistorylist = await medHistoryData.getMedHistory();
-		for (const medHistory of medHistorylist) {
+		const medHistoryList = await medHistoryData.getMedHistory();
+		for (const medHistory of medHistoryList) {
 			medHistoryMap[medHistory.MaBenhNhan] = medHistory;
 		}
 		const medHistoryMaBenhNhan = req.params.MaBenhNhan;
 		console.log("MaBenhNhan:", medHistoryMap[medHistoryMaBenhNhan]);
+		console.log("medHistoryMaBenhNhan:", medHistoryMaBenhNhan);
 		const medHistory = medHistoryMap[medHistoryMaBenhNhan];
+
+		if (!medHistory) {
+			res.status(404).send("medHistory not found");
+			return;
+		}
+
+		res.send(medHistory);
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};
+
+const getMedHistoryByNhaSi = async (req, res, next) => {
+	try {
+		const medHistoryList = await medHistoryData.getMedHistory();
+		for (const medHistory of medHistoryList) {
+			medHistoryMap[medHistory.MaNhaSi] = medHistory;
+		}
+		const medHistoryMaNhaSi = req.params.MaNhaSi;
+		console.log("MaNhaSi:", medHistoryMap[medHistoryMaNhaSi]);
+		const medHistory = medHistoryMap[medHistoryMaNhaSi];
 
 		if (!medHistory) {
 			res.status(404).send("medHistory not found");
@@ -50,4 +72,5 @@ const getMedHistoryByID = async (req, res, next) => {
 module.exports = {
 	getAllMedHistory,
 	getMedHistoryByID,
+	getMedHistoryByNhaSi,
 };

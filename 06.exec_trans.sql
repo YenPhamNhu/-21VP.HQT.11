@@ -230,9 +230,9 @@ EXEC CapNhatHoSoBenhAn
     @STT = 3,
     @MaBenhNhan = 1000,
     @MaNhaSiKham = 101,
-    @GhiChu = N'Ghi chú 2',
-    @MaThuoc = '101',
-    @NgaySuDung = '2023-01-31 00:00:00.000',
+    @GhiChu = N'Ghi chú 12',
+    @MaThuoc = 101,
+    @NgaySuDung = '2025-01-31 00:00:00.000',
     @LieuDung = N'2 viên/ngày',
     @SoLuong = 12
 SELECT *
@@ -247,7 +247,7 @@ WHERE STTLichSuKB =1
 SELECT *
 FROM HOADON
 EXEC LapHoaDonThanhToan
-    @STTLichSuKB = 1
+    @STTLichSuKB = 2
 
 select *
 from DICHVU

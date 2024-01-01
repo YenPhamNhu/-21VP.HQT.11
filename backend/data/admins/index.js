@@ -47,39 +47,6 @@ const getPatient = async () => {
   }
 };
 
-// const createPatient = async (
-// 	HoTen,
-// 	SDT,
-// 	GioiTinh,
-// 	NgaySinh,
-// 	DiaChi,
-// 	MatKhau
-// ) => {
-// 	try {
-// 		let pool = await sql.connect(config.sql);
-// 		const sqlQueries = await utils.loadSqlQueries("Patients");
-// 		// const formattedDate = NgaySinh.split("T")[0];
-// 		// console.log(NgaySinh);
-// 		// Call the stored procedure to create a patient
-// 		await pool
-// 			.request()
-// 			.input("HoTen", sql.NVarChar(50), HoTen)
-// 			.input("SDT", sql.VarChar(10), SDT)
-// 			.input("GioiTinh", sql.NVarChar(5), GioiTinh)
-// 			// .input("NgaySinh", sql.DateTime2, new Date()) //sql.DateTime .input("NgaySinh", sql.VarChar(50), formattedDate)
-// 			// .input("NgaySinh", sql.Date, new Date())
-// 			// .input("NgaySinh", sql.DateTime, new Date(NgaySinh))
-// 			.input("NgaySinh", sql.VarChar(50), NgaySinh)
-// 			.input("DiaChi", sql.NVarChar(50), DiaChi)
-// 			.input("MatKhau", sql.VarChar(8), MatKhau)
-// 			.query`EXEC TaoTaiKhoanBenhNhan N'${HoTen}','${SDT}','${GioiTinh}','${NgaySinh}',N'${DiaChi}','${MatKhau}'`;
-// 		// You need to create the stored procedure CreatePatient in your SQL database
-// 	} catch (error) {
-// 		console.log(error.message);
-// 		throw error;
-// 	}
-// };
-
 const deletePatientBySDT = async (patientSDT) => {
   try {
     // console.log("deletePatient API is called");
@@ -142,3 +109,35 @@ module.exports = {
   deleteDentistBySDT,
   // createPatient,
 };
+// const createPatient = async (
+// 	HoTen,
+// 	SDT,
+// 	GioiTinh,
+// 	NgaySinh,
+// 	DiaChi,
+// 	MatKhau
+// ) => {
+// 	try {
+// 		let pool = await sql.connect(config.sql);
+// 		const sqlQueries = await utils.loadSqlQueries("Patients");
+// 		// const formattedDate = NgaySinh.split("T")[0];
+// 		// console.log(NgaySinh);
+// 		// Call the stored procedure to create a patient
+// 		await pool
+// 			.request()
+// 			.input("HoTen", sql.NVarChar(50), HoTen)
+// 			.input("SDT", sql.VarChar(10), SDT)
+// 			.input("GioiTinh", sql.NVarChar(5), GioiTinh)
+// 			// .input("NgaySinh", sql.DateTime2, new Date()) //sql.DateTime .input("NgaySinh", sql.VarChar(50), formattedDate)
+// 			// .input("NgaySinh", sql.Date, new Date())
+// 			// .input("NgaySinh", sql.DateTime, new Date(NgaySinh))
+// 			.input("NgaySinh", sql.VarChar(50), NgaySinh)
+// 			.input("DiaChi", sql.NVarChar(50), DiaChi)
+// 			.input("MatKhau", sql.VarChar(8), MatKhau)
+// 			.query`EXEC TaoTaiKhoanBenhNhan N'${HoTen}','${SDT}','${GioiTinh}','${NgaySinh}',N'${DiaChi}','${MatKhau}'`;
+// 		// You need to create the stored procedure CreatePatient in your SQL database
+// 	} catch (error) {
+// 		console.log(error.message);
+// 		throw error;
+// 	}
+// };

@@ -23,10 +23,6 @@ function Login() {
 	const navigate = useNavigate();
 	const [errors, setErrors] = useState({});
 
-	//ADMIN
-	//USER
-
-
 	const handleInput = (event) => {
 		setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 	};
@@ -62,16 +58,17 @@ function Login() {
 					sessionStorage.setItem("item_key", res.data.role);
 					sessionStorage.setItem("item_Type", res.data.userType);
 					localStorage.setItem("item_key", res.data.SDT);
-					localStorage.setItem("user",JSON.stringify({role:'ADMIN'}))
-
-					console.log(sessionStorage.getItem("item_key"));
-					console.log(localStorage.getItem("item_key"));
+					localStorage.setItem("user",JSON.stringify({role: res.data.userType}))
+					const loginEvent = new Event("loginSuccess");
+        			window.dispatchEvent(loginEvent);
 					navigate("/");
+					console.log(sessionStorage);
+					console.log(localStorage);
 					const userRole = sessionStorage.getItem("item_key");
 					const user = {
 						SDT: res.data.SDT,
 						userRole: res.data.role,
-						userType: getUserType(res.data.role),
+						userType: getUserType(res.data.userType),
 					};
 					
 					dispatch(login(user));
@@ -205,48 +202,3 @@ function Login() {
 
 export default Login;
 
-//   return (
-//     <MDBContainer fluid style={{ margin: "40px 10px", padding: "5px 50px" }}>
-//       <MDBRow className='d-flex justify-content-center align-items-center h-100'>
-//         <MDBCol>
-//           <MDBCard className='my-4'>
-//             <MDBRow className='g-0'>
-//               <MDBCol md='6' className='d-none d-md-block' marginTop='5%'>
-//                 <MDBCardImage
-//                   width='50%'
-//                   height='50%'
-//                   src='/signup.png'
-//                   alt='Welcome to Chigsa Clinic'
-//                   className='d-flex align-items-center mx-auto'
-//                   fluid
-//                 />
-//               </MDBCol>
-//               <MDBCol md='6'>
-//                 <div className="bg-white p-3 rounded">
-//                   <form onSubmit={handleSubmit}>
-//                     <div className="mb-3">
-//                       <label htmlFor="SDT"><strong>Số điện thoại</strong></label>
-//                       <input type="text" placeholder="Số điện thoại" name='SDT'
-//                         onChange={handleInput}
-//                         className="form-control rounded-0" />
-//                       {errors.SDT && <span className="text-danger">{errors.SDT}</span>}
-//                     </div>
-//                     <div className="mb-3">
-//                       <label htmlFor="MatKhau"><strong>Mật khẩu</strong></label>
-//                       <input type="password" placeholder="Mật khẩu" name='MatKhau'
-//                         onChange={handleInput}
-//                         className="form-control rounded-0" />
-//                       {errors.MatKhau && <span className="text-danger">{errors.MatKhau}</span>}
-//                     </div>
-//                     <button type="submit" className="btn btn-success w-100 rounded-0">Đăng nhập</button>
-//                     <Link to='/signup' className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Chưa có tài khoản? Đăng ký</Link>
-//                   </form>
-//                 </div>
-//               </MDBCol>
-//             </MDBRow>
-//           </MDBCard>
-//         </MDBCol>
-//       </MDBRow>
-//     </MDBContainer>
-//   );
-// }
