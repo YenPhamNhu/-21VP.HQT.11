@@ -6,8 +6,8 @@ const MainAdmin = () => {
 	return (
 		<div className='container mt-5'>
 			<div className='d-flex justify-content-begin mt-4'>
-				{/* <SwipeableTemporaryDrawer /> */}
-				{/* <Header /> */}
+				{/* <SwipeableTemporaryDrawer />
+				<Header /> */}
 			</div>
 			<h1 className='mb-4'>Admin Home Page</h1>
 			<p>

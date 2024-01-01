@@ -23,6 +23,10 @@ function Login() {
 	const navigate = useNavigate();
 	const [errors, setErrors] = useState({});
 
+	//ADMIN
+	//USER
+
+
 	const handleInput = (event) => {
 		setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 	};
@@ -58,6 +62,8 @@ function Login() {
 					sessionStorage.setItem("item_key", res.data.role);
 					sessionStorage.setItem("item_Type", res.data.userType);
 					localStorage.setItem("item_key", res.data.SDT);
+					localStorage.setItem("user",JSON.stringify({role:'ADMIN'}))
+
 					console.log(sessionStorage.getItem("item_key"));
 					console.log(localStorage.getItem("item_key"));
 					navigate("/");

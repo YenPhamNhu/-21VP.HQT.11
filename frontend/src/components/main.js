@@ -1,6 +1,7 @@
 import "../screen.css/Main.css";
 import "../components/banner.js";
 import Banner from "../components/banner.js";
+// import SwipeableTemporaryDrawer from "../components/sidebar_admin.js";
 import Header from "../components/header.js";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -20,7 +21,8 @@ const Main = () => {
 	}, []);
 	return (
 		<main class='container-img' id='main'>
-			{/* <Header /> */}
+			<Header />
+			{/* <SwipeableTemporaryDrawer/> */}
 			<div className='welcome-section'>
 				<h2>Welcome {name} to Chigsa!</h2>
 				<p>Explore our services and enjoy a seamless experience.</p>
