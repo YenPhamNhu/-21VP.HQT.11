@@ -618,6 +618,16 @@ const QuanLyTaiKhoan = async (req, res, next) => {
 };
 
 // dashboard
+const getDailyAppointments = async () => {
+  const pool = await sql.connect(config.sql);
+  const result = await pool
+    .request()
+    .query(
+      "SELECT COUNT(*) AS TotalAppointments FROM LichHen WHERE CONVERT(DATE, NgayGioKham) = CONVERT(DATE, GETDATE())"
+    );
+  return result.recordset[0].TotalAppointments;
+};
+
 const getTotalPatients = async () => {
   const pool = await sql.connect(config.sql);
   const result = await pool
