@@ -675,6 +675,71 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
+// const getMonthlyAppointments = async (req, res, next) => {
+//   try {
+//     // Connect to the SQL Server database
+//     const pool = await sql.connect(config.sql);
+//     const request = new sql.Request();
+
+//     // Call the stored procedure to update employee information
+//     const query = `
+// 			EXEC XemThongKeLichHenTheoThang
+// 		`;
+
+//     const result = await request.query(query);
+//     res.json(result.recordset);
+//     // Check the result of the stored procedure
+//   } catch (err) {
+//     console.error("Error executing SQL query:", err);
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// };
+
+const getMonthlyAppointments = async (req, res) => {
+  try {
+    const pool = await sql.connect(config.sql);
+
+    // Thực hiện truy vấn để lấy dữ liệu thống kê lịch hẹn theo tháng
+    const result = await pool.request().query(`
+      SELECT
+        YEAR(NgayGioKham) AS Year,
+        DATENAME(MONTH, NgayGioKham) AS MonthName,
+        COUNT(*) AS AppointmentCount
+      FROM
+        LICHHEN
+      GROUP BY
+        YEAR(NgayGioKham),
+        DATENAME(MONTH, NgayGioKham)
+     
+    `);
+
+    const monthlyAppointments = result.recordset.map((entry) => ({
+      year: entry.Year,
+      month: entry.MonthName,
+      appointmentCount: entry.AppointmentCount,
+    }));
+
+    // sắp xếp theo năm
+    monthlyAppointments.sort((a, b) => {
+      if (a.year !== b.year) {
+        return a.year - b.year;
+      } else {
+        return a.month.localeCompare(b.month);
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      data: monthlyAppointments,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllAdmin,
   getAllDentistByAdmin,
@@ -705,7 +770,9 @@ module.exports = {
 
   getDashboardStats,
 
+  // dashboard
   QuanLyTaiKhoan,
+  getMonthlyAppointments,
 };
 
 // const createPatientByAdmin = async (req, res, next) => {
