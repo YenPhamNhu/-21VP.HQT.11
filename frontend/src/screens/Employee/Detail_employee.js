@@ -2,26 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 
-// const ProfileSection = () => {
-//   const [employee, setEmployee] = useState(null);
-
-//   const fetchService = async () => {
-
-//     const response = await fetch(
-//       `http://localhost:5000/api/employees/getEmployeeBySDT/${localStorage.SDT}`
-//     ); // Fetch service data
-//     console.log(response);
-//     const serviceData = await response.json();
-//     setEmployee(serviceData);
-//   };
-
-//   useEffect(() => {
-//     fetchService();
-//   }, []);
-//   if (!employee) {
-//     return <div>Loading...</div>; // Display loading message while fetching data
-//   }
 export default function Home() {
+  const [employee, setEmployee] = useState(null);
+
+  const fetchService = async () => {
+    const response = await fetch(
+      `http://localhost:5000/api/employees/getEmployeeBySDT/${localStorage.SDT}`
+    ); // Fetch service data
+    console.log(response);
+    const serviceData = await response.json();
+    setEmployee(serviceData);
+  };
+
   const [showModal, setShowModal] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -83,13 +75,13 @@ export default function Home() {
     setShowEditSuccessMessage(false);
     setShowEditErrorMessage(false);
 
-    setEditedName("employee.HoTen");
-    setEditedPhoneNumber("employee.SDT");
-    setEditedMaNhaSi("employee.MaNhanVien");
-    setEditedGioiTinh("employee.GioiTinh");
-    setEditedViTri("employee.ViTri");
-    setEditedTinhTrangHoatDong("employee.TinhTrangHoatDong");
-    setEditedDiaChi("employee.DiaChi");
+    setEditedName(" ");
+    setEditedPhoneNumber(" ");
+    setEditedMaNhaSi(" ");
+    setEditedGioiTinh(" ");
+    setEditedViTri(" ");
+    setEditedTinhTrangHoatDong(" ");
+    setEditedDiaChi(" ");
   };
 
   const handleEditClose = () => {
@@ -117,6 +109,13 @@ export default function Home() {
     }, 2000); // Simulating a delay, replace with your actual logic
   };
 
+  useEffect(() => {
+    fetchService();
+  }, []);
+  if (!employee) {
+    return <div>Loading...</div>; // Display loading message while fetching data
+  }
+
   return (
     <section
       className='vh-100'
@@ -141,7 +140,7 @@ export default function Home() {
                     className='img-fluid my-5'
                     style={{ width: "80px" }}
                   />
-                  {/* <h5 style={{ color: "#04364a" }}>{employee.HoTen}</h5>
+                  <h5 style={{ color: "#04364a" }}>{employee.HoTen}</h5>
                   <p>
                     <Link onClick={handleEditShow} style={{ color: "#04364a" }}>
                       Chỉnh sửa
@@ -194,9 +193,9 @@ export default function Home() {
                       <div className='col-6 mb-3'>
                         <h6>Địa chỉ</h6>
                         <p className='text-muted'>{employee.DiaChi}</p>
-                      </div> 
+                      </div>
                     </div>
-                  </div>*/}
+                  </div>
                 </div>
               </div>
             </div>
@@ -280,17 +279,17 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập họ và tên'
-                value={editedName}
+                value={employee.HoTen}
                 onChange={(e) => setEditedName(e.target.value)}
               />
             </Form.Group>
 
-            <Form.Group controlId='formEditedMaNhaSi'>
-              <Form.Label>Mã Nha Sĩ</Form.Label>
+            <Form.Group controlId='formEditedMaNhanVien'>
+              <Form.Label>Mã Nhân viên</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Nhập mã Nha Sĩ'
-                value={editedMaNhaSi}
+                placeholder='Nhập mã nhân viên'
+                value={employee.MaNhanVien}
                 onChange={(e) => setEditedMaNhaSi(e.target.value)}
               />
             </Form.Group>
@@ -300,7 +299,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập số điện thoại'
-                value={editedPhoneNumber}
+                value={employee.SDT}
                 onChange={(e) => setEditedPhoneNumber(e.target.value)}
               />
             </Form.Group>
@@ -310,7 +309,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập giới tính'
-                value={editedGioiTinh}
+                value={employee.GioiTinh}
                 onChange={(e) => setEditedGioiTinh(e.target.value)}
               />
             </Form.Group>
@@ -320,7 +319,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập vị trí'
-                value={editedViTri}
+                value={employee.ViTri}
                 onChange={(e) => setEditedViTri(e.target.value)}
               />
             </Form.Group>
@@ -330,7 +329,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập tình trạng hoạt động'
-                value={editedTinhTrangHoatDong}
+                value={employee.TinhTrangHoatDong}
                 onChange={(e) => setEditedTinhTrangHoatDong(e.target.value)}
               />
             </Form.Group>
@@ -340,7 +339,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập địa chỉ'
-                value={editedDiaChi}
+                value={employee.DiaChi}
                 onChange={(e) => setEditedDiaChi(e.target.value)}
               />
             </Form.Group>

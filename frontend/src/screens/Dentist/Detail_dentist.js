@@ -3,27 +3,19 @@ import { Link } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 
 export default function Home() {
-  // const [dentist, setDentist] = useState(null);
+  const [dentist, setDentist] = useState(null);
 
-  // const fetchService = async () => {
-
-  //   const response = await fetch(
-  //     `http://localhost:5000/api/dentists/getDentistBySDT/${localStorage.SDT}`
-  //   ); // Fetch service data
-  //   console.log(response);
-  //   const serviceData = await response.json();
-  //   let modifiedData;
-  //   const formattedNgaySinh = serviceData.NgaySinh.split('T')[0];
-  //   modifiedData = { ...serviceData, NgaySinh: formattedNgaySinh};
-  //   setDentist(modifiedData);
-  // };
-
-  // useEffect(() => {
-  //   fetchService();
-  // }, []);
-  // if (!dentist) {
-  //   return <div>Loading...</div>; // Display loading message while fetching data
-  // }
+  const fetchService = async () => {
+    const response = await fetch(
+      `http://localhost:5000/api/dentists/getDentistBySDT/${localStorage.SDT}`
+    ); // Fetch service data
+    console.log(response);
+    const serviceData = await response.json();
+    let modifiedData;
+    const formattedNgaySinh = serviceData.NgaySinh.split("T")[0];
+    modifiedData = { ...serviceData, NgaySinh: formattedNgaySinh };
+    setDentist(modifiedData);
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -87,14 +79,14 @@ export default function Home() {
     setShowEditSuccessMessage(false);
     setShowEditErrorMessage(false);
 
-    setEditedName("patient.HoTen");
-    setEditedPhoneNumber("patient.SDT");
-    setEditedMaNhaSi("patient.MaNhaSi");
-    setEditedGioiTinh("patient.GioiTinh");
-    setEditedNgaySinh("patient.NgaySinh");
-    setEditedChuyenMon("patient.ChuyenMon");
-    setEditedBangCap("patient.BangCap");
-    setEditedDiaChi("patient.DiaChi");
+    setEditedName(" ");
+    setEditedPhoneNumber(" ");
+    setEditedMaNhaSi(" ");
+    setEditedGioiTinh(" ");
+    setEditedNgaySinh(" ");
+    setEditedChuyenMon(" ");
+    setEditedBangCap(" ");
+    setEditedDiaChi(" ");
   };
 
   const handleEditClose = () => {
@@ -123,6 +115,13 @@ export default function Home() {
     }, 2000); // Simulating a delay, replace with your actual logic
   };
 
+  useEffect(() => {
+    fetchService();
+  }, []);
+  if (!dentist) {
+    return <div>Loading...</div>; // Display loading message while fetching data
+  }
+
   return (
     <section
       className='vh-100'
@@ -147,7 +146,7 @@ export default function Home() {
                     className='img-fluid my-5'
                     style={{ width: "80px" }}
                   />
-                  {/* <h5 style={{ color: "#04364a" }}>{dentist.HoTen}</h5>
+                  <h5 style={{ color: "#04364a" }}>{dentist.HoTen}</h5>
                   <p>
                     <Link onClick={handleEditShow} style={{ color: "#04364a" }}>
                       Chỉnh sửa
@@ -200,7 +199,7 @@ export default function Home() {
                         <p className='text-muted'>{dentist.DiaChi}</p>
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>
@@ -285,7 +284,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập họ và tên'
-                value={editedName}
+                value={dentist.HoTen}
                 onChange={(e) => setEditedName(e.target.value)}
               />
             </Form.Group>
@@ -295,7 +294,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập mã Nha Sĩ'
-                value={editedMaNhaSi}
+                value={dentist.MaNhaSi}
                 onChange={(e) => setEditedMaNhaSi(e.target.value)}
               />
             </Form.Group>
@@ -305,7 +304,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập số điện thoại'
-                value={editedPhoneNumber}
+                value={dentist.SDT}
                 onChange={(e) => setEditedPhoneNumber(e.target.value)}
               />
             </Form.Group>
@@ -315,7 +314,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập giới tính'
-                value={editedGioiTinh}
+                value={dentist.GioiTinh}
                 onChange={(e) => setEditedGioiTinh(e.target.value)}
               />
             </Form.Group>
@@ -325,7 +324,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập ngày sinh'
-                value={editedNgaySinh}
+                value={dentist.NgaySinh}
                 onChange={(e) => setEditedNgaySinh(e.target.value)}
               />
             </Form.Group>
@@ -335,17 +334,17 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập chuyên môn'
-                value={editedChuyenMon}
+                value={dentist.ChuyenMon}
                 onChange={(e) => setEditedChuyenMon(e.target.value)}
               />
             </Form.Group>
 
             <Form.Group controlId='formEditedBangCap'>
-              <Form.Label>Tình Trạng Hoạt Động</Form.Label>
+              <Form.Label>Bằng Cấp</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Nhập tình trạng hoạt động'
-                value={editedBangCap}
+                placeholder='Nhập bằng cấp'
+                value={dentist.BangCap}
                 onChange={(e) => setEditedBangCap(e.target.value)}
               />
             </Form.Group>
@@ -355,7 +354,7 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập địa chỉ'
-                value={editedDiaChi}
+                value={dentist.DiaChi}
                 onChange={(e) => setEditedDiaChi(e.target.value)}
               />
             </Form.Group>
