@@ -235,11 +235,11 @@ router.get(
   getAllAppointmentSchedule
 );
 router.get(
-  "/patients/appointmentSchedule/getAppointmentScheduleByMaBenhNhan/:ID",
+  "/patients/appointmentSchedule/getAppointmentScheduleByMaBenhNhan/:SDT",
   getAppointmentScheduleByMaBenhNhan
 );
 router.get(
-  "/dentists/appointmentSchedule/getAppointmentScheduleByMaNhaSi/:ID",
+  "/dentists/appointmentSchedule/getAppointmentScheduleByMaNhaSi/:SDT",
   getAppointmentScheduleByMaNhaSi
 );
 router.put("/employees/updateAppointmentStatus", updateAppointmentStatus);

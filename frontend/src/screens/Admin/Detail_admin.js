@@ -1,7 +1,94 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleShow = () => {
+    setShowModal(true);
+    setShowSuccessMessage(false);
+    setShowErrorMessage(false);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    // Reset password fields when closing the modal
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
+  const handleChangePassword = () => {
+    // Password length validation
+    if (newPassword.length !== 8) {
+      setShowErrorMessage(true);
+      // Reset the error message after a certain duration (e.g., 5 seconds)
+      setTimeout(() => setShowErrorMessage(false), 5000);
+      return; // Exit the function if validation fails
+    }
+
+    // Assume the password change is successful (replace with your actual logic)
+    // For simplicity, I'm using a timeout to simulate an asynchronous operation
+    setTimeout(() => {
+      // Reset the form and show the success message
+      handleClose();
+      setShowSuccessMessage(true);
+
+      // Reset the success message after a certain duration (e.g., 3 seconds)
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+    }, 2000); // Simulating a delay, replace with your actual logic
+  };
+
+  // link chỉnh sửa
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditSuccessMessage, setShowEditSuccessMessage] = useState(false);
+  const [showEditErrorMessage, setShowEditErrorMessage] = useState(false);
+
+  const [editedName, setEditedName] = useState(""); // Add state variables for edited user details
+  const [editedEmail, setEditedEmail] = useState("");
+  const [editedPhoneNumber, setEditedPhoneNumber] = useState("");
+
+  const handleEditShow = () => {
+    setShowEditModal(true);
+    setShowEditSuccessMessage(false);
+    setShowEditErrorMessage(false);
+    // Initialize edited fields with current user details
+    // You need to replace these with your actual user data
+    setEditedName("patient.HoTen");
+    setEditedEmail("patient.Email");
+    setEditedPhoneNumber("patient.SDT");
+    // Set other edited fields with actual user data
+  };
+
+  const handleEditClose = () => {
+    setShowEditModal(false);
+    // Reset edited fields when closing the modal
+    setEditedName("");
+    setEditedEmail("");
+    setEditedPhoneNumber("");
+    // Reset other edited fields
+  };
+
+  const handleEditSave = () => {
+    // Assume the user information update is successful (replace with your actual logic)
+    // For simplicity, I'm using a timeout to simulate an asynchronous operation
+    setTimeout(() => {
+      // Reset the form and show the success message
+      handleEditClose();
+      setShowEditSuccessMessage(true);
+
+      // Reset the success message after a certain duration (e.g., 3 seconds)
+      setTimeout(() => setShowEditSuccessMessage(false), 3000);
+    }, 2000); // Simulating a delay, replace with your actual logic
+  };
+
   return (
     <section
       className='vh-100'
@@ -28,16 +115,14 @@ export default function Home() {
                   />
                   <h5 style={{ color: "#04364a" }}>patient.HoTen</h5>
                   <p>
-                    <Link
-                      className='far fa-edit mb-5'
-                      style={{ color: "#04364a" }}
-                    >
-                      chỉnh sửa
-                      {/* chỉnh padding dùm*/}
+                    <Link onClick={handleEditShow} style={{ color: "#04364a" }}>
+                      Chỉnh sửa
                     </Link>
                   </p>
                   <p>
-                    <Link style={{ color: "#04364a" }}>Đổi mật khẩu</Link>
+                    <Link onClick={handleShow} style={{ color: "#04364a" }}>
+                      Đổi mật khẩu
+                    </Link>
                   </p>
                 </div>
                 <div
@@ -70,6 +155,134 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* Modal for changing password */}
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Đổi mật khẩu</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId='formOldPassword'>
+              <Form.Label>Mật khẩu cũ</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Nhập mật khẩu cũ'
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                require
+              />
+            </Form.Group>
+
+            <Form.Group controlId='formNewPassword'>
+              <Form.Label>Mật khẩu mới (8 kí tự)</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Nhập mật khẩu mới'
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                require
+              />
+            </Form.Group>
+
+            <Form.Group controlId='formConfirmPassword'>
+              <Form.Label>Xác nhận mật khẩu mới</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Xác nhận mật khẩu mới'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                require
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>
+            Đóng
+          </Button>
+          <Button variant='primary' onClick={handleChangePassword}>
+            Lưu thay đổi
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Success message */}
+      {showSuccessMessage && (
+        <Alert variant='success' className='mt-3'>
+          Đổi mật khẩu thành công!
+        </Alert>
+      )}
+
+      {/* Error message */}
+      {showErrorMessage && (
+        <Alert variant='danger' className='mt-3'>
+          Mật khẩu phải gồm đúng 8 kí tự. Vui lòng kiểm tra lại.
+        </Alert>
+      )}
+
+      {/* link chỉnh sửa */}
+      {/* Modal for editing user information */}
+      <Modal show={showEditModal} onHide={handleEditClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Chỉnh sửa thông tin</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId='formEditedName'>
+              <Form.Label>Họ và tên</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Nhập họ và tên'
+                value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId='formEditedEmail'>
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='Nhập email'
+                value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId='formEditedPhoneNumber'>
+              <Form.Label>Số điện thoại</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Nhập số điện thoại'
+                value={editedPhoneNumber}
+                onChange={(e) => setEditedPhoneNumber(e.target.value)}
+              />
+            </Form.Group>
+            {/* Add other form fields for additional details */}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleEditClose}>
+            Đóng
+          </Button>
+          <Button variant='primary' onClick={handleEditSave}>
+            Lưu thay đổi
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Success message for editing user information */}
+      {showEditSuccessMessage && (
+        <Alert variant='success' className='mt-3'>
+          Thay đổi thông tin thành công!
+        </Alert>
+      )}
+
+      {/* Error message for editing user information */}
+      {showEditErrorMessage && (
+        <Alert variant='danger' className='mt-3'>
+          Thay đổi thông tin không thành công. Vui lòng thử lại sau.
+        </Alert>
+      )}
     </section>
   );
 }
