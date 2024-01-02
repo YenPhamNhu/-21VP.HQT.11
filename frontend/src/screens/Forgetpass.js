@@ -23,22 +23,12 @@ const Forgetpass = () => {
 
                 <MDBCol md="2">
                     <MDBBtn className="ms-2" color="warning" size="sm" style={{height:'42px',lineHeight:'42px'}}>
-                    Gửi OTP
+                    Gửi Lại
                     </MDBBtn>
                 </MDBCol>
                 </MDBRow>
               </MDBRow>
-              <MDBRow>
-                <MDBCol md="12">
-                  <MDBInput
-                    wrapperClass="mb-4"
-                    label="Mã otp"
-                    size="lg"
-                    id="forgetotp"
-                    type="text"
-                  />
-                </MDBCol>
-              </MDBRow>
+           
               
               <div className="d-flex justify-content-center pt-3">
                 <MDBBtn className="ms-2" color="warning" size="lg">

@@ -1,14 +1,52 @@
+USE QLPKNK
 -- //0.Người dùng khách (người dùng chưa đăng nhập) 
 --//-------------------
 -- 0.1/Có quyền đăng kí tài khoản (gọi giao tác TaoTaiKhoanBenhNhan) 
 EXEC TaoTaiKhoanBenhNhan
-    @HoTen = N'Bệnh nhân mới',
-    @SDT = '0123456782',
+    @HoTen = N'NGUYEN HANG',
+    @SDT = '0123455718',
     @GioiTinh = N'Nam',
     @NgaySinh = '1990-01-01',
     @DiaChi = N'Địa chỉ BN mới',
     @MatKhau = '12345678';
 GO
+
+SELECT *
+FROM NHANVIEN
+
+EXEC TaoTaiKhoanNhanVien
+    @HoTen = N'NGUYEN VAN BAN',
+    @SDT = '0123455628',
+    @GioiTinh = N'Nam',
+    @DiaChi = N'6/1B Tran Phu P4, Q5, tpHCM',
+    @TinhTrangHoatDong = N'Còn làm',
+    @ViTri = N'Thu Ngân',
+    @MatKhau = '12345678';
+GO
+EXEC CapNhatTinhTrangHoatDongNhanVien @MaNhanVien = 12, @TinhTrangHoatDong ='Nghỉ Làm';
+SELECT *
+FROM NHANVIEN
+SELECT * 
+From QTV
+SELECT *
+FROM NHASI
+EXEC TaoTaiKhoanNhaSi
+    @HoTen = N'NGUYEN THU HONG',
+    @SDT = '0123283048',
+    @GioiTinh = N'Nữ',
+    @NgaySinh = '1990-01-01',
+    @DiaChi = N'7/1B Tran Phu P4, Q5, tpHCM',
+    @ChuyenMon = N'Răng hàm mặt',
+    @BangCap = N'Tiến Sĩ',
+    @MatKhau = '12345678';
+GO
+
+EXEC QuenMatKhau @SDT = "0123456778", @NewPassword = "11223344";
+
+SELECT *
+FROM BENHNHAN
+EXEC XoaTaiKhoan
+@SDT = '0123455776'
 --//-------------------
 -- 0.2/Có quyền đăng nhập vào tài khoản (gọi giao tác DangNhap)
 EXEC DangNhap @UserName = '0123456788', @Password = '12345678';
@@ -22,21 +60,23 @@ EXEC DangNhap @UserName = '0337432114', @Password = '12345678';
 -- Được quyền chọn ngày giờ khám (gọi giao tác ChonThoiGianKham). 
 -- Được quyền chọn nha sĩ khám (gọi giao tác ChonNhaSiKham). 
 GO
+--select * from LICHHEN
+--select * FROM LICHLAMVIEC
 EXEC DatLichHen
-    @Ngay = '2023-11-13',
-    @SDT = '0123456780',
-    @MaNhaSi = 100,
-    @CaDangKy = N'Sáng';
-EXEC DatLichHen
-    @Ngay = '2023-11-13',
+    @Ngay = '2023-12-20',
     @SDT = '0123456780',
     @MaNhaSi = 100,
     @CaDangKy = N'Chiều';
-EXEC DatLichHen
-    @Ngay = '2023-11-13',
-    @SDT = '0123456787',
-    @MaNhaSi = 100,
-    @CaDangKy = N'Chiều';
+--EXEC DatLichHen
+--    @Ngay = '2023-11-13',
+--    @SDT = '0123456780',
+--    @MaNhaSi = 100,
+--    @CaDangKy = N'Chiều';
+--EXEC DatLichHen
+--    @Ngay = '2023-11-13',
+--    @SDT = '0123456787',
+--    @MaNhaSi = 100,
+--    @CaDangKy = N'Chiều';
 GO
 -- Có quyền được xem thông tin cá nhân (gọi giao tác XemThongTinCaNhan) bao gồm họ tên, ngày sinh, địa chỉ, số điện thoại, giới tính. 
 EXEC XemThongTinCaNhanBenhNhan @SDT = '0123456782';
@@ -71,7 +111,7 @@ EXEC XemTrangThaiThanhToan @SDT = '0123456781', @STTLichSuKB = 1;
 
 EXEC CapNhatLichLamViec
     @MaNhaSi = 100,
-    @Ngay = '2023-11-29',
+    @Ngay = '2023-12-20',
     @CaDangKy = N'Chiều'
 
 SELECT *
@@ -94,7 +134,7 @@ EXEC ThongBaoLichKham
 GO
 EXEC XemDanhMucThuoc;
 EXEC XemDanhSachLichHen;
-EXEC XemThongTinCaNhanNhanVien @SDT = "0123456788";
+EXEC XemThongTinCaNhanNhanVien @SDT = '0123456788';
 
 --Cập nhật từ chưa thanh toán sang đã thanh toán
 EXEC ThayDoiTrangThaiThanhToan 
@@ -102,8 +142,11 @@ EXEC ThayDoiTrangThaiThanhToan
     @STTLichSuKB = 1
 SELECT *
 FROM HOADON
+SELECT *
+FROM BENHNHAN
 GO
-
+SELECT *
+FROM LICHSUKHAMBENH
 EXEC QuanLyTaiKhoan
 @HoTen = N'Benh nhan 3', 
 @SDT  = '0123455775', 
@@ -154,13 +197,13 @@ EXEC CapNhatThongTinQTV
 @SDT = '0337432114',
 @HoTen = 'Phạm Thị Như Yến',
 @Email = 'ptnyen21@vp.fitus.edu.vn'
-EXEC CapNhatThongTinQTV
 
 SELECT *
 FROM LICHHEN
 EXEC CapNhatTrangThaiLichHen
 @MaLichHen = 11,
     @TrangThaiMoi = N'Đã hủy'
+    
 SELECT *
 FROM LICHHEN
 EXEC XoaLichHen
@@ -171,10 +214,13 @@ FROM DONTHUOC
 EXEC XemDonThuoc
 @MaDonThuoc = 2
 
+select *
+from THUOC
+
 SELECT *
 FROM BENHNHAN
 EXEC XoaTaiKhoan
-@SDT = '0123455775'
+@SDT = '0123455776'
 
 SELECT *
 FROM DONTHUOC
@@ -184,9 +230,9 @@ EXEC CapNhatHoSoBenhAn
     @STT = 3,
     @MaBenhNhan = 1000,
     @MaNhaSiKham = 101,
-    @GhiChu = N'Ghi chú 2',
-    @MaThuoc = '101',
-    @NgaySuDung = '2023-01-31 00:00:00.000',
+    @GhiChu = N'Ghi chú 12',
+    @MaThuoc = 101,
+    @NgaySuDung = '2025-01-31 00:00:00.000',
     @LieuDung = N'2 viên/ngày',
     @SoLuong = 12
 SELECT *
@@ -201,7 +247,10 @@ WHERE STTLichSuKB =1
 SELECT *
 FROM HOADON
 EXEC LapHoaDonThanhToan
-    @STTLichSuKB = 1
+    @STTLichSuKB = 2
+
+select *
+from DICHVU
 
 -- Execute the stored procedure to add a new drug to the inventory
 EXEC QuanLyKhoThuoc
@@ -215,7 +264,7 @@ EXEC QuanLyKhoThuoc
     @ThaoTac = 'ThemMoi';
 
 EXEC QuanLyKhoThuoc
-    @MaThuoc = 101,
+    @MaThuoc = 107,
     @NgayHetHan = '2023-12-10',
     @TenThuoc = 'Aspirin',
     @DonViTinh = 'Viên',
@@ -223,7 +272,6 @@ EXEC QuanLyKhoThuoc
     @ChiDinh = 'Giảm đau',
     @SoLuongTonKho = 100,
     @ThaoTac = 'ThemMoi';
-
 
 -- Execute the stored procedure to update drug information in the inventory
 EXEC QuanLyKhoThuoc
@@ -236,9 +284,7 @@ EXEC QuanLyKhoThuoc
     @SoLuongTonKho = 150,
     @ThaoTac = 'CapNhat';
 
--- Execute the stored procedure to view current inventory status
-EXEC QuanLyKhoThuoc @ThaoTac = 'XemTonKho';
-
 EXEC DoiMatKhau @SDT = '0123456780'
 , @OldPassword = '12345678'
 , @NewPassword = 'qwe12345';
+
