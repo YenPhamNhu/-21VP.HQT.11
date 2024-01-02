@@ -37,7 +37,7 @@ export const Search = () => {
   const fetchService = async () => {
 
     const response = await fetch(
-      `http://localhost:5000/api/medHistory/getAllMedHistory`
+      `http://localhost:5000/api/employees/medHistory/getAllMedHistory`
     ); // Fetch service data
     console.log(response);
     const serviceData = await response.json();

@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
+  const [dentist, setDentist] = useState(null);
+
+  const fetchService = async () => {
+
+    const response = await fetch(
+      `http://localhost:5000/api/dentists/getDentistBySDT/${localStorage.SDT}`
+    ); // Fetch service data
+    console.log(response);
+    const serviceData = await response.json();
+    let modifiedData;
+    const formattedNgaySinh = serviceData.NgaySinh.split('T')[0];
+    modifiedData = { ...serviceData, NgaySinh: formattedNgaySinh};
+    setDentist(modifiedData);
+  };
+
+  useEffect(() => {
+    fetchService(); 
+  }, []); 
+  if (!dentist) {
+    return <div>Loading...</div>; // Display loading message while fetching data
+  }
   return (
     <section
       className='vh-100'
@@ -26,7 +47,7 @@ export default function Home() {
                     className='img-fluid my-5'
                     style={{ width: "80px" }}
                   />
-                  <h5 style={{ color: "#04364a" }}>patient.HoTen</h5>
+                  <h5 style={{ color: "#04364a" }}>{dentist.HoTen}</h5>
                   <p>
                     <Link className='far fa-edit mb-5 text-dark'>
                       chỉnh sửa
@@ -47,39 +68,35 @@ export default function Home() {
                     <div className='row pt-1'>
                       <div className='col-6 mb-3'>
                         <h6>Mã Nha Sĩ</h6>
-                        <p className='text-muted'>patient.MaNhaSi</p>
+                        <p className='text-muted'>{dentist.MaNhaSi}</p>
                       </div>
                       <div className='col-6 mb-3'>
                         <h6>Số điện thoại</h6>
-                        <p className='text-muted'>patient.SDT</p>
+                        <p className='text-muted'>{dentist.SDT}</p>
                       </div>
                     </div>
                     <div className='row pt-1'>
-                      {/* <div className='col-6 mb-3'>
-                        <h6>Email</h6>
-                        <p className='text-muted'>patient.Email</p>
-                      </div> */}
                       <div className='col-6 mb-3'>
                         <h6>Giới tính</h6>
-                        <p className='text-muted'>patient.GioiTinh</p>
+                        <p className='text-muted'>{dentist.GioiTinh}</p>
                       </div>
                       <div className='col-6 mb-3'>
                         <h6>Ngày Sinh</h6>
-                        <p className='text-muted'>patient.NgaySinh</p>
+                        <p className='text-muted'>{dentist.NgaySinh}</p>
                       </div>
                       <div className='col-6 mb-3'>
-                        <h6>Vị Trí</h6>
-                        <p className='text-muted'>patient.ChuyenMon</p>
+                        <h6>Chuyên môn</h6>
+                        <p className='text-muted'>{dentist.ChuyenMon}</p>
                       </div>
                       <div className='col-6 mb-3'>
-                        <h6>Tình Trạng Hoạt Động</h6>
-                        <p className='text-muted'>patient.BangCap</p>
+                        <h6>Bằng cấp</h6>
+                        <p className='text-muted'>{dentist.BangCap}</p>
                       </div>
                     </div>
                     <div className='col pt-1'>
                       <div className='col-6 mb-3'>
                         <h6>Địa chỉ</h6>
-                        <p className='text-muted'>patient.DiaChi</p>
+                        <p className='text-muted'>{dentist.DiaChi}</p>
                       </div>
                     </div>
                   </div>

@@ -3,8 +3,18 @@ import { MaterialReactTable } from 'material-react-table';
 import { Box, IconButton } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 export const Search = () => {
+ 
   const columns = useMemo(
     () => [
         {
@@ -70,28 +80,12 @@ export const Search = () => {
     <MaterialReactTable
       columns={columns}
       data={Dulieu}
+      enableRowActions
       renderRowActions={({ row, table }) => (
         <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-
-          <Link to="/">
-            View Details
-          </Link>
-          <IconButton
-            color="secondary"
-            onClick={() => {
-              table.setEditingRow(row);
-            }}
-          >
-          </IconButton>
-          <IconButton
-            color="error"
-            onClick={() => {
-              const updatedData = [...Dulieu];
-              updatedData.splice(row.index, 1); // Assuming simple data table
-              setDulieu(updatedData);
-            }}
-          >
-            {/* Add your icon component code */}
+            <IconButton
+            color="green" >
+            <EditIcon />
           </IconButton>
         </Box>
       )}

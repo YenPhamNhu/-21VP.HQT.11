@@ -37,11 +37,20 @@ function Payment() {
 
   const [Dulieu, setDulieu] = useState(null);
 
+  
   const fetchService = async () => {
+    
+    const fetchPatient = async() =>{
+      const response = await fetch(`http://localhost:5000/api/patients/getPatientBySDT/${localStorage.SDT}`);
+      const Patient_ID = await response.json();
+      return Patient_ID;
+    }
+    const Patient_ID = await fetchPatient();
     const response = await fetch(`http://localhost:5000/api/employees/receipts/getAllReceipt`);
     const serviceData = await response.json();
     if (serviceData) {
-      const modifiedData = serviceData.map((item) => {
+      const filteredData = serviceData.filter(item => item.MaBenhNhan === Patient_ID.MaBenhNhan);
+      const modifiedData = filteredData.map((item) => {
         const formattedNgayThanhToan = item.NgayThanhToan.split('T')[0];
         return { ...item, NgayThanhToan: formattedNgayThanhToan };
       });
@@ -64,7 +73,6 @@ function Payment() {
         data={Dulieu}
         renderRowActions={({ row, table }) => (
           <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-            <Link to='/'>View Details</Link>
             <IconButton
               color='secondary'
               onClick={() => {

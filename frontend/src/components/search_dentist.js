@@ -12,6 +12,10 @@ export const Search = () => {
             header: 'Họ và tên',
           },
           {
+            accessorKey: 'MaNhaSi',
+            header: 'Mã nha sĩ',
+          },
+          {
             accessorKey: 'SDT',
             header: 'Số điện thoại',
           },

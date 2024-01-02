@@ -105,7 +105,9 @@ function App({ item_Type }) {
 		return () => {
 			window.removeEventListener("logout", handleLogout);
 			window.removeEventListener("loginSuccess", handleLoginSuccess);
+			console.log(localStorage);
 		  };
+		
 	  }, []);
 	
 

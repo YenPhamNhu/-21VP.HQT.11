@@ -6,11 +6,11 @@ export default function Home() {
   return (
     <div className='container mt-4 mb-4'>
       <h3 className='mt-4' style={{ color: "#04364a" }}>
-        Tìm kiếm nha sĩ
+        Tìm kiếm bệnh nhân
       </h3>
       <SearchPatient />
       <h3 className='mt-4' style={{ color: "#04364a" }}>
-        Tìm kiếm nhân viên
+        Tìm kiếm nha sĩ
       </h3>
       <SearchDentist />
     </div>

@@ -46,55 +46,52 @@ function Login() {
 
 	axios.defaults.withCredentials = true;
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const validationErrors = Validation(values);
 		setErrors(validationErrors);
-
+	
 		if (Object.keys(validationErrors).length === 0) {
-			axios
-				.post("http://localhost:5000/login", values)
-				.then((res) => {
-					sessionStorage.setItem("item_key", res.data.role);
-					sessionStorage.setItem("item_Type", res.data.userType);
-					localStorage.setItem("item_key", res.data.SDT);
-					localStorage.setItem("user",JSON.stringify({role: res.data.userType}))
-					const loginEvent = new Event("loginSuccess");
-        			window.dispatchEvent(loginEvent);
-					navigate("/");
-					console.log(sessionStorage);
-					console.log(localStorage);
-					const userRole = sessionStorage.getItem("item_key");
-					const user = {
-						SDT: res.data.SDT,
-						userRole: res.data.role,
-						userType: getUserType(res.data.userType),
-					};
-					
-					dispatch(login(user));
-					switch (userRole) {
-						case "QTV":
-							navigate("/admin");
-							break;
-						case "NHANVIEN":
-							navigate("/employee");
-							break;
-						case "NHASI":
-							navigate("/dentist");
-							break;
-						case "BENHNHAN":
-							navigate("/patient");
-							break;
-						default:
-							navigate("/");
-					};
-				})
-				.catch((err) => {
-					// Display error message
-					alert(err.response.data.error);
-				});
+		  try {
+			const res = await axios.post('http://localhost:5000/login', values);
+			sessionStorage.setItem('item_key', res.data.role);
+			sessionStorage.setItem('item_Type', res.data.userType);
+			localStorage.setItem('item_key', res.data.SDT);
+			localStorage.setItem('user', JSON.stringify({ role: res.data.userType }));
+			localStorage.setItem('SDT', res.data.SDT);
+			const loginEvent = new Event('loginSuccess');
+			window.dispatchEvent(loginEvent);
+			navigate('/');
+			const userRole = sessionStorage.getItem('item_key');
+			const user = {
+			  SDT: res.data.SDT,
+			  userRole: res.data.role,
+			  userType: getUserType(res.data.userType),
+			};
+			dispatch(login(user));
+	
+			switch (userRole) {
+			  case 'QTV':
+				navigate('/admin');
+				break;
+			  case 'NHANVIEN':
+				navigate('/employee');
+				break;
+			  case 'NHASI':
+				navigate('/dentist');
+				break;
+			  case 'BENHNHAN':
+				navigate('/patient');
+				break;
+			  default:
+				navigate('/');
+			}
+		  } catch (err) {
+			// Display error message
+			alert(err.response.data.error);
+		  }
 		}
-	};
+	  };
 
 	const Validation = (values) => {
 		const errors = {};

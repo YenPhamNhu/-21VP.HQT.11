@@ -15,6 +15,7 @@ const Main = () => {
 				if (res.data.valid) {
 					setName(res.data.HoTen);
 				}
+				console.log(name);
 			})
 			.catch((err) => console.log(err));
 	}, []);
