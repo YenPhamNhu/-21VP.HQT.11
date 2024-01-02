@@ -25,7 +25,7 @@ const LichHenList = ({ lichHenList }) => {
           <th>Ngày Khám</th>
           {/* <th>Giờ Khám</th> */}
           <th>SĐT Bệnh Nhân</th>
-          <th>SĐT Nhà Sĩ</th>
+          <th>SĐT Nha Sĩ</th>
         </tr>
       </thead>
       <tbody>

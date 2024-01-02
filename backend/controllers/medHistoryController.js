@@ -30,9 +30,9 @@ const getMedHistoryByID = async (req, res, next) => {
   try {
     const medHistoryList = await medHistoryData.getMedHistory();
     for (const medHistory of medHistoryList) {
-      medHistoryMap[medHistory.MaBenhNhan] = medHistory;
+      medHistoryMap[medHistory.SDT] = medHistory;
     }
-    const medHistoryMaBenhNhan = req.params.MaBenhNhan;
+    const medHistoryMaBenhNhan = req.params.SDT;
     console.log("MaBenhNhan:", medHistoryMap[medHistoryMaBenhNhan]);
     console.log("medHistoryMaBenhNhan:", medHistoryMaBenhNhan);
     const medHistory = medHistoryMap[medHistoryMaBenhNhan];
