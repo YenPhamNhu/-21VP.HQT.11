@@ -18,7 +18,6 @@ CREATE PROCEDURE TaoTaiKhoanBenhNhan
     @SDT VARCHAR(10),
     @GioiTinh NVARCHAR(5),
     @NgaySinh DATETIME,
-    -- @NgaySinh VARCHAR(50),
     @DiaChi NVARCHAR(50),
     @MatKhau VARCHAR(8)
 AS
@@ -1273,6 +1272,7 @@ GO
 
         DECLARE @ExistingUserCount INT;
 
+<<<<<<< Updated upstream
         -- Kiểm tra xem tài khoản đã tồn tại chưa
         SELECT @ExistingUserCount = COUNT(*)
         FROM (
@@ -1287,6 +1287,22 @@ GO
             UNION
                 SELECT SDT
                 FROM BENHNHAN
+=======
+    -- Kiểm tra xem tài khoản đã tồn tại chưa
+    SELECT @ExistingUserCount = COUNT(*)
+    FROM (
+          SELECT SDT
+            FROM QTV
+        UNION
+            SELECT SDT
+            FROM NHANVIEN
+        UNION
+            SELECT SDT
+            FROM NHASI
+        UNION
+            SELECT SDT
+            FROM BENHNHAN
+>>>>>>> Stashed changes
     ) AS Users
         WHERE SDT = @SDT;
 
@@ -1981,9 +1997,27 @@ BEGIN
         PRINT N'Giao tác LapHoaDonThanhToan chưa được tạo.';
     END
 GO
+<<<<<<< Updated upstream
     CREATE PROCEDURE LapHoaDonThanhToan
         @STTLichSuKB int
     AS
+=======
+CREATE PROCEDURE LapHoaDonThanhToan
+    @STTLichSuKB int
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    DECLARE @MaBenhNhan int;
+    DECLARE @MaPhieuDVSD int;
+    DECLARE @TongTien int;
+    DECLARE @MaDonThuoc int;
+    DECLARE @MaHoaDon int;
+
+    IF NOT EXISTS (SELECT 1
+    FROM LICHSUKHAMBENH
+    WHERE STT = @STTLichSuKB)
+>>>>>>> Stashed changes
     BEGIN
         BEGIN TRANSACTION;
 
