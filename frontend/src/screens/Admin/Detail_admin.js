@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
+import axios from 'axios';
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -10,6 +11,13 @@ export default function Home() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditSuccessMessage, setShowEditSuccessMessage] = useState(false);
+  const [showEditErrorMessage, setShowEditErrorMessage] = useState(false);
+
+  const [editedName, setEditedName] = useState(""); // Add state variables for edited user details
+  const [editedEmail, setEditedEmail] = useState("");
 
   const handleShow = () => {
     setShowModal(true);
@@ -24,6 +32,22 @@ export default function Home() {
     setNewPassword("");
     setConfirmPassword("");
   };
+
+  const [admin, setAdmin] = useState(null);
+    const fetchService = async () => {
+    const response = await fetch(
+      `http://localhost:5000/api/admins/getAdminBySDT/${localStorage.SDT}`
+    ); // Fetch service data
+    console.log(response);
+    const serviceData = await response.json();
+    setAdmin(serviceData);
+  };
+  useEffect(() => {
+    fetchService();
+  }, []);
+  if (!admin) {
+    return <div>Loading...</div>;
+  }
 
   const handleChangePassword = () => {
     // Password length validation
@@ -47,13 +71,7 @@ export default function Home() {
   };
 
   // link chỉnh sửa
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showEditSuccessMessage, setShowEditSuccessMessage] = useState(false);
-  const [showEditErrorMessage, setShowEditErrorMessage] = useState(false);
-
-  const [editedName, setEditedName] = useState(""); // Add state variables for edited user details
-  const [editedEmail, setEditedEmail] = useState("");
-  const [editedPhoneNumber, setEditedPhoneNumber] = useState("");
+  
 
   const handleEditShow = () => {
     setShowEditModal(true);
@@ -61,9 +79,8 @@ export default function Home() {
     setShowEditErrorMessage(false);
     // Initialize edited fields with current user details
     // You need to replace these with your actual user data
-    setEditedName("patient.HoTen");
-    setEditedEmail("patient.Email");
-    setEditedPhoneNumber("patient.SDT");
+    setEditedName("");
+    setEditedEmail("");
     // Set other edited fields with actual user data
   };
 
@@ -72,21 +89,45 @@ export default function Home() {
     // Reset edited fields when closing the modal
     setEditedName("");
     setEditedEmail("");
-    setEditedPhoneNumber("");
     // Reset other edited fields
   };
 
   const handleEditSave = () => {
-    // Assume the user information update is successful (replace with your actual logic)
-    // For simplicity, I'm using a timeout to simulate an asynchronous operation
-    setTimeout(() => {
-      // Reset the form and show the success message
-      handleEditClose();
-      setShowEditSuccessMessage(true);
-
-      // Reset the success message after a certain duration (e.g., 3 seconds)
-      setTimeout(() => setShowEditSuccessMessage(false), 3000);
-    }, 2000); // Simulating a delay, replace with your actual logic
+    const fetchService = async () => {
+      // Get the updated data from your form or wherever it's available
+      const updatedData = {
+        HoTen: editedName,
+        Email: editedEmail,
+      };
+      const requestOptions = {
+        method: 'PUT', // Use the PUT method for updating data
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData), // Convert the data to JSON format
+      };
+  
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/admins/updateInfAdmin/${localStorage.SDT}`,
+          requestOptions
+        ); // Fetch service data
+  
+        if (response.ok) {
+          // Handle the successful response
+          const serviceData = await response.json();
+          console.log('Data updated successfully:', serviceData);
+        } else {
+          // Handle the error response
+          console.error('Failed to update data');
+        }
+      } catch (error) {
+        // Handle any network or other errors
+        console.error('An error occurred:', error);
+      }
+    };
+  
+    fetchService();
   };
 
   return (
@@ -113,7 +154,7 @@ export default function Home() {
                     className='img-fluid my-5'
                     style={{ width: "80px" }}
                   />
-                  <h5 style={{ color: "#04364a" }}>patient.HoTen</h5>
+                  <h5 style={{ color: "#04364a" }}>{admin.Hoten}</h5>
                   <p>
                     <Link onClick={handleEditShow} style={{ color: "#04364a" }}>
                       Chỉnh sửa
@@ -134,18 +175,24 @@ export default function Home() {
                     <hr className='mt-0 mb-4' />
                     <div className='col pt-1'>
                       <div className='col-6 mb-3'>
-                        <h6>Mã bệnh nhân</h6>
-                        <p className='text-muted'>patient.MaNhanVien</p>
+                        <h6>Mã QTV</h6>
+                        <p className='text-muted'>{admin.MaNhanVien}</p>
+                      </div>
+                    </div>
+                    <div className='col pt-1'>
+                      <div className='col-6 mb-3'>
+                        <h6>Họ Tên</h6>
+                        <p className='text-muted'>{admin.HoTen}</p>
                       </div>
                     </div>
                     <div className='row pt-1'>
                       <div className='col-6 mb-3'>
                         <h6>Email</h6>
-                        <p className='text-muted'>patient.Email</p>
+                        <p className='text-muted'>{admin.Email}</p>
                       </div>
                       <div className='col-6 mb-3'>
                         <h6>Số điện thoại</h6>
-                        <p className='text-muted'>patient.SDT</p>
+                        <p className='text-muted'>{admin.SDT}</p>
                       </div>
                     </div>
                   </div>
@@ -235,6 +282,7 @@ export default function Home() {
                 placeholder='Nhập họ và tên'
                 value={editedName}
                 onChange={(e) => setEditedName(e.target.value)}
+                require={true}
               />
             </Form.Group>
 
@@ -245,16 +293,7 @@ export default function Home() {
                 placeholder='Nhập email'
                 value={editedEmail}
                 onChange={(e) => setEditedEmail(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId='formEditedPhoneNumber'>
-              <Form.Label>Số điện thoại</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Nhập số điện thoại'
-                value={editedPhoneNumber}
-                onChange={(e) => setEditedPhoneNumber(e.target.value)}
+                require={true}
               />
             </Form.Group>
             {/* Add other form fields for additional details */}

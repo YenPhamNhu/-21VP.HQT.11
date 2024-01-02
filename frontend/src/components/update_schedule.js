@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import axios from "axios";
 
 const ScheduleForm = () => {
 	const [formData, setFormData] = useState({
-		MaNhaSi: 100,
+		MaNhaSi: "",
 		Ngay: "",
 		CaDangKy: "Sáng",
 	});
+
+const getMaNhaSi = async () => {
+  const response = await fetch(
+    `http://localhost:5000/api/dentists/getDentistBySDT/${localStorage.SDT}`
+  );
+  const data = await response.json();
+  console.log(data);
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    MaNhaSi: data.MaNhaSi, // Update MaNhaSi with the fetched value
+  }));
+};
+useEffect(() => {
+	getMaNhaSi();
+  }, []);
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,6 +30,7 @@ const ScheduleForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+			// console.log(formData);
 			const response = await axios.post(
 				"http://localhost:5000/api/dentists/updateSchedule",
 				{
@@ -28,37 +44,28 @@ const ScheduleForm = () => {
 		}
 	};
 
+	const currentDate = new Date().toISOString().split('T')[0];
+
 	return (
+		<div>
 		<form onSubmit={handleSubmit} style={formStyles}>
 			<div style={inputContainerStyles}>
-				<label htmlFor='MaNhaSi' style={labelStyles}>
-					MaNhaSi:
-				</label>
-				<input
-					type='number'
-					id='MaNhaSi'
-					name='MaNhaSi'
-					value={formData.MaNhaSi}
-					onChange={handleChange}
-					style={inputStyles}
-				/>
-			</div>
-			<div style={inputContainerStyles}>
 				<label htmlFor='Ngay' style={labelStyles}>
-					Ngay:
+					Ngày: 
 				</label>
 				<input
-					type='datetime-local'
+					type='date'
 					id='Ngay'
 					name='Ngay'
 					value={formData.Ngay}
 					onChange={handleChange}
+					min={currentDate}
 					style={inputStyles}
 				/>
 			</div>
 			<div style={inputContainerStyles}>
 				<label htmlFor='CaDangKy' style={labelStyles}>
-					CaDangKy:
+					Ca: 
 				</label>
 				<select
 					id='CaDangKy'
@@ -72,9 +79,10 @@ const ScheduleForm = () => {
 				</select>
 			</div>
 			<button type='submit' style={buttonStyles}>
-				Submit
+				Xác nhận
 			</button>
 		</form>
+		</div>
 	);
 };
 

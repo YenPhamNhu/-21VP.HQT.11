@@ -84,7 +84,7 @@ export const Search = () => {
             onClick={async () => {
               try {
                 const response = await fetch(
-                  `http://localhost:5000/api/admins/deleteEmployee/${row._valuesCache.SDT}`
+                  `http://localhost:5000/api/admins/deleteEmployee/${row.orginal.SDT}`
                 );
                 const responseData = await response.json();
                 if (responseData.success) {

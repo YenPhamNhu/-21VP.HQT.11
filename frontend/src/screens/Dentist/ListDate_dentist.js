@@ -10,8 +10,8 @@ const AppointmentSchedule = () => {
 
   const fetchAppointmentScheduleData = async () => {
     const response = await fetch(
-      "http://localhost:5000/api//appointmentSchedule/getAllAppointmentSchedule"
-    ); // Replace with your API endpoint
+      `http://localhost:5000/api/dentists/appointmentSchedule/getAppointmentScheduleByMaNhaSi/${localStorage.SDT}`
+    ); 
     const data = await response.json();
     if (data) {
       const filteredData = data.filter(

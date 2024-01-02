@@ -12,14 +12,18 @@ import {
 import axios from "axios";
 
 const AppointmentForm = () => {
-  const [dateTime, setDateTime] = useState("");
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() + 1); // Subtract 1 day from the current date
+  const currentDateTime = currentDate.toISOString().slice(0, -8); // Get current date and time in the required format
+  const [dateTime, setDateTime] = useState('');
+  const [Dulieu, setDulieu] = useState([]);
   const [services, setServices] = useState([]);
-  const [dentists, setDentists] = useState([]);
+ 
   const [selectedDentist, setSelectedDentist] = useState("");
   const [selectedService, setSelectedService] = useState("");
 
+
   useEffect(() => {
-    // Fetch services
     axios
       .get("http://localhost:5000/api/services/getAllService")
       .then((response) => {
@@ -29,21 +33,48 @@ const AppointmentForm = () => {
       .catch((error) => {
         console.error("Error fetching services:", error);
       });
-
-    // Fetch dentists
-    axios
-      .get("http://localhost:5000/api/dentists/getAllDentist")
-      .then((response) => {
-        const dentists = response.data;
-        setDentists(dentists);
-      })
-      .catch((error) => {
-        console.error("Error fetching dentists:", error);
-      });
   }, []);
 
-  const handleDateTimeChange = (e) => {
+  
+
+ 
+	const GetLichNhaSi = async () => {
+		const response = await fetch(
+			`http://localhost:5000/api/employee/getAllWorkCalendar`
+		);
+		const serviceData = await response.json();
+    const modifiedData = serviceData.map((item) => {
+      const formattedNgay = item.Ngay.split("T")[0];
+      return { ...item, Ngay: formattedNgay };
+    });
+    const [datePart, timePart] = dateTime.split('T');
+    const NgayHen = datePart;
+    const [GioHen,PhutHen] = timePart.split(':');
+    if (Dulieu) {
+    const filteredDulieu = modifiedData.filter(({ Ngay }) => Ngay === NgayHen);
+      const filteredDulieu1 = filteredDulieu.filter(({ CaDangKy }) => 
+    (CaDangKy === "Sáng" && 12 >= GioHen && GioHen >= 6) ||
+    (CaDangKy === "Chiều" && 17 >= GioHen && GioHen >= 13) ||
+    (CaDangKy === "Tối" && 22 >= GioHen && GioHen >= 18));
+    setDulieu(filteredDulieu1);
+  } }
+
+  const [dentists, setDentists] = useState([]);
+  const GetNhaSi = async () => {
+    const response = await fetch(
+      `http://localhost:5000/api/dentists/getAllDentist`
+    );
+    const datadentist = await response.json();
+    setDentists(datadentist);
+    await GetLichNhaSi();
+    const filterdentist = dentists.filter((dentist) =>
+    Dulieu.some((item) => item.SDT === dentist.SDT));
+    setDentists(filterdentist);
+   };
+
+   const handleDateTimeChange = async (e) => { // Add async keyword
     setDateTime(e.target.value);
+    await GetNhaSi(); // Wait for GetNhaSi() to complete
   };
 
   const handleCancel = () => {
@@ -52,18 +83,6 @@ const AppointmentForm = () => {
     setSelectedService([]);
     setSelectedDentist("");
   };
-  // const handleServiceChange = (event) => {
-  //   const serviceId = event.target.value;
-  //   const isChecked = event.target.checked;
-  //   if (isChecked) {
-  //     setSelectedService([...selectedService, serviceId]);
-  //   } else {
-  //     setSelectedService(
-  //       selectedService.filter((service) => service !== serviceId)
-  //     );
-  //   }
-  // };
-
   const handleServiceChange = (e) => {
     setSelectedService(e.target.value);
   };
@@ -74,11 +93,8 @@ const AppointmentForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the form data
-    console.log("Date & Time:", dateTime);
-    console.log("Services:", selectedService);
-    console.log("Dentist:", selectedDentist);
   };
+
 
   return (
     <div
@@ -101,6 +117,7 @@ const AppointmentForm = () => {
                 value={dateTime}
                 onChange={handleDateTimeChange}
                 required
+                min={currentDateTime}
               />
             </FormGroup>
 
