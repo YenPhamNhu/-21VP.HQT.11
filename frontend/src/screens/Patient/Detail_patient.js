@@ -1,5 +1,3 @@
-// <<<<<<< Updated upstream
-// import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 // import {
 //   Dialog,
@@ -12,40 +10,30 @@
 // } from '@material-ui/core';
 
 // export default function ProfileSection() {
-//   const [patient, setPatient] = useState(null);
-//   const [open, setOpen] = React.useState(false);
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
 
-//   const fetchService = async () => {
-//     const response = await fetch(
-//       `http://localhost:5000/api/patients/getPatientBySDT/${localStorage.SDT}`
-//     ); // Fetch service data
-//     console.log(response);
-//     const serviceData = await response.json();
-//     let modifiedData;
-//     const formattedNgaySinh = serviceData.NgaySinh.split('T')[0];
-//     modifiedData = { ...serviceData, NgaySinh: formattedNgaySinh};
-//     setPatient(modifiedData);
-//   };
-
-//   useEffect(() => {
-//     fetchService();
-//   }, []);
-//   if (!patient) {
-//     return <div>Loading...</div>;
-
-//   }
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 
 export default function ProfileSection() {
+  const [patient, setPatient] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const fetchService = async () => {
+    const response = await fetch(
+      `http://localhost:5000/api/patients/getPatientBySDT/${localStorage.SDT}`
+    ); // Fetch service data
+    console.log(response);
+    const serviceData = await response.json();
+    let modifiedData;
+    const formattedNgaySinh = serviceData.NgaySinh.split("T")[0];
+    modifiedData = { ...serviceData, NgaySinh: formattedNgaySinh };
+    setPatient(modifiedData);
+  };
+
   const [showModal, setShowModal] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -106,12 +94,12 @@ export default function ProfileSection() {
     setShowEditSuccessMessage(false);
     setShowEditErrorMessage(false);
 
-    setEditedName("patient.HoTen");
-    setEditedPhoneNumber("patient.SDT");
-    setEditedMaBenhNhan("patient.MaBenhNhan");
-    setEditedGioiTinh("patient.GioiTinh");
-    setEditedNgaySinh("patient.NgaySinh");
-    setEditedDiaChi("patient.DiaChi");
+    setEditedName(" ");
+    setEditedPhoneNumber(" ");
+    setEditedMaBenhNhan(" ");
+    setEditedGioiTinh(" ");
+    setEditedNgaySinh(" ");
+    setEditedDiaChi(" ");
   };
 
   const handleEditClose = () => {
@@ -138,6 +126,12 @@ export default function ProfileSection() {
     }, 2000); // Simulating a delay, replace with your actual logic
   };
 
+  useEffect(() => {
+    fetchService();
+  }, []);
+  if (!patient) {
+    return <div>Loading...</div>;
+  }
   return (
     <section
       className='vh-100'
@@ -162,7 +156,7 @@ export default function ProfileSection() {
                     className='img-fluid my-5'
                     style={{ width: "80px" }}
                   />
-                  {/* <h5 style={{ color: "#04364a" }}>{patient.HoTen}</h5>
+                  <h5 style={{ color: "#04364a" }}>{patient.HoTen}</h5>
                   <p>
                     <Link onClick={handleEditShow} style={{ color: "#04364a" }}>
                       Chỉnh sửa
@@ -211,7 +205,7 @@ export default function ProfileSection() {
                         <p className='text-muted'>{patient.DiaChi}</p>
                       </div>
                     </div>
-                  </div>*/}
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,7 +290,7 @@ export default function ProfileSection() {
               <Form.Control
                 type='text'
                 placeholder='Nhập họ và tên'
-                value={editedName}
+                value={patient.HoTen}
                 onChange={(e) => setEditedName(e.target.value)}
               />
             </Form.Group>
@@ -306,7 +300,7 @@ export default function ProfileSection() {
               <Form.Control
                 type='text'
                 placeholder='Nhập mã bệnh nhân'
-                value={editedMaBenhNhan}
+                value={patient.MaBenhNhan}
                 onChange={(e) => setEditedMaBenhNhan(e.target.value)}
               />
             </Form.Group>
@@ -316,7 +310,7 @@ export default function ProfileSection() {
               <Form.Control
                 type='text'
                 placeholder='Nhập số điện thoại'
-                value={editedPhoneNumber}
+                value={patient.SDT}
                 onChange={(e) => setEditedPhoneNumber(e.target.value)}
               />
             </Form.Group>
@@ -326,7 +320,7 @@ export default function ProfileSection() {
               <Form.Control
                 type='text'
                 placeholder='Nhập giới tính'
-                value={editedGioiTinh}
+                value={patient.GioiTinh}
                 onChange={(e) => setEditedGioiTinh(e.target.value)}
               />
             </Form.Group>
@@ -336,7 +330,7 @@ export default function ProfileSection() {
               <Form.Control
                 type='text'
                 placeholder='Nhập ngày sinh'
-                value={editedNgaySinh}
+                value={patient.NgaySinh}
                 onChange={(e) => setEditedNgaySinh(e.target.value)}
               />
             </Form.Group>
@@ -346,7 +340,7 @@ export default function ProfileSection() {
               <Form.Control
                 type='text'
                 placeholder='Nhập địa chỉ'
-                value={editedDiaChi}
+                value={patient.DiaChi}
                 onChange={(e) => setEditedDiaChi(e.target.value)}
               />
             </Form.Group>
