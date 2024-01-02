@@ -51,14 +51,15 @@ export default function SwipeableTemporaryDrawer() {
       icon: <SupervisorAccountIcon />,
       to: "/admin/account",
     },
-    { text: "Danh mục thuốc", icon: <VaccinesIcon />, to: "/admin/storemed" },
-    { text: "Thông tin khám", icon: <InfoIcon />, to: "/admin/infoappo" },
-    { text: "Đăng xuất", icon: <LogoutIcon />, to: "/logout" },
     {
       text: "Lịch làm việc",
       icon: <InfoIcon />,
       to: "/admin/lichlamviec",
     },
+    { text: "Danh mục thuốc", icon: <VaccinesIcon />, to: "/admin/storemed" },
+    { text: "Thông tin khám", icon: <InfoIcon />, to: "/admin/infoappo" },
+    { text: "Đăng xuất", icon: <LogoutIcon />, to: "/logout" },
+    
   ];
 
   const list = (anchor) => (

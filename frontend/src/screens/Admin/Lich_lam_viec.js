@@ -1,5 +1,5 @@
 import React from "react";
-import LichLamViec from "../../components/lich_lam_viec.js";
+import LichLamViec from "../../components/lich_lam_viec_foradmin.js";
 export default function Home() {
   return (
     <div className='container mt-5 mb-5'>

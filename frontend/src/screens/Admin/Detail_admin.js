@@ -95,12 +95,29 @@ export default function Home() {
   const handleEditSave = () => {
     const fetchService = async () => {
       // Get the updated data from your form or wherever it's available
-      const updatedData = {
-        HoTen: editedName,
-        Email: editedEmail,
-      };
+      const updatedData = {};
+
+    if (editedName !== "") {
+      updatedData.HoTen = editedName;
+    }
+
+    if (editedEmail !== "") {
+      updatedData.Email = editedEmail;
+    }
+    if (editedName.trim() === "") {
+      // Display an error message or handle the validation error in some way
+      console.error("Name field is empty");
+      return;
+    }
+
+    if (editedEmail.trim() === "") {
+      // Display an error message or handle the validation error in some way
+      console.error("Email field is empty");
+      return;
+    }
+    
       const requestOptions = {
-        method: 'PUT', // Use the PUT method for updating data
+        method: 'PUT', // Use the PUT method for   updating data
         headers: {
           'Content-Type': 'application/json',
         },
@@ -111,18 +128,23 @@ export default function Home() {
         const response = await fetch(
           `http://localhost:5000/api/admins/updateInfAdmin/${localStorage.SDT}`,
           requestOptions
-        ); // Fetch service data
-  
+        );
         if (response.ok) {
-          // Handle the successful response
-          const serviceData = await response.json();
-          console.log('Data updated successfully:', serviceData);
+          console.log('Data updated successfully');
+          // Fetch the updated data
+          const fetchResponse = await fetch(
+            `http://localhost:5000/api/admins/getAdminBySDT/${localStorage.SDT}`
+          );
+          if (fetchResponse.ok) {
+            const updatedAdminData = await fetchResponse.json();
+            console.log('Updated admin data:', updatedAdminData);
+          } else {
+            console.error('Failed to fetch updated data');
+          }
         } else {
-          // Handle the error response
           console.error('Failed to update data');
         }
       } catch (error) {
-        // Handle any network or other errors
         console.error('An error occurred:', error);
       }
     };

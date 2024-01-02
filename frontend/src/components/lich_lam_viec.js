@@ -78,10 +78,10 @@ export default function Home() {
       data={Dulieu}
       enableRowActions
       renderRowActions={({ row, table }) => {
-        // if (row.original.Ngay < currentDate) {
-        //   return null; 
-        // }
-		// else {
+        if (row.original.Ngay < currentDate) {
+          return null; 
+        }
+		else {
         return (
           <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
             <Button variant="outlined" onClick={() => handleClickOpen(row)}>
@@ -116,7 +116,7 @@ export default function Home() {
               </DialogActions>
             </Dialog>
           </Box>
-        );}
+        );}}
       }
     />
 	);
