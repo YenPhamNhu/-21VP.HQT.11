@@ -1,9 +1,11 @@
 SELECT [MaHoaDon]
-      , [MaBenhNhan]
+      , HD.[MaBenhNhan]
       , [STTLichSuKB]
       , [MaPhieuDVSD]
       , [TongTien]
       , [TinhTrangThanhToan]
       , [NgayThanhToan]
       , [MaDonThuoc]
-FROM [QLPKNK].[dbo].[HOADON]
+      , [SDT]
+FROM [QLPKNK].[dbo].[HOADON] HD
+JOIN [QLPKNK].[dbo].[BENHNHAN] BN ON HD.[MaBenhNhan] = BN.[MaBenhNhan];
