@@ -73,37 +73,8 @@ export const Search = () => {
     <MaterialReactTable
       columns={columns}
       data={Dulieu}
-      enableRowActions
       renderRowActions={({ row, table }) => (
         <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
-          <IconButton
-            color='secondary'
-            onClick={() => {
-              table.setEditingRow(row);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-
-          <IconButton
-  color='error'
-  onClick={async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/admins/deletePatient/${row.original.SDT}`);
-      if (response.ok) {
-        const updatedData = Dulieu.filter((SDT) => SDT !== row.original.SDT);
-        setDulieu(updatedData);
-      } else {
-        const errorData = await response.json();
-        console.error(errorData.error);
-      }
-    } catch (error) {
-      console.error("Error deleting patient:", error);
-    }
-  }}
->
-  <DeleteIcon />
-</IconButton>
         </Box>
       )}
     />

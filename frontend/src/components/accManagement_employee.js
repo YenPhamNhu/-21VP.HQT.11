@@ -23,10 +23,6 @@ export const Search = () => {
         accessorKey: "GioiTinh",
         header: "Giới tính",
       },
-      // {
-      //   accessorKey: 'NgaySinh',
-      //   header: 'Ngày sinh',
-      // },
       {
         accessorKey: "DiaChi",
         header: "Địa chỉ",
@@ -78,7 +74,6 @@ export const Search = () => {
           >
             <EditIcon />
           </IconButton>
-
           <IconButton
             color='error'
             onClick={async () => {
@@ -89,7 +84,7 @@ export const Search = () => {
                 const responseData = await response.json();
                 if (responseData.success) {
                   const updatedData = Dulieu.filter(
-                    (patient) => patient.SDT !== row._valuesCache.SDT
+                    (SDT) => SDT !== row.orginal.SDT
                   );
                   setDulieu(updatedData);
                 } else {
@@ -98,8 +93,7 @@ export const Search = () => {
               } catch (error) {
                 console.error("Error deleting employee:", error);
               }
-            }}
-          >
+            }} >
             <DeleteIcon />
           </IconButton>
         </Box>

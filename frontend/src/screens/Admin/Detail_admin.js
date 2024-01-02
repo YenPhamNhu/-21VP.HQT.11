@@ -16,6 +16,8 @@ export default function Home() {
   const [showEditSuccessMessage, setShowEditSuccessMessage] = useState(false);
   const [showEditErrorMessage, setShowEditErrorMessage] = useState(false);
 
+  const [currentName, setCurrentName] = useState(""); // Add state variables for edited user details
+  const [currentEmail, setCurrentEmail] = useState("");
   const [editedName, setEditedName] = useState(""); // Add state variables for edited user details
   const [editedEmail, setEditedEmail] = useState("");
 
@@ -39,6 +41,8 @@ export default function Home() {
       `http://localhost:5000/api/admins/getAdminBySDT/${localStorage.SDT}`
     ); // Fetch service data
     console.log(response);
+    setCurrentName(response.Hoten);
+    setCurrentEmail(response.Email);
     const serviceData = await response.json();
     setAdmin(serviceData);
   };
@@ -53,22 +57,17 @@ export default function Home() {
     // Password length validation
     if (newPassword.length !== 8) {
       setShowErrorMessage(true);
-      // Reset the error message after a certain duration (e.g., 5 seconds)
-      setTimeout(() => setShowErrorMessage(false), 5000);
-      return; // Exit the function if validation fails
-    }
-
-    // Assume the password change is successful (replace with your actual logic)
-    // For simplicity, I'm using a timeout to simulate an asynchronous operation
-    setTimeout(() => {
-      // Reset the form and show the success message
-      handleClose();
-      setShowSuccessMessage(true);
-
-      // Reset the success message after a certain duration (e.g., 3 seconds)
-      setTimeout(() => setShowSuccessMessage(false), 3000);
-    }, 2000); // Simulating a delay, replace with your actual logic
-  };
+    const fetchService = async () => {
+        const response = await fetch(
+          `http://localhost:5000/api/admins/getAdminBySDT/${localStorage.SDT}`
+        ); // Fetch service data
+        console.log(response);
+        setCurrentName(response.Hoten);
+        setCurrentEmail(response.Email);
+        const serviceData = await response.json();
+        setAdmin(serviceData);
+      };
+  }};
 
   // link chỉnh sửa
   
@@ -138,6 +137,7 @@ export default function Home() {
           if (fetchResponse.ok) {
             const updatedAdminData = await fetchResponse.json();
             console.log('Updated admin data:', updatedAdminData);
+            window.location.reload();
           } else {
             console.error('Failed to fetch updated data');
           }
@@ -182,11 +182,11 @@ export default function Home() {
                       Chỉnh sửa
                     </Link>
                   </p>
-                  <p>
+                  {/* <p>
                     <Link onClick={handleShow} style={{ color: "#04364a" }}>
                       Đổi mật khẩu
                     </Link>
-                  </p>
+                  </p> */}
                 </div>
                 <div
                   className='col-md-8'
@@ -225,7 +225,7 @@ export default function Home() {
         </div>
       </div>
       {/* Modal for changing password */}
-      <Modal show={showModal} onHide={handleClose}>
+      {/* <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Đổi mật khẩu</Modal.Title>
         </Modal.Header>
@@ -273,7 +273,7 @@ export default function Home() {
             Lưu thay đổi
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       {/* Success message */}
       {showSuccessMessage && (
@@ -283,11 +283,11 @@ export default function Home() {
       )}
 
       {/* Error message */}
-      {showErrorMessage && (
+      {/* {showErrorMessage && (
         <Alert variant='danger' className='mt-3'>
           Mật khẩu phải gồm đúng 8 kí tự. Vui lòng kiểm tra lại.
         </Alert>
-      )}
+      )} */}
 
       {/* link chỉnh sửa */}
       {/* Modal for editing user information */}

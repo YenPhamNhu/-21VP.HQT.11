@@ -68,6 +68,7 @@ export default function Home() {
       const response = await axios.delete(
         `http://localhost:5000/api/admins/drugs/deleteDrug/${row.original.MaThuoc}/${row.original.NgayHetHan}`
       );
+      window.location.reload();
 
       if (response.ok) {
         const data = await response.json();
@@ -108,14 +109,12 @@ export default function Home() {
       renderRowActions={({ row, table }) => (
         <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
           <IconButton
-            color='secondary'
-            onClick={() => {
-              table.setEditingRow(row);
-            }}
+            color='secondary'    
           >
             <EditIcon />
           </IconButton>
           <IconButton color='error' onClick={() => fetchDelete(row)}>
+            
             <DeleteIcon />
           </IconButton>
         </Box>
