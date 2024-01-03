@@ -1,6 +1,5 @@
 "use strict";
 
-
 const express = require("express");
 const userControll = require("../controllers/userController");
 const serviceControll = require("../controllers/serviceController");
@@ -14,7 +13,6 @@ const appointmentScheduleController = require("../controllers/appointmentSchedul
 const medHistoryController = require("../controllers/medHistoryController");
 const workCalendarController = require("../controllers/workCalendarController");
 const router = express.Router();
-
 
 // const auth = require("../middleware.js");
 // const { authPage } = require("../middlewares.js");
@@ -191,6 +189,7 @@ const {
   createDrug,
   deleteDrug,
   XemDonThuoc,
+  XemDonThuocIDBN,
 } = drugController;
 router.get("/admins/drugs/getAllDrug", getAllDrug);
 router.get("/employees/drugs/getAllDrug", getAllDrug);
@@ -213,6 +212,7 @@ router.get("/employees/receipts/getAllReceipt", getAllReceipt);
 router.get("/employees/receipts/getReceiptByID/:MaHoaDon", getReceiptByID);
 router.get("/patients/receipts/getReceiptByID/:MaHoaDon", getReceiptByID);
 router.get("/employees/drugs/XemDonThuoc/:drugInvoiceId", XemDonThuoc);
+router.get("/patients/drugs/XemDonThuoc/:SDT", XemDonThuocIDBN);
 // lich hen appointmentSchedule
 const {
   getAllAppointmentSchedule,
