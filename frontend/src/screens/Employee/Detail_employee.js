@@ -18,8 +18,8 @@ export default function Home() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [OldPassword, setOldPassword] = useState("");
+  const [NewPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleShow = () => {
@@ -37,37 +37,60 @@ export default function Home() {
   };
 
   const handleChangePassword = () => {
-    // Password length validation
-    if (newPassword.length !== 8) {
-      setShowErrorMessage(true);
-      // Reset the error message after a certain duration (e.g., 5 seconds)
-      setTimeout(() => setShowErrorMessage(false), 5000);
-      return; // Exit the function if validation fails
+    // Check if the new password and confirm password match
+    if (NewPassword !== confirmPassword) {
+      alert("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+      return;
     }
-
-    // Assume the password change is successful (replace with your actual logic)
-    // For simplicity, I'm using a timeout to simulate an asynchronous operation
-    setTimeout(() => {
-      // Reset the form and show the success message
-      handleClose();
-      setShowSuccessMessage(true);
-
-      // Reset the success message after a certain duration (e.g., 3 seconds)
-      setTimeout(() => setShowSuccessMessage(false), 3000);
-    }, 2000); // Simulating a delay, replace with your actual logic
+    if (NewPassword.length < 8) {
+      alert("Mật khẩu mới không đủ 8 kí tự trở lên");
+      return;
+    }
+    const SDT = localStorage.SDT;
+    const data = {
+      SDT,
+      OldPassword,
+      NewPassword,
+    };
+    console.log(data);
+  
+    // Make a fetch request to update the password
+    fetch('http://localhost:5000/api/employees/changePassword', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the server
+        if (data.success) {
+          alert("Mật khẩu đã được cập nhật thành công.");
+          // Reset the password fields
+          setOldPassword(data.NewPassword);
+          // setNewPassword("");
+          // setConfirmPassword("");
+          // Close the modal
+          handleClose();
+        } else {
+          alert("Mật khẩu cũ không đúng hoặc có lỗi xảy ra.");
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
+      });
   };
-
   // link chỉnh sửa
   const [showEditModal, setShowEditModal] = useState(false);
   const [showEditSuccessMessage, setShowEditSuccessMessage] = useState(false);
   const [showEditErrorMessage, setShowEditErrorMessage] = useState(false);
 
   const [editedName, setEditedName] = useState("");
-  const [editedPhoneNumber, setEditedPhoneNumber] = useState("");
-  const [editedMaNhaSi, setEditedMaNhaSi] = useState("");
   const [editedGioiTinh, setEditedGioiTinh] = useState("");
   const [editedViTri, setEditedViTri] = useState("");
-  const [editedTinhTrangHoatDong, setEditedTinhTrangHoatDong] = useState("");
+  // const [editedTinhTrangHoatDong, setEditedTinhTrangHoatDong] = useState("");
   const [editedDiaChi, setEditedDiaChi] = useState("");
 
   const handleEditShow = () => {
@@ -76,11 +99,8 @@ export default function Home() {
     setShowEditErrorMessage(false);
 
     setEditedName(" ");
-    setEditedPhoneNumber(" ");
-    setEditedMaNhaSi(" ");
-    setEditedGioiTinh(" ");
+    setEditedGioiTinh('Nam');
     setEditedViTri(" ");
-    setEditedTinhTrangHoatDong(" ");
     setEditedDiaChi(" ");
   };
 
@@ -88,25 +108,82 @@ export default function Home() {
     setShowEditModal(false);
     // Reset edited fields when closing the modal
     setEditedName("");
-    setEditedPhoneNumber("");
-    setEditedMaNhaSi("");
     setEditedGioiTinh("");
     setEditedViTri("");
-    setEditedTinhTrangHoatDong("");
     setEditedDiaChi("");
   };
 
   const handleEditSave = () => {
-    // Assume the user information update is successful (replace with your actual logic)
-    // For simplicity, I'm using a timeout to simulate an asynchronous operation
-    setTimeout(() => {
-      // Reset the form and show the success message
-      handleEditClose();
-      setShowEditSuccessMessage(true);
-
-      // Reset the success message after a certain duration (e.g., 3 seconds)
-      setTimeout(() => setShowEditSuccessMessage(false), 3000);
-    }, 2000); // Simulating a delay, replace with your actual logic
+    const fetchService = async () => {
+      // Get the updated data from your form or wherever it's available
+      const updatedData = {};
+    if (editedName !== "") {
+      updatedData.HoTen = editedName;
+    }
+    if (editedDiaChi !== "") {
+      updatedData.DiaChi = editedDiaChi;
+    }
+    if (editedGioiTinh !== "") {
+      updatedData.GioiTinh  = editedGioiTinh;
+    }
+    if (editedViTri !== "") {
+      updatedData.ViTri  = editedViTri;
+    }
+    if (editedName.trim() === "") {
+      // Display an error message or handle the validation error in some way
+      console.error("Name field is empty");
+      return;
+    }
+    if (editedDiaChi.trim() === "") {
+      // Display an error message or handle the validation error in some way
+      console.error("DiaChi field is empty");
+      return;
+    }
+    if (editedGioiTinh.trim() === "") {
+      // Display an error message or handle the validation error in some way
+      console.error("GioiTinh field is empty");
+      return;
+    }
+    if (editedViTri.trim() === "") {
+      // Display an error message or handle the validation error in some way
+      console.error("ViTri field is empty");
+      return;
+    }
+      const requestOptions = {
+        method: 'PUT', // Use the PUT method for   updating data
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData), // Convert the data to JSON format
+      };
+  
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/employees/updateInf/${localStorage.SDT}`,
+          requestOptions
+        );
+        if (response.ok) {
+          console.log('Data updated successfully');
+          // Fetch the updated data
+          const fetchResponse = await fetch(
+            `http://localhost:5000/api/employees/getEmployeeBySDT/${localStorage.SDT}`
+          );
+          if (fetchResponse.ok) {
+            const updatedAdminData = await fetchResponse.json();
+            console.log('Updated employee data:', updatedAdminData);
+            window.location.reload();
+          } else {
+            console.error('Failed to fetch updated data');
+          }
+        } else {
+          console.error('Failed to update data');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+  
+    fetchService();
   };
 
   useEffect(() => {
@@ -214,7 +291,7 @@ export default function Home() {
               <Form.Control
                 type='password'
                 placeholder='Nhập mật khẩu cũ'
-                value={oldPassword}
+                value={OldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 require
               />
@@ -225,7 +302,8 @@ export default function Home() {
               <Form.Control
                 type='password'
                 placeholder='Nhập mật khẩu mới'
-                value={newPassword}
+                value={NewPassword}
+                minLength={8}
                 onChange={(e) => setNewPassword(e.target.value)}
                 require
               />
@@ -279,67 +357,37 @@ export default function Home() {
               <Form.Control
                 type='text'
                 placeholder='Nhập họ và tên'
-                value={employee.HoTen}
+                value={editedName}
                 onChange={(e) => setEditedName(e.target.value)}
               />
             </Form.Group>
-
-            <Form.Group controlId='formEditedMaNhanVien'>
-              <Form.Label>Mã Nhân viên</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Nhập mã nhân viên'
-                value={employee.MaNhanVien}
-                onChange={(e) => setEditedMaNhaSi(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId='formEditedPhoneNumber'>
-              <Form.Label>Số điện thoại</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Nhập số điện thoại'
-                value={employee.SDT}
-                onChange={(e) => setEditedPhoneNumber(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId='formEditedGioiTinh'>
+            <Form.Group controlId='formEditedGender'>
               <Form.Label>Giới tính</Form.Label>
               <Form.Control
-                type='text'
-                placeholder='Nhập giới tính'
-                value={employee.GioiTinh}
+                as='select'
+                value={editedGioiTinh}
+                required
                 onChange={(e) => setEditedGioiTinh(e.target.value)}
-              />
+              >
+                <option value='Nam'>Nam</option>
+                <option value='Nữ'>Nữ</option>
+              </Form.Control>
             </Form.Group>
-
             <Form.Group controlId='formEditedViTri'>
               <Form.Label>Vị Trí</Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Nhập vị trí'
-                value={employee.ViTri}
+                value={editedViTri}
                 onChange={(e) => setEditedViTri(e.target.value)}
               />
             </Form.Group>
-
-            <Form.Group controlId='formEditedChuyenMon'>
-              <Form.Label>Tình trạng hoạt động</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Nhập tình trạng hoạt động'
-                value={employee.TinhTrangHoatDong}
-                onChange={(e) => setEditedTinhTrangHoatDong(e.target.value)}
-              />
-            </Form.Group>
-
             <Form.Group controlId='formEditedDiaChi'>
               <Form.Label>Địa chỉ</Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Nhập địa chỉ'
-                value={employee.DiaChi}
+                value={editedDiaChi}
                 onChange={(e) => setEditedDiaChi(e.target.value)}
               />
             </Form.Group>
@@ -372,4 +420,3 @@ export default function Home() {
   );
 }
 
-// export default ProfileSection;

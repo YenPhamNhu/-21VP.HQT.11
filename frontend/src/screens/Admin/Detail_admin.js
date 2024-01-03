@@ -8,9 +8,6 @@ export default function Home() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showEditSuccessMessage, setShowEditSuccessMessage] = useState(false);
@@ -30,9 +27,9 @@ export default function Home() {
   const handleClose = () => {
     setShowModal(false);
     // Reset password fields when closing the modal
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    // setOldPassword("");
+    // setNewPassword("");
+    // setConfirmPassword("");
   };
 
   const [admin, setAdmin] = useState(null);
@@ -52,22 +49,6 @@ export default function Home() {
   if (!admin) {
     return <div>Loading...</div>;
   }
-
-  const handleChangePassword = () => {
-    // Password length validation
-    if (newPassword.length !== 8) {
-      setShowErrorMessage(true);
-    const fetchService = async () => {
-        const response = await fetch(
-          `http://localhost:5000/api/admins/getAdminBySDT/${localStorage.SDT}`
-        ); // Fetch service data
-        console.log(response);
-        setCurrentName(response.Hoten);
-        setCurrentEmail(response.Email);
-        const serviceData = await response.json();
-        setAdmin(serviceData);
-      };
-  }};
 
   // link chỉnh sửa
   

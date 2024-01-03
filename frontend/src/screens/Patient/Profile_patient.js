@@ -24,22 +24,27 @@ export default function Home() {
   
     
     const [Dulieu, setDulieu] = useState(null);
-    const fetchService = async () => {
-  
-      const response = await fetch(
-        `http://localhost:5000/api/medHistory/getAllMedHistory`
-      ); // Fetch service data
-      console.log(response);
-      const serviceData = await response.json();
-      if (serviceData) {
-        const modifiedData = serviceData.map((item) => {
-          const formattedNgayKham = item.NgayKham.split('T')[0]; // Extract the date part
-          return { ...item, NgayKham: formattedNgayKham };
-        });
-          setDulieu(modifiedData);
-      }
-    };
-  
+const fetchService = async () => {
+  const response = await fetch(
+    `http://localhost:5000/api/patients/medHistory/getMedHistoryByID/${localStorage.SDT}`
+  );
+  console.log(response);
+  const serviceData = await response.json();
+  console.log(serviceData);
+  if (serviceData) {
+    let modifiedData;
+    if (Array.isArray(serviceData)) {
+      modifiedData = serviceData.map((item) => {
+        const formattedNgayKham = item.NgayKham.split('T')[0];
+        return { ...item, NgayKham: formattedNgayKham };
+      });
+    } else {
+      const formattedNgayKham = serviceData.NgayKham.split('T')[0];
+      modifiedData = { ...serviceData, NgayKham: formattedNgayKham };
+    }
+    setDulieu(modifiedData);
+  }
+};
     useEffect(() => {
       fetchService(); 
     }, []); 

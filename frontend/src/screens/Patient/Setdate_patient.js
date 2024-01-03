@@ -21,6 +21,7 @@ const AppointmentForm = () => {
  
   const [selectedDentist, setSelectedDentist] = useState("");
   const [selectedService, setSelectedService] = useState("");
+  const [dentists, setDentists] = useState([]);
 
 
   useEffect(() => {
@@ -39,42 +40,60 @@ const AppointmentForm = () => {
 
  
 	const GetLichNhaSi = async () => {
-		const response = await fetch(
-			`http://localhost:5000/api/employee/getAllWorkCalendar`
-		);
-		const serviceData = await response.json();
-    const modifiedData = serviceData.map((item) => {
-      const formattedNgay = item.Ngay.split("T")[0];
-      return { ...item, Ngay: formattedNgay };
-    });
-    const [datePart, timePart] = dateTime.split('T');
-    const NgayHen = datePart;
-    const [GioHen,PhutHen] = timePart.split(':');
-    if (Dulieu) {
-    const filteredDulieu = modifiedData.filter(({ Ngay }) => Ngay === NgayHen);
-      const filteredDulieu1 = filteredDulieu.filter(({ CaDangKy }) => 
-    (CaDangKy === "Sáng" && 12 >= GioHen && GioHen >= 6) ||
-    (CaDangKy === "Chiều" && 17 >= GioHen && GioHen >= 13) ||
-    (CaDangKy === "Tối" && 22 >= GioHen && GioHen >= 18));
-    setDulieu(filteredDulieu1);
-  } }
-
-  const [dentists, setDentists] = useState([]);
+    try {
+      console.log(dentists);
+      const response = await fetch(`http://localhost:5000/api/employee/getAllWorkCalendar`);
+      const serviceData = await response.json();
+      const modifiedData = serviceData.map((item) => {
+        const formattedNgay = item.Ngay.split("T")[0];
+        return { ...item, Ngay: formattedNgay };
+      });
+  
+      const [datePart, timePart] = dateTime.split('T');
+      const NgayHen = datePart;
+      const [GioHen, PhutHen] = timePart.split(':');
+  
+      if (Dulieu) {
+        const filteredDulieu = modifiedData.filter(({ Ngay }) => Ngay === NgayHen);
+        const filteredDulieu1 = filteredDulieu.filter(({ CaDangKy }) =>
+          (CaDangKy === "Sáng" && 12 >= GioHen && GioHen >= 6) ||
+          (CaDangKy === "Chiều" && 17 >= GioHen && GioHen >= 13) ||
+          (CaDangKy === "Tối" && 22 >= GioHen && GioHen >= 18)
+        );
+        setDulieu(filteredDulieu1);
+      }
+    } catch (error) {
+      // Handle error appropriately
+      console.error(error);
+    }
+  };
+  
   const GetNhaSi = async () => {
-    const response = await fetch(
-      `http://localhost:5000/api/dentists/getAllDentist`
-    );
-    const datadentist = await response.json();
-    setDentists(datadentist);
-    await GetLichNhaSi();
-    const filterdentist = dentists.filter((dentist) =>
-    Dulieu.some((item) => item.SDT === dentist.SDT));
-    setDentists(filterdentist);
-   };
-
-   const handleDateTimeChange = async (e) => { // Add async keyword
-    setDateTime(e.target.value);
-    await GetNhaSi(); // Wait for GetNhaSi() to complete
+    try {
+      const response = await fetch(`http://localhost:5000/api/dentists/getAllDentist`);
+      const datadentist = await response.json();
+      setDentists(datadentist);
+      if(dentists)
+      {
+      await GetLichNhaSi();
+      const filterdentist = dentists.filter((dentist) =>
+        Dulieu.some((item) => item.SDT === dentist.SDT)
+      );
+      setDentists(filterdentist);}
+    } catch (error) {
+      // Handle error appropriately
+      console.error(error);
+    }
+  };
+  
+  const handleDateTimeChange = async (e) => {
+    try {
+      setDateTime(e.target.value);
+      await GetNhaSi();
+    } catch (error) {
+      // Handle error appropriately
+      console.error(error);
+    }
   };
 
   const handleCancel = () => {
