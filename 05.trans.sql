@@ -1799,6 +1799,93 @@ GO
     END;
 GO
 
+    --Xem đơn thuốc bằng mã bệnh nhân
+    IF EXISTS (SELECT *
+    FROM sys.procedures
+    WHERE name = N'XemDonThuocIDBN' AND type = 'P')
+BEGIN
+        DROP PROCEDURE XemDonThuocIDBN;
+        PRINT N'Đã hủy giao tác XemDonThuocIDBN.';
+    END
+ELSE
+BEGIN
+        PRINT N'Giao tác XemDonThuocIDBN chưa được tạo.';
+    END
+GO
+CREATE PROCEDURE XemDonThuocIDBN
+    @SDT VARCHAR(10) -- Thay đổi kiểu dữ liệu của tham số input nếu cần thiết
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+    BEGIN TRY
+        -- Kiểm tra xem bệnh nhân có tồn tại hay không
+        IF NOT EXISTS (
+                SELECT *
+                FROM BENHNHAN
+                WHERE SDT = @SDT
+            )
+        BEGIN
+            THROW 50001, 'Bệnh nhân không tồn tại', 1;
+        END
+
+        -- Lấy thông tin về đơn thuốc của bệnh nhân
+        SELECT DT.MaDonThuoc, DT.MaThuoc, DT.MaBenhNhan, DT.NgaySuDung, DT.NgayHetHan, DT.LieuDung, DT.STTLichSuKB, DT.SoLuong
+        FROM DONTHUOC DT
+        INNER JOIN BENHNHAN BN ON DT.MaBenhNhan = BN.MaBenhNhan
+        WHERE BN.SDT = @SDT;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Nếu xảy ra lỗi, rollback transaction
+        ROLLBACK TRANSACTION;
+
+        -- Giữ lại thông báo lỗi gốc
+        THROW;
+    END CATCH;
+END;
+GO
+
+--    CREATE PROCEDURE XemDonThuocIDBN
+--        @MaBenhNhan INT
+--    AS
+--    BEGIN
+--        SET NOCOUNT ON;
+
+--        BEGIN TRANSACTION;
+--        SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+--        BEGIN TRY
+--        -- Kiểm tra xem đơn thuốc có tồn tại hay không
+	
+--        IF NOT EXISTS (SELECT *
+--        FROM DONTHUOC
+--        WHERE @MaBenhNhan = @MaBenhNhan)
+--        BEGIN
+--            THROW 50001, 'Đơn thuốc không tồn tại', 1;
+--        END
+
+--        -- Lấy thông tin về đơn thuốc
+--        SELECT MaDonThuoc, MaThuoc, MaBenhNhan, NgaySuDung, NgayHetHan, LieuDung, STTLichSuKB, SoLuong
+--        FROM DONTHUOC
+--        WHERE MaBenhNhan = @MaBenhNhan;
+
+--        COMMIT TRANSACTION;
+--    END
+--        TRY
+--    BEGIN CATCH
+--        -- Nếu xảy ra lỗi, rollback transaction
+--        ROLLBACK TRANSACTION;
+
+--        -- Giữ lại thông báo lỗi gốc
+--        THROW;
+--        END CATCH;
+--    END;
+--GO
+exec XemDonThuocIDBN @SDT = '0123456780'
     --Xóa tài khoản
     IF EXISTS (SELECT *
     FROM sys.procedures
