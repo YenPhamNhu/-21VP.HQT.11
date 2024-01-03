@@ -65,33 +65,38 @@ export default function Home() {
 
   const fetchDelete = async (row) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/admins/drugs/deleteDrug/${row.original.MaThuoc}/${row.original.NgayHetHan}`
-      );
+    const config = {
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    };
+    const cellmt = row.original.MaThuoc;
+    const cellnhh = row.original.NgayHetHan;
+    const url = `http://localhost:5000/api/admins/drugs/deleteDrug/${cellmt}/${cellnhh}`;
+      const response = await fetch(url, config);
       window.location.reload();
+            if (response.ok) {
+              const data = await response.json();
+              if (data.success) {
+                // Drug deleted successfully
+                const updatedData = Dulieu.filter(
+                  (drug) => ((drug.MaThuoc !== row.original.MaThuoc) && (drug.NgayHetHan !== row.original.NgayHetHan))
+                );
+                setDulieu(updatedData);
+              } else {
+                // Show error message if drug not found or could not be deleted
+                console.error(data.error || "Error deleting drug");
+              }
+            } else if (response.status === 404) {
+              console.error("Drug not found");
+            } else {
+              console.error(`Error deleting drug. Status: ${response.status}`);
+            }} catch (error) {
+              console.error("Error deleting drug:", error);
+              }
+              };
 
-      if (response.ok) {
-        const data = await response.json();
-
-        if (data.success) {
-          // Drug deleted successfully
-          const updatedData = Dulieu.filter(
-            (drug) => drug.MaThuoc !== row.original.MaThuoc
-          );
-          setDulieu(updatedData);
-        } else {
-          // Show error message if drug not found or could not be deleted
-          console.error(data.error || "Error deleting drug");
-        }
-      } else if (response.status === 404) {
-        console.error("Drug not found");
-      } else {
-        console.error(`Error deleting drug. Status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Error deleting drug:", error);
-    }
-  };
 
   useEffect(() => {
     fetchService();

@@ -68,34 +68,43 @@ export const Search = () => {
         <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
           <IconButton
             color='secondary'
-            onClick={() => {
-              table.setEditingRow(row);
+            onClick={async()=>{
+              
             }}
           >
             <EditIcon />
           </IconButton>
           <IconButton
-            color='error'
-            onClick={async () => {
-              try {
-                const response = await fetch(
-                  `http://localhost:5000/api/admins/deleteEmployee/${row.orginal.SDT}`
-                );
-                const responseData = await response.json();
-                if (responseData.success) {
-                  const updatedData = Dulieu.filter(
-                    (SDT) => SDT !== row.orginal.SDT
-                  );
-                  setDulieu(updatedData);
-                } else {
-                  console.error(responseData.error);
-                }
-              } catch (error) {
-                console.error("Error deleting employee:", error);
-              }
-            }} >
-            <DeleteIcon />
-          </IconButton>
+  color='error'
+  onClick={async () => {
+    try {
+      const cellsdt = row.original.SDT;
+      const response = await fetch(
+        `http://localhost:5000/api/admins/deleteEmployee/${cellsdt}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const responseData = await response.json();
+      window.location.reload();
+      if (responseData.ok) {
+        await fetchService();
+        const updatedData = Dulieu.filter(
+          (SDT) => SDT !== row.orginal.SDT
+        );
+        setDulieu(updatedData);
+      } else {
+        console.error(responseData.error);
+      }
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+    }
+  }} >
+  <DeleteIcon />
+</IconButton>
         </Box>
       )}
     />
